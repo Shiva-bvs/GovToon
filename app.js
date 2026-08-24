@@ -3,7 +3,605 @@
 
 let API_BASE_URL = 'http://localhost:5000/api';
 
-// Grounded Schemes Knowledge Base
+// Comprehensive Multilingual Translation Dictionary (EN, TE, HI)
+const TRANSLATIONS = {
+  en: {
+    // Navigation & Header
+    logo_sub: "Government Schemes, Told Simply.",
+    trust_badge: "🛡️ Official Source Grounding",
+    trust_text: "Data sourced from India.gov.in National Portal of India. We don't change what the government says — we change how easily citizens understand it.",
+    btn_contrast: "👁️ Contrast",
+    btn_text_size: "A+ Text Size",
+    nav_home: "🏠 Home",
+    nav_explore: "🔍 Explore Schemes",
+    nav_create: "⚡ Create Comic",
+    nav_reader: "📖 Comic Reader",
+    nav_library: "📚 My Library",
+    nav_ask: "💬 Ask GovToon",
+    nav_admin: "📊 Admin",
+    btn_create_nav: "+ Turn Scheme into Comic",
+
+    // Hero Section
+    hero_badge: "🇮🇳 National Portal of India Integration Ready",
+    hero_title: "Government Schemes,<br><span class=\"hero-highlight\">Told Simply.</span>",
+    hero_sub: "Transform complex official government documents, eligibility rules, and application processes into simple, visual 4-panel stories with voice narration and comprehension testing.",
+    hero_ph: "What government scheme do you want to understand? (e.g. PM-Kisan, Ayushman Bharat, Scholarships)...",
+    btn_search_schemes: "Search Schemes",
+    try_asking: "Try asking:",
+
+    // Pipeline
+    pipe_doc: "Government Document / Portal",
+    pipe_ai: "AI Fact Extraction",
+    pipe_story: "Visual Comic Story",
+    pipe_voice: "Multilingual Voice",
+    pipe_quiz: "Comprehension Quiz",
+
+    // Impact
+    impact_orig: "Average Citizen Understanding of Official PDF Text",
+    impact_govtoon: "Understanding Score After Reading GovToon Visual Comics",
+
+    // Features
+    feat_title: "How GovToon Empowers Citizens",
+    feat_sub: "Bridging the gap between complex administrative legalese and citizen understanding.",
+    f1_h: "1. Grounded in Official Sources",
+    f1_p: "Directly linked to India.gov.in / myScheme. Every fact, date, benefit, and requirement maintains an exact source citation.",
+    f2_h: "2. Relatable Character Stories",
+    f2_p: "Character-bible technology ensures consistent visual storytelling featuring farmers, students, women, and street vendors.",
+    f3_h: "3. Desi Basti-Speak & Voice",
+    f3_p: "Translates 'Babu-speak' into everyday language with instant English, Telugu, and Hindi audio narration.",
+    f4_h: "4. Visual Eligibility & Documents",
+    f4_p: "Match your age, income, and state against scheme rules and track your document readiness progress.",
+    f5_h: "5. Comprehension Testing",
+    f5_p: "Take interactive quizzes to verify your understanding with automatic panel-jump help for tricky questions.",
+    f6_h: "6. Grounded AI Q&A Assistant",
+    f6_p: "Ask anything about the scheme. GovToon answers strictly from official source data with page citations.",
+
+    // Explore
+    exp_badge: "India.gov.in Scheme Directory",
+    exp_h: "Explore Official Government Schemes",
+    exp_sub: "Browse verified schemes from Central & State Ministries. Click any scheme to generate a visual comic.",
+    source_pill: "Source: National Portal of India / myScheme Ecosystem",
+    dir_search_ph: "Search by scheme name, keyword, or benefit...",
+
+    // Create
+    create_badge: "Module 1 & 2 Ingestion Pipeline",
+    create_h: "Create a Scheme Comic",
+    create_sub: "Select an official scheme, upload a government PDF, paste text, or enter an official URL.",
+    cmode_search: "🔍 Search Schemes",
+    cmode_pdf: "📄 Upload PDF / Document",
+    cmode_text: "📝 Paste Government Text",
+    cmode_url: "🔗 Official URL",
+    csearch_h: "Search Verified Government Database",
+    csearch_p: "Select from official scheme records indexed from India.gov.in.",
+    csearch_ph: "Type scheme name (e.g. PM-Kisan, Ayushman Bharat)...",
+    btn_find_scheme: "Find Scheme",
+    cpdf_h: "Upload Official Scheme PDF or Document",
+    cpdf_p: "GovToon extracts verified facts directly from official notifications.",
+    cpdf_drop_h: "Drag & Drop Official Scheme PDF here",
+    cpdf_drop_p: "or click to browse files from your computer",
+    ctext_h: "Paste Official Scheme Notification Text",
+    ctext_p: "Paste raw government text, eligibility guidelines, or press releases.",
+    ctext_ph: "Paste official text here...",
+    btn_proc_text: "Process Government Text",
+    curl_h: "Enter Official Government Source URL",
+    curl_p: "Provide a direct link from India.gov.in or official ministry portal.",
+    btn_proc_url: "Ingest Official Source URL",
+    persona_h: "👤 Who is this visual story for? (Audience Persona)",
+    persona_sub: "Select target beneficiary context. The underlying government facts remain 100% unchanged.",
+    p_farmer: "👨‍🌾 Small Farmer (Ramu Kaka)",
+    p_vendor: "🛒 Street Vendor (Kalu)",
+    p_woman: "👩 Domestic Worker (Lata Tai)",
+    p_student: "🎓 Student / Youth (Raju)",
+    p_senior: "👴 Senior Citizen (Sharma Ji)",
+
+    // Reader & Subtabs
+    source_verified: "✓ Official Source Verified",
+    btn_verify_portal: "🔗 Verify Official Portal",
+    rtab_comic: "🎨 4-Panel Comic",
+    rtab_eligibility: "🟢 Visual Eligibility",
+    rtab_documents: "📄 Required Documents",
+    rtab_steps: "🗺️ Application Steps",
+    rtab_ask: "💬 Ask GovToon AI",
+    rtab_quiz: "✅ Comprehension Quiz",
+    btn_listen: "▶ Listen to Full Comic",
+    btn_pause: "⏸ Pause",
+    lbl_speed: "Speed:",
+    btn_bookmark: "🔖 Bookmark",
+    btn_print: "🖨️ Print 1-Page Flyer",
+    btn_citation: "🔍 Why shown? (Citation)",
+    btn_play_panel: "🔊 Play Panel",
+
+    // Eligibility Tab
+    elig_h: "🟢 Visual Eligibility Assessment",
+    elig_sub: "Enter your basic details to check preliminary match against official rules.",
+    lbl_age: "Your Age (Years)",
+    lbl_income: "Annual Family Income (₹)",
+    lbl_state: "State of Residence",
+    lbl_occ: "Occupation / Category",
+    elig_disclaimer: "⚠️ Official Disclaimer: This is a preliminary assessment based on available scheme rules. Always verify current requirements on official government website before applying.",
+    elig_eligible: "🟢 Likely Eligible",
+    elig_not_eligible: "🔴 Does not appear to meet criteria",
+    elig_amber: "🟡 Threshold requires verification",
+
+    // Documents Tab
+    doc_h: "📄 Required Documents Checklist",
+    doc_sub: "Check off documents as you prepare them before visiting the official portal or Panchayat office.",
+    doc_prep_label: "Preparation Progress:",
+
+    // Steps Tab
+    steps_h: "🗺️ Step-by-Step Application Roadmap",
+    steps_sub: "Follow these official steps to submit your application safely.",
+    cta_ready: "Ready to Apply?",
+    cta_desc: "Submit your application directly on the official government portal.",
+    btn_go_portal: "🚀 Go to Official Government Application Portal",
+
+    // Ask Tab
+    ask_h: "💬 Ask GovToon Grounded AI Assistant",
+    ask_sub: "Answers strictly from official India.gov.in scheme data with page citations.",
+    sug_q: "Suggested Questions:",
+    q1: "Who is eligible?",
+    q2: "What benefits will I get?",
+    q3: "What documents are compulsory?",
+    q4: "Where should I submit?",
+    bot_welcome: "Namaste! I am your GovToon Assistant. I can answer questions about this scheme strictly based on official government records.",
+    cit_verified: "Source: Verified India.gov.in Record",
+    chat_ph: "Ask a question about this scheme...",
+    btn_send_q: "Send Question",
+
+    // Quiz Tab
+    quiz_h: "✅ Scheme Comprehension Test",
+    quiz_sub: "Test your understanding of the verified scheme facts.",
+
+    // Library Tab
+    lib_h: "📚 My Library",
+    lib_sub: "Your saved schemes, created comics, and completed comprehension test scores.",
+    lib_bm: "🔖 Bookmarked Schemes",
+    lib_created: "🎨 Created Comics",
+    lib_quiz_hist: "🎯 Comprehension Test History",
+
+    // General Ask
+    gask_h: "💬 Ask GovToon AI (All Schemes)",
+    gask_sub: "Ask questions across the entire National Portal of India scheme directory.",
+    gbot_welcome: "Hello! Ask me about any government scheme in India — scholarships, pensions, farmer support, or healthcare cards.",
+    cit_india_gov: "Source: Grounded on India.gov.in",
+    gchat_ph: "e.g. Which scheme provides solar rooftop subsidies?",
+    btn_ask_govtoon: "Ask GovToon",
+
+    // Admin
+    admin_badge: "Admin Access Only",
+    admin_h: "GovToon Administrative & Confusion Analytics Dashboard",
+    admin_sub: "Monitor ingested schemes, version updates, AI extraction logs, and citizen confusion analytics.",
+    astat_1: "Indexed Government Schemes",
+    astat_2: "Visual Comics Generated",
+    astat_3: "Average Citizen Comprehension",
+    astat_4: "Active Languages (EN, TE, HI)",
+    conf_h: "📊 Citizen Confusion Analytics",
+    conf_sub: "Where citizens encounter the most difficulty in understanding government schemes:",
+    conf_1: "Eligibility Criteria & Income Thresholds",
+    conf_2: "Required Documents & Verification",
+    conf_3: "Application Process & Portal Submission",
+    conf_4: "Benefit Calculation & Disbursement",
+    log_h: "🔄 Scheme Update & Ingestion Logs",
+    th_name: "Scheme Name",
+    th_url: "Source URL",
+    th_date: "Last Ingested",
+    th_status: "Status",
+    th_changes: "Detected Version Changes",
+    th_action: "Action",
+
+    // Citation Modal
+    cite_h: "🔍 Panel Source Citation",
+    cite_stmt: "Panel Statement:",
+    cite_src_txt: "Authoritative Source Text (India.gov.in):",
+    cite_loc: "Source Location:",
+    cite_date: "Retrieved Date:",
+    cite_url: "Official Source URL:",
+    cite_view_link: "View Official Document ↗",
+
+    // Footer
+    footer_quote: "\"We don't change what the government says. We change how easily citizens understand it.\"",
+    footer_src_label: "Source Data:",
+    footer_disclaimer: "GovToon simplifies publicly available government information for visual comprehension. It does not replace official government websites, departments, or application portals."
+  },
+  te: {
+    // Navigation & Header
+    logo_sub: "ప్రభుత్వ పథకాలు, సులువైన మాటల్లో.",
+    trust_badge: "🛡️ అధికారిక మూలాల ఆధారం",
+    trust_text: "India.gov.in జాతీయ పోర్టల్ నుండి వివరాలు. ప్రభుత్వం చెప్పిన దాన్ని మేము మార్చము — పౌరులు అర్థం చేసుకునే విధానాన్ని సులభతరం చేస్తాము.",
+    btn_contrast: "👁️ కాంట్రాస్ట్",
+    btn_text_size: "A+ అక్షర పరిమాణం",
+    nav_home: "🏠 హోమ్",
+    nav_explore: "🔍 పథకాలు వెతకండి",
+    nav_create: "⚡ కామిక్ తయారు చేయండి",
+    nav_reader: "📖 కామిక్ చదవండి",
+    nav_library: "📚 లైబ్రరీ",
+    nav_ask: "💬 గోవ్‌టూన్ అడగండి",
+    nav_admin: "📊 అడ్మిన్",
+    btn_create_nav: "+ పథకాన్ని కామిక్‌గా మార్చండి",
+
+    // Hero Section
+    hero_badge: "🇮🇳 జాతీయ పోర్టల్ సమన్వయం సిద్ధంగా ఉంది",
+    hero_title: "ప్రభుత్వ పథకాలు,<br><span class=\"hero-highlight\">సులువైన మాటల్లో.</span>",
+    hero_sub: "సంక్లిష్టమైన ప్రభుత్వ పత్రాలు, అర్హత నిబంధనలు మరియు దరఖాస్తు విధానాలను సులువైన 4-ప్యానెల్ కామిక్ కథలుగా, వాయిస్ వివరణలతో పొందండి.",
+    hero_ph: "మీరు ఏ ప్రభుత్వ పథకం గురించి తెలుసుకోవాలనుకుంటున్నారు? (ఉదా: పిఎమ్-కిసాన్, ఆయుష్మాన్ భారత్)...",
+    btn_search_schemes: "పథకాలు వెతకండి",
+    try_asking: "ప్రయత్నించండి:",
+
+    // Pipeline
+    pipe_doc: "ప్రభుత్వ పత్రం / పోర్టల్",
+    pipe_ai: "AI విశ్లేషణ",
+    pipe_story: "కామిక్ కథ",
+    pipe_voice: "బహుభాషా వాయిస్",
+    pipe_quiz: "అవగాహన పరీక్ష",
+
+    // Impact
+    impact_orig: "సాధారణ పౌరుల ప్రభుత్వ పత్రాల అవగాహన",
+    impact_govtoon: "గోవ్‌టూన్ కామిక్స్ చదివిన తర్వాత అవగాహన స్కోరు",
+
+    // Features
+    feat_title: "గోవ్‌టూన్ పౌరులకు ఎలా సహాయపడుతుంది",
+    feat_sub: "కఠినమైన ప్రభుత్వ భాషకు, సాధారణ పౌరుల అవగాహనకు మధ్య వారధి.",
+    f1_h: "1. అధికారిక ఆధారాలు",
+    f1_p: "India.gov.in / myScheme కి నేరుగా అనుసంధానించబడింది. ప్రతి విషయం అధికారిక ఆధారంతో కూడి ఉంటుంది.",
+    f2_h: "2. సుపరిచితమైన పాత్రల కథలు",
+    f2_p: "రైతులు, విద్యార్థులు, మహిళలు మరియు వీధి వ్యాపారుల ప్రతిరూప పాత్రలతో సులువైన కథలు.",
+    f3_h: "3. దేశీ బస్తీ మాటలు & వాయిస్",
+    f3_p: "కఠినమైన అధికారుల భాషను సాధారణ వాడుక భాషలోకి మార్చి ఇంగ్లీష్, తెలుగు, హిందీ వాయిస్ ఇస్తుంది.",
+    f4_h: "4. అర్హత మరియు పత్రాల తనిఖీ",
+    f4_p: "మీ వయస్సు, ఆదాయం నమోదు చేసి మీ అర్హతను మరియు సిద్ధం చేసుకోవాల్సిన పత్రాలను తనిఖీ చేయండి.",
+    f5_h: "5. అవగాహన పరీక్ష",
+    f5_p: "పథకం గురించి మీకు ఎంతవరకు అర్థమైందో తెలుసుకోవడానికి క్విజ్ పరీక్ష రాసి స్కోర్ పొందండి.",
+    f6_h: "6. AI ప్రశ్నోత్తరాల సహాయకుడు",
+    f6_p: "పథకం గురించి ఏ సందేహం ఉన్నా అడగండి. కేవలం అధికారిక ఆధారాల నుండే సమాధానం ఇస్తుంది.",
+
+    // Explore
+    exp_badge: "India.gov.in పథకాల డైరెక్టరీ",
+    exp_h: "అధికారిక ప్రభుత్వ పథకాలను అన్వేషించండి",
+    exp_sub: "కేంద్ర మరియు రాష్ట్ర మంత్రిత్వ శాఖల ద్వారా ధృవీకరించబడిన పథకాలను చూడండి.",
+    source_pill: "మూలం: జాతీయ పోర్టల్ India.gov.in",
+    dir_search_ph: "పథకం పేరు లేదా లబ్ధి ద్వారా వెతకండి...",
+
+    // Create
+    create_badge: "కామిక్ తయారీ విధానం",
+    create_h: "పథకం కామిక్ తయారు చేయండి",
+    create_sub: "అధికారిక పథకాన్ని ఎంచుకోండి, PDF అప్‌లోడ్ చేయండి లేదా లింక్ ఇవ్వండి.",
+    cmode_search: "🔍 పథకాలు వెతకండి",
+    cmode_pdf: "📄 PDF అప్‌లోడ్ చేయండి",
+    cmode_text: "📝 ప్రభుత్వం వచనం పేస్ట్ చేయండి",
+    cmode_url: "🔗 అధికారిక లింక్",
+    csearch_h: "ధృవీకరించబడిన డేటాబేస్ వెతకండి",
+    csearch_p: "India.gov.in నుండి సేకరించిన పథకాలను ఎంచుకోండి.",
+    csearch_ph: "పథకం పేరు టైప్ చేయండి...",
+    btn_find_scheme: "పథకం కనుగొనండి",
+    cpdf_h: "అధికారిక PDF లేదా పత్రాన్ని అప్‌లోడ్ చేయండి",
+    cpdf_p: "గోవ్‌టూన్ నేరుగా పత్రాల నుండి నిజాలను సేకరిస్తుంది.",
+    cpdf_drop_h: "అధికారిక PDF ని ఇక్కడ డ్రాప్ చేయండి",
+    cpdf_drop_p: "లేదా మీ కంప్యూటర్ నుండి ఎంచుకోండి",
+    ctext_h: "ప్రభుత్వ జీవో / ప్రకటన వచనం పేస్ట్ చేయండి",
+    ctext_p: "ప్రభుత్వ నిబంధనలు లేదా వార్తల వచనం పేస్ట్ చేయండి.",
+    ctext_ph: "ఇక్కడ పేస్ట్ చేయండి...",
+    btn_proc_text: "వచనాన్ని విశ్లేషించండి",
+    curl_h: "అధికారిక వెబ్‌సైట్ లింక్ ఇవ్వండి",
+    curl_p: "India.gov.in నుండి నేరుగా లింక్ నమోదు చేయండి.",
+    btn_proc_url: "లింక్ విశ్లేషించండి",
+    persona_h: "👤 ఈ కథ ఎవరి కోసం? (పాత్ర ఎంపిక)",
+    persona_sub: "లబ్ధిదారుల నేపథ్యాన్ని ఎంచుకోండి. ప్రభుత్వ నియమాలు 100% మారవు.",
+    p_farmer: "👨‍🌾 చిన్న రైతు (రాము కాకా)",
+    p_vendor: "🛒 వీధి వ్యాపారి (కాలు)",
+    p_woman: "👩 గృహ కార్మికురాలు (లతా తాయి)",
+    p_student: "🎓 విద్యార్థి (రాజు)",
+    p_senior: "👴 వృద్ధులు (శర్మ జీ)",
+
+    // Reader & Subtabs
+    source_verified: "✓ అధికారిక ఆధారాలు ధృవీకరించబడ్డాయి",
+    btn_verify_portal: "🔗 పోర్టల్‌ను తనిఖీ చేయండి",
+    rtab_comic: "🎨 4-ప్యానెల్ కామిక్",
+    rtab_eligibility: "🟢 అర్హత తనిఖీ",
+    rtab_documents: "📄 అవసరమైన పత్రాలు",
+    rtab_steps: "🗺️ దరఖాస్తు విధానం",
+    rtab_ask: "💬 గోవ్‌టూన్ AI అడగండి",
+    rtab_quiz: "✅ అవగాహన క్విజ్",
+    btn_listen: "▶ పూర్తి కామిక్ వినండి",
+    btn_pause: "⏸ ఆపండి",
+    lbl_speed: "వేగం:",
+    btn_bookmark: "🔖 బుక్‌మార్క్",
+    btn_print: "🖨️ 1-పేజీ ఫ్లైయర్ ప్రింట్",
+    btn_citation: "🔍 ఆధారాలు (Citation)",
+    btn_play_panel: "🔊 వినండి",
+
+    // Eligibility Tab
+    elig_h: "🟢 అర్హత అంచనా తనిఖీ",
+    elig_sub: "అధికారిక నిబంధనలతో మీ వివరాలను తనిఖీ చేయడానికి వివరాలు నమోదు చేయండి.",
+    lbl_age: "మీ వయస్సు (సంవత్సరాలు)",
+    lbl_income: "వార్షిక కుటుంబ ఆదాయం (₹)",
+    lbl_state: "నివాస రాష్ట్రం",
+    lbl_occ: "వృత్తి / వర్గం",
+    elig_disclaimer: "⚠️ అధికారిక గమనిక: ఇది లభించిన సమాచారం ఆధారంగా ప్రాథమిక అంచనా మాత్రమే. దరఖాస్తు చేసేముందు అధికారిక వెబ్‌సైట్‌లో తనిఖీ చేయండి.",
+    elig_eligible: "🟢 అర్హత పొందే అవకాశం ఉంది",
+    elig_not_eligible: "🔴 అర్హత నిబంధనలకు సరిపోలడం లేదు",
+    elig_amber: "🟡 ఆదాయ పరిమితి తనిఖీ అవసరం",
+
+    // Documents Tab
+    doc_h: "📄 అవసరమైన పత్రాల జాబితా",
+    doc_sub: "మీరు సిద్ధం చేసుకున్న పత్రాలను చెక్‌బాక్స్‌లో గుర్తించండి.",
+    doc_prep_label: "సిద్ధమైన పురోగతి:",
+
+    // Steps Tab
+    steps_h: "🗺️ అంచెలవారీ దరఖాస్తు విధానం",
+    steps_sub: "సురక్షితంగా దరఖాస్తు చేయడానికి ఈ అధికారిక దశలను అనుసరించండి.",
+    cta_ready: "దరఖాస్తు చేయడానికి సిద్ధంగా ఉన్నారా?",
+    cta_desc: "నేరుగా అధికారిక ప్రభుత్వ పోర్టల్‌లో దరఖాస్తు చేసుకోండి.",
+    btn_go_portal: "🚀 అధికారిక ప్రభుత్వ దరఖాస్తు పోర్టల్‌కు వెళ్లండి",
+
+    // Ask Tab
+    ask_h: "💬 గోవ్‌టూన్ AI సహాయకుడు",
+    ask_sub: "కేవలం అధికారిక India.gov.in సమాచారం ఆధారంగానే సమాధానాలు ఇస్తుంది.",
+    sug_q: "సూచించిన ప్రశ్నలు:",
+    q1: "ఎవరు అర్హులు?",
+    q2: "నాకు ఏమి ప్రయోజనాలు లభిస్తాయి?",
+    q3: "ఏ పత్రాలు తప్పనిసరి?",
+    q4: "ఎక్కడ దరఖాస్తు చేసుకోవాలి?",
+    bot_welcome: "నమస్తే! నేను మీ గోవ్‌టూన్ సహాయకుడిని. అధికారిక రికార్డుల ఆధారంగా మీ ప్రశ్నలకు సమాధానం ఇస్తాను.",
+    cit_verified: "మూలం: ధృవీకరించబడిన India.gov.in రికార్డు",
+    chat_ph: "ఈ పథకం గురించి ప్రశ్నించండి...",
+    btn_send_q: "ప్రశ్న పంపండి",
+
+    // Quiz Tab
+    quiz_h: "✅ పథకం అవగాహన పరీక్ష",
+    quiz_sub: "పథకం విషయాలపై మీ అవగాహనను పరీక్షించుకోండి.",
+
+    // Library Tab
+    lib_h: "📚 నా లైబ్రరీ",
+    lib_sub: "మీరు దాచుకున్న పథకాలు, సృష్టించిన కామిక్స్ మరియు క్విజ్ స్కోర్లు.",
+    lib_bm: "🔖 బుక్‌మార్క్ చేసిన పథకాలు",
+    lib_created: "🎨 తయారు చేసిన కామిక్స్",
+    lib_quiz_hist: "🎯 క్విజ్ పరీక్షల చరిత్ర",
+
+    // General Ask
+    gask_h: "💬 గోవ్‌టూన్ AI (అన్ని పథకాలు)",
+    gask_sub: "భారత జాతీయ పోర్టల్‌లోని ఏ పథకం గురించైనా అడగండి.",
+    gbot_welcome: "నమస్కారం! స్కాలర్‌షిప్‌లు, పెన్షన్లు, రైతు సహాయం లేదా హెల్త్ కార్డుల గురించి ఏమైనా అడగండి.",
+    cit_india_gov: "మూలం: India.gov.in ఆధారం",
+    gchat_ph: "ఉదా: సోలార్ రూఫ్‌టాప్‌కు ఏ పథకం సబ్సిడీ ఇస్తుంది?",
+    btn_ask_govtoon: "గోవ్‌టూన్ అడగండి",
+
+    // Admin
+    admin_badge: "అడ్మిన్ లాగిన్ మాత్రమే",
+    admin_h: "గోవ్‌టూన్ నిర్వాహక & అవగాహన విశ్లేషణల డాష్‌బోర్డ్",
+    admin_sub: "సేకరించిన పథకాలు, నవీకరణలు మరియు ప్రజల సందేహాలను విశ్లేషించండి.",
+    astat_1: "సేకరించిన ప్రభుత్వ పథకాలు",
+    astat_2: "తయారైన దృశ్య కామిక్స్",
+    astat_3: "సగటు పౌరుల అవగాహన",
+    astat_4: "యాక్టివ్ భాషలు (ఇంగ్లీష్, తెలుగు, హిందీ)",
+    conf_h: "📊 పౌరుల అయోమయ విశ్లేషణలు",
+    conf_sub: "ప్రభుత్వ పథకాలను అర్థం చేసుకోవడంలో ప్రజలు ఎక్కడ ఎక్కువ ఇబ్బంది పడుతున్నారు:",
+    conf_1: "అర్హత నిబంధనలు & ఆదాయ పరిమితులు",
+    conf_2: "అవసరమైన పత్రాలు & ధృవీకరణ",
+    conf_3: "దరఖాస్తు విధానం & పోర్టల్ సబ్మిషన్",
+    conf_4: "లబ్ధి లెక్కింపు & జమ ప్రక్రియ",
+    log_h: "🔄 పథకం నవీకరణ రికార్డులు",
+    th_name: "పథకం పేరు",
+    th_url: "మూల లింక్",
+    th_date: "చివరిగా సేకరించిన తేదీ",
+    th_status: "స్థితి",
+    th_changes: "గుర్తించిన మార్పులు",
+    th_action: "చర్య",
+
+    // Citation Modal
+    cite_h: "🔍 ప్యానెల్ ఆధారాల ధృవీకరణ",
+    cite_stmt: "ప్యానెల్ వాక్యం:",
+    cite_src_txt: "అధికారిక మూల వచనం (India.gov.in):",
+    cite_loc: "మూల విభాగం:",
+    cite_date: "సేకరించిన తేదీ:",
+    cite_url: "అధికారిక వెబ్‌సైట్ లింక్:",
+    cite_view_link: "అధికారిక పత్రాన్ని చూడండి ↗",
+
+    // Footer
+    footer_quote: "\"ప్రభుత్వం చెప్పిన దాన్ని మేము మార్చము. పౌరులు అర్థం చేసుకునే విధానాన్ని సులభతరం చేస్తాము.\"",
+    footer_src_label: "మూల సమాచారం:",
+    footer_disclaimer: "గోవ్‌టూన్ పౌరుల సులువైన అవగాహన కోసం ప్రభుత్వ సమాచారాన్ని సరళీకృతం చేస్తుంది. ఇది అధికారిక ప్రభుత్వ వెబ్‌సైట్‌లకు ప్రత్యామ్నాయం కాదు."
+  },
+  hi: {
+    // Navigation & Header
+    logo_sub: "सरकारी योजनाएं, आसान भाषा में।",
+    trust_badge: "🛡️ आधिकारिक स्रोतों पर आधारित",
+    trust_text: "India.gov.in राष्ट्रीय पोर्टल से प्राप्त जानकारी। हम सरकार की बात नहीं बदलते — हम नागरिकों के समझने का तरीका आसान बनाते हैं।",
+    btn_contrast: "👁️ कंट्रास्ट",
+    btn_text_size: "A+ अक्षर आकार",
+    nav_home: "🏠 होम",
+    nav_explore: "🔍 योजनाएं खोजें",
+    nav_create: "⚡ कॉमिक बनाएं",
+    nav_reader: "📖 कॉमिक पढ़ें",
+    nav_library: "📚 मेरी लाइब्रेरी",
+    nav_ask: "💬 गवटून से पूछें",
+    nav_admin: "📊 एडमिन",
+    btn_create_nav: "+ योजना को कॉमिक में बदलें",
+
+    // Hero Section
+    hero_badge: "🇮🇳 राष्ट्रीय पोर्टल इंडिया Integration तैयार",
+    hero_title: "सरकारी योजनाएं,<br><span class=\"hero-highlight\">आसान भाषा में।</span>",
+    hero_sub: "जटिल सरकारी दस्तावेजों, पात्रता नियमों और आवेदन प्रक्रियाओं को सरल 4-पैनल दृश्यात्मक कहानियों और ऑडियो में समझें।",
+    hero_ph: "आप कौन सी सरकारी योजना समझना चाहते हैं? (जैसे पीएम-किसान, आयुष्मान भारत)...",
+    btn_search_schemes: "योजनाएं खोजें",
+    try_asking: "खोजकर देखें:",
+
+    // Pipeline
+    pipe_doc: "सरकारी दस्तावेज / पोर्टल",
+    pipe_ai: "AI तथ्य विश्लेषण",
+    pipe_story: "कॉमिक कहानी",
+    pipe_voice: "बहुभाषी ऑडियो",
+    pipe_quiz: "समझ की परीक्षा",
+
+    // Impact
+    impact_orig: "सरकारी दस्तावेज पढ़ने पर सामान्य नागरिक की समझ",
+    impact_govtoon: "गवटून कॉमिक्स पढ़ने के बाद समझ का स्कोर",
+
+    // Features
+    feat_title: "गवटून नागरिकों को कैसे सशक्त बनाता है",
+    feat_sub: "जटिल सरकारी भाषा और आम नागरिक की समझ के बीच का मजबूत पुल।",
+    f1_h: "1. आधिकारिक स्रोतों पर आधारित",
+    f1_p: "India.gov.in / myScheme से सीधा जुड़ाव। हर नियम और लाभ का स्पष्ट संदर्भ।",
+    f2_h: "2. आम आदमी की कहानिया",
+    f2_p: "किसान, छात्र, महिला और छोटे व्यापारियों की दैनिक जिंदगी से जुड़ी कहानियां।",
+    f3_h: "3. देशी बस्ती की भाषा और आवाज",
+    f3_p: "अधिकारियों की कठिन भाषा को आसान वोलचाल में बदलकर अंग्रेजी, तेलुगु, हिंदी में ऑडियो।",
+    f4_h: "4. पात्रता और दस्तावेज जांच",
+    f4_p: "अपनी उम्र, आय और राज्य दर्ज करके अपनी पात्रता और जरूरी कागजात जांचें।",
+    f5_h: "5. समझ की परीक्षा (क्विज)",
+    f5_p: "योजना की सही जानकारी का परीक्षण करने के लिए आसान सवाल-जवाब।",
+    f6_h: "6. AI प्रश्नोत्तर सहायक",
+    f6_p: "योजना से जुड़ा कोई भी सवाल पूछें। केवल आधिकारिक दस्तावेजों से सटीक जवाब।",
+
+    // Explore
+    exp_badge: "India.gov.in योजना डायरेक्टरी",
+    exp_h: "आधिकारिक सरकारी योजनाएं खोजें",
+    exp_sub: "केंद्र और राज्य मंत्रालयों की प्रमाणित योजनाएं देखें।",
+    source_pill: "स्रोत: भारत का राष्ट्रीय पोर्टल India.gov.in",
+    dir_search_ph: "योजना का नाम या लाभ से खोजें...",
+
+    // Create
+    create_badge: "कॉमिक निर्माण प्रक्रिया",
+    create_h: "योजना की कॉमिक बनाएं",
+    create_sub: "सरकारी योजना चुनें, PDF अपलोड करें या लिंक दर्ज करें।",
+    cmode_search: "🔍 योजनाएं खोजें",
+    cmode_pdf: "📄 PDF अपलोड करें",
+    cmode_text: "📝 सरकारी टेक्स्ट पेस्ट करें",
+    cmode_url: "🔗 आधिकारिक लिंक",
+    csearch_h: "प्रमाणित डेटाबेस में खोजें",
+    csearch_p: "India.gov.in से ली गई योजनाओं में से चुनें।",
+    csearch_ph: "योजना का नाम लिखें...",
+    btn_find_scheme: "योजना खोजें",
+    cpdf_h: "आधिकारिक PDF दस्तावेज अपलोड करें",
+    cpdf_p: "गवटून सीधे सरकारी नोटिस से तथ्य निकालता है।",
+    cpdf_drop_h: "आधिकारिक PDF यहां ड्रैग और ड्रॉप करें",
+    cpdf_drop_p: "या अपने कंप्यूटर से फाइल चुनें",
+    ctext_h: "सरकारी आदेश / टेक्स्ट पेस्ट करें",
+    ctext_p: "सरकारी नियम या प्रेस विज्ञप्ति का टेक्स्ट पेस्ट करें।",
+    ctext_ph: "यहां पेस्ट करें...",
+    btn_proc_text: "टेक्स्ट का विश्लेषण करें",
+    curl_h: "आधिकारिक वेबसाइट लिंक दर्ज करें",
+    curl_p: "India.gov.in से सीधा लिंक दर्ज करें।",
+    btn_proc_url: "वेबसाइट लिंक विश्लेषण करें",
+    persona_h: "👤 यह कहानी किसके लिए है? (पात्र चयन)",
+    persona_sub: "लाभार्थी की पृष्ठभूमि चुनें। सरकारी नियम 100% वही रहेंगे।",
+    p_farmer: "👨‍🌾 छोटे किसान (रामू काका)",
+    p_vendor: "🛒 चाय विक्रेता (कालू)",
+    p_woman: "👩 घरेलू कामगार (लता ताई)",
+    p_student: "🎓 छात्र / युवा (राजू)",
+    p_senior: "👴 वरिष्ठ नागरिक (शर्मा जी)",
+
+    // Reader & Subtabs
+    source_verified: "✓ आधिकारिक स्रोत प्रमाणित",
+    btn_verify_portal: "🔗 आधिकारिक पोर्टल देखें",
+    rtab_comic: "🎨 4-पैनल कॉमिक",
+    rtab_eligibility: "🟢 पात्रता जांच",
+    rtab_documents: "📄 जरूरी दस्तावेज",
+    rtab_steps: "🗺️ आवेदन के चरण",
+    rtab_ask: "💬 गवटून AI से पूछें",
+    rtab_quiz: "✅ समझ की परीक्षा",
+    btn_listen: "▶ पूरी कॉमिक सुनें",
+    btn_pause: "⏸ रोकें",
+    lbl_speed: "गति:",
+    btn_bookmark: "🔖 बुकमार्क",
+    btn_print: "🖨️ 1-पेज फ्लायर प्रिंट",
+    btn_citation: "🔍 यह क्यों दिखाया? (स्रोतः)",
+    btn_play_panel: "🔊 सुनें",
+
+    // Eligibility Tab
+    elig_h: "🟢 पात्रता मूल्यांकन जांच",
+    elig_sub: "आधिकारिक नियमों से अपनी पात्रता मिलाने के लिए जानकारी दर्ज करें।",
+    lbl_age: "आपकी उम्र (वर्ष)",
+    lbl_income: "वार्षिक पारिवारिक आय (₹)",
+    lbl_state: "निवास का राज्य",
+    lbl_occ: "व्यवसाय / वर्ग",
+    elig_disclaimer: "⚠️ आधिकारिक अस्वीकरण: यह उपलब्ध नियमों के आधार पर प्रारंभिक अनुमान है। आवेदन से पहले आधिकारिक वेबसाइट पर जरूर जांचें।",
+    elig_eligible: "🟢 पात्र होने की संभावना है",
+    elig_not_eligible: "🔴 पात्रता शर्तों से मेल नहीं खाता",
+    elig_amber: "🟡 आय सीमा सत्यापन आवश्यक",
+
+    // Documents Tab
+    doc_h: "📄 आवश्यक दस्तावेजों की सूची",
+    doc_sub: "तैयार दस्तावेजों को चेकबॉक्स में मार्क करें।",
+    doc_prep_label: "तैयारी की प्रगति:",
+
+    // Steps Tab
+    steps_h: "🗺️ चरणबद्ध आवेदन मार्गदर्शिका",
+    steps_sub: "सुरक्षित आवेदन के लिए इन आधिकारिक चरणों का पालन करें।",
+    cta_ready: "आवेदन के लिए तैयार हैं?",
+    cta_desc: "सीधे आधिकारिक सरकारी पोर्टल पर आवेदन जमा करें।",
+    btn_go_portal: "🚀 आधिकारिक सरकारी पोर्टल पर जाएं",
+
+    // Ask Tab
+    ask_h: "💬 गवटून AI सहायक",
+    ask_sub: "केवल आधिकारिक India.gov.in आंकड़ों पर आधारित सटीक जवाब।",
+    sug_q: "सुझाए गए प्रश्न:",
+    q1: "कौन पात्र है?",
+    q2: "मुझे क्या लाभ मिलेंगे?",
+    q3: "कौन से कागज जरूरी हैं?",
+    q4: "आवेदन कहां जमा करें?",
+    bot_welcome: "नमस्ते! मैं आपका गवटून सहायक हूं। सरकारी रिकॉर्ड के आधार पर आपके सवालों के जवाब दूंगा।",
+    cit_verified: "स्रोत: प्रमाणित India.gov.in रिकॉर्ड",
+    chat_ph: "इस योजना के बारे में सवाल पूछें...",
+    btn_send_q: "सवाल भेजें",
+
+    // Quiz Tab
+    quiz_h: "✅ योजना समझ की परीक्षा",
+    quiz_sub: "योजना के तथ्यों पर अपनी समझ की जांच करें।",
+
+    // Library Tab
+    lib_h: "📚 मेरी लाइब्रेरी",
+    lib_sub: "आपकी सुरक्षित योजनाएं, बनाई गई कॉमिक्स और परीक्षा स्कोर।",
+    lib_bm: "🔖 बुकमार्क की गई योजनाएं",
+    lib_created: "🎨 बनाई गई कॉमिक्स",
+    lib_quiz_hist: "🎯 परीक्षा इतिहास",
+
+    // General Ask
+    gask_h: "💬 गवटून AI (सभी योजनाएं)",
+    gask_sub: "भारत के राष्ट्रीय पोर्टल की किसी भी योजना के बारे में पूछें।",
+    gbot_welcome: "नमस्ते! छात्रवृत्ति, पेंशन, किसान सहायता या स्वास्थ्य कार्ड के बारे में कुछ भी पूछें।",
+    cit_india_gov: "स्रोतः India.gov.in पर आधारित",
+    gchat_ph: "जैसे: सोलर रूफटॉप के लिए कौन सी योजना सब्सिडी देती है?",
+    btn_ask_govtoon: "गवटून से पूछें",
+
+    // Admin
+    admin_badge: "केवल एडमिन लॉगिन",
+    admin_h: "गवटून प्रशासनिक एवं नागरिक समझ विश्लेषण डैशबोर्ड",
+    admin_sub: "योजनाओं, नए अपडेट और नागरिकों के संशय का विश्लेषण करें।",
+    astat_1: "सूचीबद्ध सरकारी योजनाएं",
+    astat_2: "निर्मित दृश्यात्मक कॉमिक्स",
+    astat_3: "औसत नागरिक समझ स्कोर",
+    astat_4: "सक्रिय भाषाएं (अंग्रेजी, तेलुगु, हिंदी)",
+    conf_h: "📊 नागरिक संशय विश्लेषण",
+    conf_sub: "नागरिकों को सरकारी योजनाएं समझने में कहां सबसे ज्यादा कठिनाई होती है:",
+    conf_1: "पात्रता नियम और आय सीमा",
+    conf_2: "आवश्यक दस्तावेज और सत्यापन",
+    conf_3: "आवेदन प्रक्रिया और पोर्टल जमा",
+    conf_4: "लाभ की गणना और राशि जमा",
+    log_h: "🔄 योजना अपडेट लॉग",
+    th_name: "योजना का नाम",
+    th_url: "स्रोत लिंक",
+    th_date: "अंतिम अपडेट",
+    th_status: "स्थिति",
+    th_changes: "पहचाने गए बदलाव",
+    th_action: "कार्रवाई",
+
+    // Citation Modal
+    cite_h: "🔍 पैनल स्रोत संदर्भ",
+    cite_stmt: "पैनल वाक्य:",
+    cite_src_txt: "आधिकारिक स्रोत टेक्स्ट (India.gov.in):",
+    cite_loc: "स्रोत अनुभाग:",
+    cite_date: "प्राप्ति तिथि:",
+    cite_url: "आधिकारिक वेबसाइट लिंक:",
+    cite_view_link: "आधिकारिक दस्तावेज देखें ↗",
+
+    // Footer
+    footer_quote: "\"हम सरकार की बात नहीं बदलते। हम नागरिकों के समझने का तरीका आसान बनाते हैं।\"",
+    footer_src_label: "स्रोत डेटा:",
+    footer_disclaimer: "गवटून आसान समझ के लिए सार्वजनिक सरकारी जानकारी को सरल बनाता है। यह आधिकारिक सरकारी वेबसाइटों का विकल्प नहीं है।"
+  }
+};
+
+// Multilingual Scheme Database (Fully Translated Documents, Steps, Characters, Quiz)
 const SCHEMES_DATABASE = [
   {
     id: "pm_kisan",
@@ -33,33 +631,17 @@ const SCHEMES_DATABASE = [
     officialUrl: "https://www.india.gov.in/my-government/schemes/pm-kisan-samman-nidhi",
     sourceUrl: "https://pmkisan.gov.in",
     lastVerified: "2026-08-24",
-    character: { name: "Ramu Kaka", role: "Small Farmer", avatar: "👨🏽‍🌾", clothing: "White Kurta & Blue Gamcha" },
+    character: {
+      en: { name: "Ramu Kaka", role: "Small Farmer", avatar: "👨🏽‍🌾", desc: "White Kurta & Blue Gamcha" },
+      te: { name: "రాము కాకా", role: "చిన్న రైతు", avatar: "👨🏽‍🌾", desc: "తెల్లని కుర్తా మరియు నీలిరంగు రుమాలు" },
+      hi: { name: "रामू काका", role: "छोटे किसान", avatar: "👨🏽‍🌾", desc: "सफेद कुर्ता और नीला गमछा" }
+    },
     panels: {
       en: [
-        {
-          num: 1, tag: "Panel 1: The Tension", image: "assets/pm_kisan_1.jpg",
-          speaker: "Ramu Kaka", dialogue: "Hey Bhagwan! Seed and fertilizer prices have gone up. Where will I get the money to sow crops this season?",
-          caption: "Ramu Kaka worries about rising agricultural costs.",
-          sourceRef: "Section 1: Background & Target Beneficiaries (Page 1)"
-        },
-        {
-          num: 2, tag: "Panel 2: The Solution", image: "assets/pm_kisan_2.jpg",
-          speaker: "CSC Bhaiya", dialogue: "Don't worry Kaka! The Government sends ₹2,000 directly to your bank account 3 times a year!",
-          caption: "Sarkari Paisa, Seedha Khate Mein (Direct Benefit Transfer).",
-          sourceRef: "Section 2: Benefit Structure - ₹6000/yr in 3 installments (Page 2)"
-        },
-        {
-          num: 3, tag: "Panel 3: The Easy Path", image: "assets/pm_kisan_3.jpg",
-          speaker: "Ramu Kaka & Bhaiya", dialogue: "Ramu Kaka: 'Is Aadhaar and Bank book enough?' Bhaiya: 'Yes! Simple fingerprint e-KYC at the Jan Seva Kendra.'",
-          caption: "Simple registration with Aadhaar & Land Passbook.",
-          sourceRef: "Section 3: Mandatory Documents & e-KYC (Page 3)"
-        },
-        {
-          num: 4, tag: "Panel 4: The Khushali", image: "assets/pm_kisan_4.jpg",
-          speaker: "Tagline", dialogue: "🌾 PM-Kisan: Kheti Ki Takat, Kisan Ki Barkat!",
-          caption: "Prosperity restored, seeds bought on time.",
-          sourceRef: "Section 4: Disbursement & Impact (Page 4)"
-        }
+        { num: 1, tag: "Panel 1: The Tension", image: "assets/pm_kisan_1.jpg", speaker: "Ramu Kaka", dialogue: "Hey Bhagwan! Seed and fertilizer prices have gone up. Where will I get the money to sow crops this season?", caption: "Ramu Kaka worries about rising agricultural costs.", sourceRef: "Section 1: Background & Target Beneficiaries" },
+        { num: 2, tag: "Panel 2: The Solution", image: "assets/pm_kisan_2.jpg", speaker: "CSC Bhaiya", dialogue: "Don't worry Kaka! The Government sends ₹2,000 directly to your bank account 3 times a year!", caption: "Sarkari Paisa, Seedha Khate Mein (Direct Benefit Transfer).", sourceRef: "Section 2: Benefit Structure - ₹6000/yr" },
+        { num: 3, tag: "Panel 3: The Easy Path", image: "assets/pm_kisan_3.jpg", speaker: "Ramu Kaka & Bhaiya", dialogue: "Ramu Kaka: 'Is Aadhaar and Bank book enough?' Bhaiya: 'Yes! Simple fingerprint e-KYC at the Jan Seva Kendra.'", caption: "Simple registration with Aadhaar & Land Passbook.", sourceRef: "Section 3: Mandatory Documents & e-KYC" },
+        { num: 4, tag: "Panel 4: The Khushali", image: "assets/pm_kisan_4.jpg", speaker: "Tagline", dialogue: "🌾 PM-Kisan: Kheti Ki Takat, Kisan Ki Barkat!", caption: "Prosperity restored, seeds bought on time.", sourceRef: "Section 4: Disbursement & Impact" }
       ],
       te: [
         { num: 1, tag: "ప్యానెల్ 1: ఆందోళన", image: "assets/pm_kisan_1.jpg", speaker: "రాము కాకా", dialogue: "అయ్యో భగవంతుడా! విత్తనాలు, ఎరువుల ధరలు పెరిగాయి. విత్తనాలు వేయడానికి డబ్బు ఎక్కడి నుంచి వస్తుంది?", caption: "వ్యవసాయ ఖర్చుల గురించి రాము కాకా ఆందోళన.", sourceRef: "Section 1" },
@@ -103,7 +685,11 @@ const SCHEMES_DATABASE = [
     officialUrl: "https://www.india.gov.in/my-government/schemes/pm-shram-yogi-maandhan",
     sourceUrl: "https://maandhan.in",
     lastVerified: "2026-08-24",
-    character: { name: "Kalu", role: "Tea Stall Owner", avatar: "👴🏽", desc: "Hardworking vendor worried about old age & aching bones" },
+    character: {
+      en: { name: "Kalu", role: "Tea Stall Owner", avatar: "👴🏽", desc: "Hardworking vendor worried about old age & aching bones" },
+      te: { name: "కాలు", role: "టీ కొట్టు యజమాని", avatar: "👴🏽", desc: "వృద్ధాప్యం గురించి ఆందోళన చెందుతున్న శ్రామికుడు" },
+      hi: { name: "कालू", role: "चाय विक्रेता", avatar: "👴🏽", desc: "बुढ़ापे की चिंता करने वाले चाय विक्रेता" }
+    },
     panels: {
       en: [
         { num: 1, tag: "Panel 1: The Tension", image: "assets/panel1.jpg", speaker: "Kalu", dialogue: "Didi, my bones ache. I can't sell tea forever. What happens when I am too old to stand?", caption: "Kalu worries about his future.", sourceRef: "Section 1" },
@@ -112,15 +698,15 @@ const SCHEMES_DATABASE = [
         { num: 4, tag: "Panel 4: The Khushali", image: "assets/panel4.jpg", speaker: "Alert", dialogue: "🎉 Monthly Pension Received: ₹3,000", caption: "Save a little now, get a 'Salary' for life when you retire.", sourceRef: "Section 4" }
       ],
       te: [
-        { num: 1, tag: "ప్యానెల్ 1: ఆందోళన", image: "assets/panel1.jpg", speaker: "కాలు", dialogue: "దిదీ, వయసు పైబడుతోంది. ఎల్లప్పుడూ టీ అమ్మలేను.", caption: "భవిష్యత్తు గురించి ఆందోళన.", sourceRef: "Section 1" },
-        { num: 2, tag: "ప్యానెల్ 2: పరిష్కారం", image: "assets/panel2.jpg", speaker: "దిదీ", dialogue: "ఈ పథకాన్ని ఒక మర్రిచెట్టు నాటడం లాంటిదిగా భావించు.", caption: "వృద్ధాప్య ఆసరా.", sourceRef: "Section 2" },
-        { num: 3, tag: "ప్యానెల్ 3: నమోదు", image: "assets/panel3.jpg", speaker: "దిదీ", dialogue: "మీ ఆధార్ కార్డు తీసుకెళ్లి సేవ కేంద్రంలో ఇవ్వండి.", caption: "సులువైన నమోదు.", sourceRef: "Section 3" },
+        { num: 1, tag: "ప్యానెల్ 1: ఆందోళన", image: "assets/panel1.jpg", speaker: "కాలు", dialogue: "దిదీ, వయసు పైబడుతోంది. ఎల్లప్పుడూ టీ అమ్మలేను. వృద్ధాప్యంలో ఏమిటి పరిస్థితి?", caption: "భవిష్యత్తు గురించి ఆందోళన.", sourceRef: "Section 1" },
+        { num: 2, tag: "ప్యానెల్ 2: పరిష్కారం", image: "assets/panel2.jpg", speaker: "దిదీ", dialogue: "ఈ పథకాన్ని ఒక మర్రిచెట్టు నాటడం లాంటిదిగా భావించు. ఈరోజు కొన్ని నాణేలు దాచితే, వృద్ధాప్యంలో ప్రతినెల నీడ (డబ్బు) ఇస్తుంది.", caption: "వృద్ధాప్య ఆసరా.", sourceRef: "Section 2" },
+        { num: 3, tag: "ప్యానెల్ 3: నమోదు", image: "assets/panel3.jpg", speaker: "దిదీ", dialogue: "మీ ఆధార్ కార్డు తీసుకెళ్లి సేవ కేంద్రంలో ఇవ్వండి. రోజుకు 20 రూపాయలు దాచుకుంటానని చెప్పండి.", caption: "సులువైన నమోదు.", sourceRef: "Section 3" },
         { num: 4, tag: "ప్యానెల్ 4: ఆనందం", image: "assets/panel4.jpg", speaker: "అలర్ట్", dialogue: "🎉 నెలవారీ పెన్షన్ లభించింది: ₹3,000", caption: "నెలవారీ పెన్షన్ హామీ.", sourceRef: "Section 4" }
       ],
       hi: [
-        { num: 1, tag: "पैनल 1: चिंता", image: "assets/panel1.jpg", speaker: "कालू", dialogue: "दीदी, अब शरीर थकने लगा है। हमेशा चाय नहीं बेच सकता।", caption: "भविष्य की चिंता।", sourceRef: "Section 1" },
-        { num: 2, tag: "पैनल 2: समाधान", image: "assets/panel2.jpg", speaker: "दीदी", dialogue: "कालू, इसे बरगद का पेड़ लगाने जैसा समझो।", caption: "बूढ़ापे की मजबूत लाठी।", sourceRef: "Section 2" },
-        { num: 3, tag: "पैनल 3: आसान पंजीकरण", image: "assets/panel3.jpg", speaker: "दीदी", dialogue: "बस अपना आधार कार्ड नीले जन सेवा केंद्र ले जाओ।", caption: "आसान पंजीकरण।", sourceRef: "Section 3" },
+        { num: 1, tag: "पैनल 1: चिंता", image: "assets/panel1.jpg", speaker: "कालू", dialogue: "दीदी, अब शरीर थकने लगा है। हमेशा चाय नहीं बेच सकता। बुढ़ापे में क्या होगा?", caption: "भविष्य की चिंता।", sourceRef: "Section 1" },
+        { num: 2, tag: "पैनल 2: समाधान", image: "assets/panel2.jpg", speaker: "दीदी", dialogue: "कालू, इसे बरगद का पेड़ लगाने जैसा समझो। आज थोड़े सिक्के डालो, बुढ़ापे में हर महीने ठंडी छांव मिलेगी।", caption: "बूढ़ापे की मजबूत लाठी।", sourceRef: "Section 2" },
+        { num: 3, tag: "पैनल 3: आसान पंजीकरण", image: "assets/panel3.jpg", speaker: "दीदी", dialogue: "बस अपना आधार कार्ड नीले जन सेवा केंद्र ले जाओ और बचत शुरू करो।", caption: "आसान पंजीकरण।", sourceRef: "Section 3" },
         { num: 4, tag: "पैनल 4: खुशहाली", image: "assets/panel4.jpg", speaker: "अलर्ट", dialogue: "🎉 मासिक पेंशन प्राप्त: ₹3,000", caption: "हर महीने ₹3,000 की गारंटी।", sourceRef: "Section 4" }
       ]
     },
@@ -142,7 +728,7 @@ const SCHEMES_DATABASE = [
       { id: "d2", name: "Ration Card", required: true, why: "Family member mapping" }
     ],
     applicationSteps: [
-      { step: 1, title: "Check Ayushman Card Status", desc: "Visit beneficiary.nha.gov.in or nearest hospital Pradhan Mantri Arogyamitra." },
+      { step: 1, title: "Check Ayushman Card Status", desc: "Visit beneficiary.nha.gov.in or nearest hospital Arogyamitra." },
       { step: 2, title: "Show Aadhaar & Ration Card", desc: "Complete instant e-KYC." },
       { step: 3, title: "Get Golden Ayushman Card", desc: "Free Ayushman PVC Card issued." },
       { step: 4, title: "Cashless Treatment", desc: "Show card at hospital counter for ₹5 Lakh zero-cash treatment." }
@@ -150,7 +736,11 @@ const SCHEMES_DATABASE = [
     officialUrl: "https://www.india.gov.in/my-government/schemes/ayushman-bharat",
     sourceUrl: "https://pmjay.gov.in",
     lastVerified: "2026-08-24",
-    character: { name: "Lata Tai", role: "Domestic Worker", avatar: "👩🏽", desc: "Working mother worried about high hospital operation costs" },
+    character: {
+      en: { name: "Lata Tai", role: "Domestic Worker", avatar: "👩🏽", desc: "Working mother worried about high hospital operation costs" },
+      te: { name: "లతా తాయి", role: "గృహ కార్మికురాలు", avatar: "👩🏽", desc: "వైద్య ఖర్చుల గురించి ఆందోళన చెందుతున్న తల్లి" },
+      hi: { name: "लता ताई", role: "घरेलू कामगार", avatar: "👩🏽", desc: "अस्पताल के भारी खर्चे से चिंतित मां" }
+    },
     panels: {
       en: [
         { num: 1, tag: "Panel 1: The Emergency", image: "assets/panel1.jpg", speaker: "Lata Tai", dialogue: "Doctor says operation costs ₹1 Lakh! Where will we get this money at midnight?", caption: "Medical emergencies cause unexpected panic.", sourceRef: "Section 1" },
@@ -159,14 +749,14 @@ const SCHEMES_DATABASE = [
         { num: 4, tag: "Panel 4: The Recovery", image: "assets/panel4.jpg", speaker: "Lata Tai", dialogue: "Paid zero rupees! My family is healthy and debt-free.", caption: "Full hospital treatment with zero cash out of pocket.", sourceRef: "Section 4" }
       ],
       te: [
-        { num: 1, tag: "ప్యానెల్ 1: అత్యవసరం", image: "assets/panel1.jpg", speaker: "లతా తాయి", dialogue: "ఆపరేషన్‌కు లక్ష రూపాయలు అవుతాయని డాక్టర్ చెప్పారు!", caption: "వైద్య అత్యవసర పరిస్థితి.", sourceRef: "Section 1" },
-        { num: 2, tag: "ప్యానెల్ 2: ఆయుష్మాన్ కార్డ్", image: "assets/panel2.jpg", speaker: "ఆశా దిదీ", dialogue: "ఆయుష్మాన్ గోల్డెన్ కార్డ్ చూపించండి. ప్రభుత్వం 5 లక్షల వరకు ఉచిత వైద్యం అందిస్తుంది!", caption: "ఉచిత వైద్య భద్రత.", sourceRef: "Section 2" },
-        { num: 3, tag: "ప్యానెల్ 3: ఉచిత చికిత్స", image: "assets/panel3.jpg", speaker: "ఆరోగ్యమిత్ర", dialogue: "ఆధార్ వేలిముద్ర వేస్తే సరిపోతుంది. కౌంటర్లో ఒక్క రూపాయి కూడా ఇవ్వవద్దు.", caption: "క్యాష్‌లెస్ చికిత్స.", sourceRef: "Section 3" },
-        { num: 4, tag: "ప్యానెల్ 4: ఆనందం", image: "assets/panel4.jpg", speaker: "లతా తాయి", dialogue: "సున్నా రూపాయలు చెల్లించాం! కుటుంబం ఆరోగ్యంగా ఉంది.", caption: "ఉచిత చికిత్స.", sourceRef: "Section 4" }
+        { num: 1, tag: "ప్యానెల్ 1: అత్యవసరం", image: "assets/panel1.jpg", speaker: "లతా తాయి", dialogue: "ఆపరేషన్‌కు లక్ష రూపాయలు అవుతాయని డాక్టర్ చెప్పారు! అర్ధరాత్రి అంత డబ్బు ఎక్కడ తెచ్చేది?", caption: "వైద్య అత్యవసర పరిస్థితి.", sourceRef: "Section 1" },
+        { num: 2, tag: "ప్యానెల్ 2: ఆయుష్మాన్ కార్డ్", image: "assets/panel2.jpg", speaker: "ఆశా దిదీ", dialogue: "బంగారం అమ్మకండి! ఆయుష్మాన్ గోల్డెన్ కార్డ్ చూపించండి. ప్రభుత్వం 5 లక్షల వరకు ఉచిత వైద్యం అందిస్తుంది!", caption: "ఉచిత వైద్య భద్రత.", sourceRef: "Section 2" },
+        { num: 3, tag: "ప్యానెల్ 3: ఉచిత చికిత్స", image: "assets/panel3.jpg", speaker: "ఆరోగ్యమిత్ర", dialogue: "ఆధార్ వేలిముద్ర వేస్తే సరిపోతుంది. కౌంటర్లో ఒక్క రూపాయి కూడా చెల్లించనవసరం లేదు.", caption: "క్యాష్‌లెస్ చికిత్స.", sourceRef: "Section 3" },
+        { num: 4, tag: "ప్యానెల్ 4: ఆనందం", image: "assets/panel4.jpg", speaker: "లతా తాయి", dialogue: "సున్నా రూపాయలు చెల్లించాం! కుటుంబం ఆరోగ్యంగా ఉంది.", caption: "రుణాలు లేని ఉచిత చికిత్స.", sourceRef: "Section 4" }
       ],
       hi: [
-        { num: 1, tag: "पैनल 1: आपात स्थिति", image: "assets/panel1.jpg", speaker: "लता ताई", dialogue: "डॉक्टर साहब कह रहे हैं ऑपरेशन में ₹1 लाख लगेगा!", caption: "अस्पताल के खर्च से चिंता।", sourceRef: "Section 1" },
-        { num: 2, tag: "पैनल 2: समाधान", image: "assets/panel2.jpg", speaker: "आशा दीदी", dialogue: "आयुष्मान कार्ड दिखाओ। सरकार ₹5 लाख तक का अस्पताल खर्च खुद देगी!", caption: "₹5 लाख का मुफ्त इलाज।", sourceRef: "Section 2" },
+        { num: 1, tag: "पैनल 1: आपात स्थिति", image: "assets/panel1.jpg", speaker: "लता ताई", dialogue: "डॉक्टर साहब कह रहे हैं ऑपरेशन में ₹1 लाख लगेगा! आधी रात को इतना पैसा कहां से लाऊं?", caption: "अस्पताल के खर्च से चिंता।", sourceRef: "Section 1" },
+        { num: 2, tag: "पैनल 2: समाधान", image: "assets/panel2.jpg", speaker: "आशा दीदी", dialogue: "गहने मत बेचो! आयुष्मान कार्ड दिखाओ। सरकार ₹5 लाख तक का अस्पताल खर्च खुद देगी!", caption: "₹5 लाख का मुफ्त इलाज।", sourceRef: "Section 2" },
         { num: 3, tag: "पैनल 3: कैशलेस प्रक्रिया", image: "assets/panel3.jpg", speaker: "आरोग्यमित्र", dialogue: "बस आधार से फिंगरप्रिंट लगाएं। अस्पताल में ₹1 भी नगद नहीं देना होगा।", caption: "कैशलेस अस्पताल सेवा।", sourceRef: "Section 3" },
         { num: 4, tag: "पैनल 4: स्वस्थ परिवार", image: "assets/panel4.jpg", speaker: "लता ताई", dialogue: "₹0 में पूरा इलाज हो गया! परिवार सुरक्षित है।", caption: "बिना कर्ज के इलाज।", sourceRef: "Section 4" }
       ]
@@ -189,18 +779,12 @@ let appState = {
   isServerOnline: false
 };
 
-// UI Translations
-const TRANSLATIONS = {
-  en: { home: "Home", explore: "Explore Schemes", create: "Create Comic", reader: "Comic Reader", library: "My Library", ask: "Ask GovToon", admin: "Admin" },
-  te: { home: "హోమ్", explore: "పథకాలు వెతకండి", create: "కామిక్ తయారు చేయండి", reader: "కామిక్ చదవండి", library: "లైబ్రరీ", ask: "గోవ్‌టూన్ అడగండి", admin: "అడ్మిన్" },
-  hi: { home: "होम", explore: "योजनाएं खोजें", create: "कॉमिक बनाएं", reader: "कॉमिक पढ़ें", library: "मेरी लाइब्रेरी", ask: "गवटून से पूछें", admin: "एडमिन" }
-};
-
 // Initialize App
 document.addEventListener("DOMContentLoaded", async () => {
   setupNavigation();
   setupLanguageSelector();
   checkServerHealth();
+  updateLanguageUI();
   renderDirectory(SCHEMES_DATABASE);
   renderReaderView();
   renderLibrary();
@@ -243,7 +827,7 @@ function navigateTo(viewId) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Multilingual Setup
+// Multilingual Setup & Site-Wide Language Engine
 function setupLanguageSelector() {
   const sel = document.getElementById('app-language-select');
   if (!sel) return;
@@ -251,6 +835,7 @@ function setupLanguageSelector() {
   sel.addEventListener('change', (e) => {
     appState.currentLang = e.target.value;
     updateLanguageUI();
+    renderDirectory(SCHEMES_DATABASE);
     renderReaderView();
   });
 }
@@ -258,9 +843,25 @@ function setupLanguageSelector() {
 function updateLanguageUI() {
   const lang = appState.currentLang;
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
-  document.querySelectorAll('.nav-link').forEach(link => {
-    const key = link.getAttribute('data-nav');
-    if (t[key]) link.innerText = t[key];
+
+  // Update all text elements with data-i18n
+  document.querySelectorAll('[data-i18n]').forEach(elem => {
+    const key = elem.getAttribute('data-i18n');
+    if (t[key]) {
+      if (elem.tagName === 'INPUT' || elem.tagName === 'TEXTAREA') {
+        elem.value = t[key];
+      } else {
+        elem.innerHTML = t[key];
+      }
+    }
+  });
+
+  // Update input placeholders with data-i18n-ph
+  document.querySelectorAll('[data-i18n-ph]').forEach(elem => {
+    const key = elem.getAttribute('data-i18n-ph');
+    if (t[key]) {
+      elem.placeholder = t[key];
+    }
   });
 }
 
@@ -268,6 +869,9 @@ function updateLanguageUI() {
 function renderDirectory(schemes) {
   const grid = document.getElementById('schemes-directory-grid');
   if (!grid) return;
+
+  const lang = appState.currentLang;
+  const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
 
   grid.innerHTML = '';
   schemes.forEach(s => {
@@ -282,7 +886,7 @@ function renderDirectory(schemes) {
       <p class="scard-desc">${s.purpose}</p>
       <div class="scard-footer">
         <span class="scard-source">✓ Source: India.gov.in</span>
-        <button class="btn btn-saffron" onclick="openSchemeInReader('${s.id}')">🎨 Turn into Comic</button>
+        <button class="btn btn-saffron" onclick="openSchemeInReader('${s.id}')">${t.btn_create_nav || '+ Turn into Comic'}</button>
       </div>
     `;
     grid.appendChild(card);
@@ -302,6 +906,9 @@ function renderReaderView() {
   const s = appState.selectedScheme;
   if (!s) return;
 
+  const lang = appState.currentLang;
+  const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+
   document.getElementById('reader-category-badge').innerText = `${s.category} • ${s.level}`;
   document.getElementById('reader-scheme-name').innerText = s.name;
   document.getElementById('reader-scheme-dept').innerText = `${s.dept} | Source: India.gov.in`;
@@ -309,20 +916,21 @@ function renderReaderView() {
   document.getElementById('reader-official-link').href = s.officialUrl;
   document.getElementById('chat-scheme-name').innerText = s.name;
 
+  // Character Card in active language
   const charBox = document.getElementById('reader-character-card');
   if (charBox && s.character) {
+    const charData = s.character[lang] || s.character.en || s.character;
     charBox.innerHTML = `
-      <div class="char-avatar" style="font-size:2.2rem;">${s.character.avatar}</div>
+      <div class="char-avatar" style="font-size:2.2rem;">${charData.avatar}</div>
       <div>
-        <h4 style="font-family:var(--font-heading); font-size:1.1rem; color:var(--primary-navy);">${s.character.name} <span style="color:var(--saffron); font-size:0.85rem;">(${s.character.role})</span></h4>
-        <p style="font-size:0.85rem; color:var(--text-muted);">${s.character.desc || s.character.clothing}</p>
+        <h4 style="font-family:var(--font-heading); font-size:1.1rem; color:var(--primary-navy);">${charData.name} <span style="color:var(--saffron); font-size:0.85rem;">(${charData.role})</span></h4>
+        <p style="font-size:0.85rem; color:var(--text-muted);">${charData.desc || charData.clothing}</p>
       </div>
     `;
   }
 
-  const lang = appState.currentLang;
+  // Panels in active language
   const panelsList = s.panels[lang] || s.panels.en;
-
   const panelsContainer = document.getElementById('reader-panels-container');
   if (panelsContainer) {
     panelsContainer.innerHTML = '';
@@ -332,7 +940,7 @@ function renderReaderView() {
       pdiv.innerHTML = `
         <div class="panel-tag-header">
           <span>${p.tag}</span>
-          <button class="btn-outline-sm" onclick="showCitationModal('${escapeQuotes(p.dialogue)}', '${escapeQuotes(p.sourceRef)}', '${s.officialUrl}')">🔍 Why shown? (Citation)</button>
+          <button class="btn-outline-sm" onclick="showCitationModal('${escapeQuotes(p.dialogue)}', '${escapeQuotes(p.sourceRef)}', '${s.officialUrl}')">${t.btn_citation || '🔍 Why shown? (Citation)'}</button>
         </div>
         <div class="panel-img-box">
           <img src="${p.image}" alt="${p.tag}" loading="lazy">
@@ -342,7 +950,7 @@ function renderReaderView() {
         </div>
         <div class="panel-footer-bar">
           <span style="font-size:0.85rem; color:var(--text-main);">📌 <strong>Caption:</strong> ${p.caption}</span>
-          <button class="btn-outline-sm" onclick="speakPanelText('${escapeQuotes(p.dialogue)}')">🔊 Play Panel</button>
+          <button class="btn-outline-sm" onclick="speakPanelText('${escapeQuotes(p.dialogue)}')">${t.btn_play_panel || '🔊 Play Panel'}</button>
         </div>
       `;
       panelsContainer.appendChild(pdiv);
@@ -369,17 +977,19 @@ function runEligibilityCheck() {
   const s = appState.selectedScheme;
   if (!s || !s.eligibility) return;
 
+  const lang = appState.currentLang;
+  const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+
   const userAge = parseInt(document.getElementById('elig-user-age')?.value || 30);
   const userIncome = parseInt(document.getElementById('elig-user-income')?.value || 150000);
-  const userState = document.getElementById('elig-user-state')?.value || "All India";
 
   const e = s.eligibility;
-  let status = "🟢 Likely Eligible";
+  let status = t.elig_eligible || "🟢 Likely Eligible";
   let statusClass = "green-badge";
   let reasons = [];
 
   if (userAge < e.minAge || userAge > e.maxAge) {
-    status = "🔴 Does not appear to meet age criteria";
+    status = t.elig_not_eligible || "🔴 Does not appear to meet age criteria";
     statusClass = "red-badge";
     reasons.push(`Age ${userAge} is outside specified range (${e.minAge}-${e.maxAge} yrs).`);
   } else {
@@ -387,7 +997,7 @@ function runEligibilityCheck() {
   }
 
   if (userIncome > e.maxIncome) {
-    status = "🟡 Income threshold requires official verification";
+    status = t.elig_amber || "🟡 Income threshold requires official verification";
     statusClass = "amber-badge";
     reasons.push(`Annual income ₹${userIncome.toLocaleString()} exceeds limit ₹${e.maxIncome.toLocaleString()}.`);
   } else {
@@ -647,7 +1257,6 @@ async function startProcessingPipeline(schemeTitle) {
   setTimeout(() => { document.getElementById('pstep-2').style.fontWeight = 'bold'; }, 800);
   setTimeout(() => { document.getElementById('pstep-3').style.fontWeight = 'bold'; }, 1200);
 
-  // Call Server AI API if server online
   if (appState.isServerOnline) {
     try {
       const apiRes = await fetch(`${API_BASE_URL}/generate-story`, {
@@ -673,7 +1282,7 @@ async function startProcessingPipeline(schemeTitle) {
   }, 2400);
 }
 
-// Grounded AI Chatbot (Calls Server API / Local Fallback)
+// Grounded AI Chatbot
 async function sendChatMessage() {
   const input = document.getElementById('chat-user-input');
   const text = input.value.trim();
@@ -681,7 +1290,6 @@ async function sendChatMessage() {
 
   const box = document.getElementById('chat-messages');
 
-  // User Msg
   const udiv = document.createElement('div');
   udiv.className = 'chat-msg user-msg';
   udiv.innerHTML = `<div class="msg-content"><p>${text}</p></div>`;
@@ -692,7 +1300,6 @@ async function sendChatMessage() {
   let reply = `Based strictly on official India.gov.in records for ${s.name}: ${s.purpose} Benefits provided: ${s.benefits}`;
   let sourceTag = `Source: Verified India.gov.in Record (${s.officialUrl})`;
 
-  // Try calling AI Server API
   if (appState.isServerOnline) {
     try {
       const res = await fetch(`${API_BASE_URL}/ask-ai`, {
