@@ -258,6 +258,188 @@ SCHEMES_DB = [
         ],
         "sourceUrl": "https://scholarships.gov.in",
         "lastVerified": "2026-08-24"
+    },
+    {
+        "id": "pm_awas_rural",
+        "name": "Pradhan Mantri Awas Yojana - Gramin (PMAY-G)",
+        "category": "Housing & Energy",
+        "level": "Central",
+        "dept": "Ministry of Rural Development",
+        "purpose": "Provide pucca houses with basic amenities like piped water, electricity, and clean cooking fuel to all houseless rural families.",
+        "benefits": "Financial assistance of ₹1.20 Lakh in plain areas and ₹1.30 Lakh in hilly/difficult areas transferred directly via DBT.",
+        "eligibility": {
+            "minAge": 18, "maxAge": 100, "maxIncome": 150000, "state": "All India", "occupation": "Rural Household",
+            "summary": "Houseless families or families living in kutcha or dilapidated houses based on SECC 2011 data."
+        },
+        "documents": [
+            {"id": "d1", "name": "Aadhaar Card", "required": True, "why": "Identity and geo-tagging validation"},
+            {"id": "d2", "name": "Bank Account Passbook", "required": True, "why": "Direct DBT installment credits"},
+            {"id": "d3", "name": "MGNREGA Job Card Number", "required": False, "why": "For 90-95 days unskilled labor wage support"}
+        ],
+        "applicationSteps": [
+            {"step": 1, "title": "Gram Sabha Beneficiary Validation", "desc": "Check presence in village PMAY-G permanent waitlist."},
+            {"step": 2, "title": "Geo-Tagging of Old Site", "desc": "Gram Panchayat officer takes geotagged photo via AwaasApp."},
+            {"step": 3, "title": "Direct Installment Releases", "desc": "Receive fund releases linked to foundation, lintel, and roof construction stages."}
+        ],
+        "officialUrl": "https://www.india.gov.in/my-government/schemes/pradhan-mantri-awaas-yojana-gramin",
+        "sourceUrl": "https://pmayg.nic.in",
+        "lastVerified": "2026-08-24"
+    },
+    {
+        "id": "pm_vishwakarma",
+        "name": "PM Vishwakarma Kaushal Samman",
+        "category": "Business",
+        "level": "Central",
+        "dept": "Ministry of Micro, Small & Medium Enterprises",
+        "purpose": "Holistic end-to-end support to traditional artisans and craftspeople across 18 trades (carpenters, blacksmiths, potters, cobblers, tailors).",
+        "benefits": "Collateral-free enterprise loans up to ₹3 Lakh at 5% interest rate + ₹15,000 modern e-voucher toolkit grant + ₹500/day training stipend.",
+        "eligibility": {
+            "minAge": 18, "maxAge": 70, "maxIncome": 300000, "state": "All India", "occupation": "Artisan / Craftsperson",
+            "summary": "Artisans engaged in one of the 18 eligible traditional family crafts (Blacksmith, Carpenter, Potter, Mason, Tailor, Barber, etc.)."
+        },
+        "documents": [
+            {"id": "d1", "name": "Aadhaar Card & Mobile Link", "required": True, "why": "Biometric verification on PM Vishwakarma Portal"},
+            {"id": "d2", "name": "Bank Account Passbook", "required": True, "why": "For loan disbursement and toolkit e-voucher"},
+            {"id": "d3", "name": "Trade Skill Declaration", "required": True, "why": "Gram Panchayat / ULB trade endorsement"}
+        ],
+        "applicationSteps": [
+            {"step": 1, "title": "Register at CSC", "desc": "Visit nearest Common Service Center with Aadhaar and bank details."},
+            {"step": 2, "title": "Complete 5-Day Basic Skill Training", "desc": "Receive ₹500/day stipend during skill upgradation."},
+            {"step": 3, "title": "Claim ₹15,000 Toolkit Incentive", "desc": "Receive digital voucher to buy modern trade tools."},
+            {"step": 4, "title": "Access ₹1 Lakh Collateral-Free Loan", "desc": "Receive first tranche loan at concessional 5% interest rate."}
+        ],
+        "officialUrl": "https://www.india.gov.in/my-government/schemes/pm-vishwakarma",
+        "sourceUrl": "https://pmvishwakarma.gov.in",
+        "lastVerified": "2026-08-24"
+    },
+    {
+        "id": "pm_ujjwala",
+        "name": "Pradhan Mantri Ujjwala Yojana 2.0 (LPG Connection)",
+        "category": "Housing & Energy",
+        "level": "Central",
+        "dept": "Ministry of Petroleum & Natural Gas",
+        "purpose": "Provide clean cooking LPG cylinders to poor women living in rural and urban households to eliminate hazardous smoke inhalation.",
+        "benefits": "100% Free deposit-free LPG connection (stove + cylinder + regulator) + targeted ₹300 subsidy per refill cylinder for up to 12 refills/year.",
+        "eligibility": {
+            "minAge": 18, "maxAge": 100, "maxIncome": 200000, "state": "All India", "occupation": "Woman Householder",
+            "summary": "Adult woman belonging to BPL/poor household having no existing LPG connection in the family."
+        },
+        "documents": [
+            {"id": "d1", "name": "Aadhaar Card of Applicant & Family", "required": True, "why": "Identity and deduplication check"},
+            {"id": "d2", "name": "Ration Card / BPL Proof", "required": True, "why": "Proof of household composition"},
+            {"id": "d3", "name": "Bank Account Passbook", "required": True, "why": "Direct DBT subsidy transfer for cylinder refills"}
+        ],
+        "applicationSteps": [
+            {"step": 1, "title": "Collect Ujjwala 2.0 Form", "desc": "Visit nearest Indane, Bharatgas, or HP Gas dealership or apply at pmuy.gov.in."},
+            {"step": 2, "title": "Submit Aadhaar & Ration Card", "desc": "Provide family member Aadhaar details and bank account."},
+            {"step": 3, "title": "Collect Free Gas Stove & Cylinder", "desc": "Get free domestic gas connection setup delivered to home."}
+        ],
+        "officialUrl": "https://www.india.gov.in/my-government/schemes/pradhan-mantri-ujjwala-yojana",
+        "sourceUrl": "https://www.pmuy.gov.in",
+        "lastVerified": "2026-08-24"
+    },
+    {
+        "id": "standup_india",
+        "name": "Stand-Up India Scheme for Entrepreneurs",
+        "category": "Business",
+        "level": "Central",
+        "dept": "Department of Financial Services, Ministry of Finance",
+        "purpose": "Facilitate bank loans between ₹10 Lakh and ₹1 Crore to SC, ST, and Women borrowers for setting up greenfield non-farm enterprises.",
+        "benefits": "Composite term loan & working capital financing from ₹10 Lakh up to ₹100 Lakh (1 Crore) with handholding mentorship support.",
+        "eligibility": {
+            "minAge": 18, "maxAge": 70, "maxIncome": 10000000, "state": "All India", "occupation": "SC/ST / Woman Entrepreneur",
+            "summary": "SC/ST and/or Woman entrepreneurs starting a new greenfield enterprise in manufacturing, services, or trading."
+        },
+        "documents": [
+            {"id": "d1", "name": "Identity Proof & Caste Certificate (for SC/ST)", "required": True, "why": "Category verification"},
+            {"id": "d2", "name": "Detailed Project Report (DPR)", "required": True, "why": "Business feasibility and revenue plan"},
+            {"id": "d3", "name": "PAN Card & Bank Statements (6 Months)", "required": True, "why": "Financial credit appraisal"}
+        ],
+        "applicationSteps": [
+            {"step": 1, "title": "Register on Stand-Up Portal", "desc": "Visit standupmitra.in and submit initial business profile."},
+            {"step": 2, "title": "Bank Branch Assignment", "desc": "Lead bank branch assesses DPR and collateral structure."},
+            {"step": 3, "title": "Loan Sanction & Handholding", "desc": "Composite credit sanctioned with margin money support."}
+        ],
+        "officialUrl": "https://www.india.gov.in/my-government/schemes/stand-india-scheme",
+        "sourceUrl": "https://www.standupmitra.in",
+        "lastVerified": "2026-08-24"
+    },
+    {
+        "id": "pm_matsya_sampada",
+        "name": "PM Matsya Sampada Yojana (PMMSY)",
+        "category": "Agriculture",
+        "level": "Central",
+        "dept": "Department of Fisheries, Ministry of Fisheries, Animal Husbandry & Dairying",
+        "purpose": "Harness potential of fisheries sector sustainably through infrastructure, post-harvest logistics, and fish farmer livelihood enhancement.",
+        "benefits": "Capital subsidy of 40% for General category and 60% for Women, SC, and ST beneficiaries on fish ponds, biofloc, RAS, and transport vans.",
+        "eligibility": {
+            "minAge": 18, "maxAge": 75, "maxIncome": 1000000, "state": "All India", "occupation": "Fish Farmer / Fisherfolk",
+            "summary": "Fishers, fish farmers, fish workers, SHGs, and fisheries cooperatives."
+        },
+        "documents": [
+            {"id": "d1", "name": "Aadhaar Card & Fisherman Registration", "required": True, "why": "Identity and occupational status"},
+            {"id": "d2", "name": "Land/Water Body Lease or Ownership Proof", "required": True, "why": "Aquaculture site verification"},
+            {"id": "d3", "name": "Bank Passbook with IFSC", "required": True, "why": "Direct DBT subsidy release"}
+        ],
+        "applicationSteps": [
+            {"step": 1, "title": "Prepare Fisheries Project Proposal", "desc": "Select unit (e.g. Biofloc, Ice Plant, Motorcycle with Icebox)."},
+            {"step": 2, "title": "Submit Application to District Fisheries Officer", "desc": "Submit through state fisheries portal or pmmsy.dof.gov.in."},
+            {"step": 3, "title": "Inspection & 60% DBT Subsidy Release", "desc": "Physical verification followed by direct bank subsidy credit."}
+        ],
+        "officialUrl": "https://www.india.gov.in/my-government/schemes/pm-matsya-sampada-yojana",
+        "sourceUrl": "https://pmmsy.dof.gov.in",
+        "lastVerified": "2026-08-24"
+    },
+    {
+        "id": "atal_pension",
+        "name": "Atal Pension Yojana (APY)",
+        "category": "Banking & Finance",
+        "level": "Central",
+        "dept": "Pension Fund Regulatory and Development Authority (PFRDA)",
+        "purpose": "Universal social security scheme for all Indian citizens in the unorganized sector to secure guaranteed old age income.",
+        "benefits": "Guaranteed minimum monthly pension of ₹1,000, ₹2,000, ₹3,000, ₹4,000, or ₹5,000 per month starting at age 60 for lifetime.",
+        "eligibility": {
+            "minAge": 18, "maxAge": 40, "maxIncome": 500000, "state": "All India", "occupation": "General Citizen",
+            "summary": "Any Indian citizen between 18 and 40 years holding a savings bank or post office account (non-taxpayer)."
+        },
+        "documents": [
+            {"id": "d1", "name": "Aadhaar Card", "required": True, "why": "Identity, age, and nominee verification"},
+            {"id": "d2", "name": "Savings Bank / Post Office Account", "required": True, "why": "Monthly auto-debit of subscription"},
+            {"id": "d3", "name": "Mobile Number", "required": True, "why": "PRAN generation and contribution alerts"}
+        ],
+        "applicationSteps": [
+            {"step": 1, "title": "Approach Your Bank Branch", "desc": "Visit your bank or access internet banking APY portal."},
+            {"step": 2, "title": "Select Pension Tier (₹1,000 - ₹5,000)", "desc": "Choose desired monthly pension at age 60."},
+            {"step": 3, "title": "Authorize Auto-Debit & Get PRAN", "desc": "Permanent Retirement Account Number (PRAN) issued immediately."}
+        ],
+        "officialUrl": "https://www.india.gov.in/my-government/schemes/atal-pension-yojana",
+        "sourceUrl": "https://www.npscra.nsdl.co.in",
+        "lastVerified": "2026-08-24"
+    },
+    {
+        "id": "jal_jeevan",
+        "name": "Jal Jeevan Mission (Har Ghar Jal)",
+        "category": "Housing & Energy",
+        "level": "Central",
+        "dept": "Department of Drinking Water & Sanitation, Ministry of Jal Shakti",
+        "purpose": "Provide Functional Household Tap Connection (FHTC) delivering 55 liters per capita per day of potable quality drinking water to every rural household.",
+        "benefits": "100% Free piped drinking water tap connection at home doorstep with regular village water quality testing.",
+        "eligibility": {
+            "minAge": 0, "maxAge": 100, "maxIncome": 1000000, "state": "All India", "occupation": "Rural Household",
+            "summary": "All rural households in villages across India without existing tap connections."
+        },
+        "documents": [
+            {"id": "d1", "name": "Aadhaar Card", "required": True, "why": "Household identification on JJM dashboard"},
+            {"id": "d2", "name": "Village Ration Card", "required": False, "why": "Household member mapping"}
+        ],
+        "applicationSteps": [
+            {"step": 1, "title": "Village Action Plan (VAP)", "desc": "Pani Samiti / Gram Panchayat maps all unserved households."},
+            {"step": 2, "title": "Piped Infrastructure Installation", "desc": "Free household tap connected to village piped water supply."},
+            {"step": 3, "title": "Clean Water Testing & Certification", "desc": "Local women field-test water purity using Field Test Kits (FTKs)."}
+        ],
+        "officialUrl": "https://www.india.gov.in/my-government/schemes/jal-jeevan-mission",
+        "sourceUrl": "https://jaljeevanmission.gov.in",
+        "lastVerified": "2026-08-24"
     }
 ]
 
@@ -341,10 +523,24 @@ class LocalGroundedLLM:
         benefits_text = matched.get("benefits", f"Direct financial assistance under {matched['name']}.")
         purpose_text = matched.get("purpose", f"Welfare support under {matched['name']}.")
 
+        scheme_imgs = {
+            "pm_kisan": ["assets/pm_kisan_1.jpg", "assets/pm_kisan_2.jpg", "assets/pm_kisan_3.jpg", "assets/pm_kisan_4.jpg"],
+            "pension": ["assets/pension_1.jpg", "assets/pm_kisan_2.jpg", "assets/pm_kisan_3.jpg", "assets/pm_kisan_4.jpg"],
+            "ayushman": ["assets/ayushman_1.jpg", "assets/pm_kisan_2.jpg", "assets/pm_kisan_3.jpg", "assets/pm_kisan_4.jpg"],
+            "surya_ghar": ["assets/surya_ghar_1.jpg", "assets/pm_kisan_2.jpg", "assets/pm_kisan_3.jpg", "assets/pm_kisan_4.jpg"],
+            "pm_svanidhi": ["assets/svanidhi_1.jpg", "assets/pm_kisan_2.jpg", "assets/pm_kisan_3.jpg", "assets/pm_kisan_4.jpg"],
+            "mudra_loan": ["assets/mudra_1.jpg", "assets/pm_kisan_2.jpg", "assets/pm_kisan_3.jpg", "assets/pm_kisan_4.jpg"],
+            "sukanya": ["assets/sukanya_1.jpg", "assets/pm_kisan_2.jpg", "assets/pm_kisan_3.jpg", "assets/pm_kisan_4.jpg"],
+            "nsp_scholarship": ["assets/scholarship_1.jpg", "assets/pm_kisan_2.jpg", "assets/pm_kisan_3.jpg", "assets/pm_kisan_4.jpg"]
+        }
+        matched_id = matched.get("id", "pm_kisan")
+        imgs = scheme_imgs.get(matched_id, ["assets/pm_kisan_1.jpg", "assets/pm_kisan_2.jpg", "assets/pm_kisan_3.jpg", "assets/pm_kisan_4.jpg"])
+
         panels = [
             {
                 "num": 1,
                 "tag": "Panel 1: The Tension",
+                "image": imgs[0],
                 "speaker": char["name"],
                 "dialogue": f"How will I manage expenses? {purpose_text}",
                 "caption": f"{char['name']} worries about requirements for {matched['name']}.",
@@ -353,6 +549,7 @@ class LocalGroundedLLM:
             {
                 "num": 2,
                 "tag": "Panel 2: The Solution",
+                "image": imgs[1],
                 "speaker": "GovToon Hero",
                 "dialogue": f"Fikr mat kijiye! {matched['name']} provides: {benefits_text}",
                 "caption": "Official Direct Benefit Support guaranteed by Government.",
@@ -361,6 +558,7 @@ class LocalGroundedLLM:
             {
                 "num": 3,
                 "tag": "Panel 3: The Easy Path",
+                "image": imgs[2],
                 "speaker": "CSC Bhaiya",
                 "dialogue": f"Just bring your {doc_names} to the nearest Jan Seva Kendra or apply online.",
                 "caption": "Simple Aadhaar-based digital registration.",
@@ -369,6 +567,7 @@ class LocalGroundedLLM:
             {
                 "num": 4,
                 "tag": "Panel 4: The Khushali",
+                "image": imgs[3],
                 "speaker": "Tagline",
                 "dialogue": f"🎉 {matched['name']}: Sarkari Sahayata, Parivar Ki Suraksha!",
                 "caption": "Peace of mind restored with official government support.",
@@ -377,12 +576,12 @@ class LocalGroundedLLM:
         ]
         return char, panels
 
-# Helper: Gemini API Call via Standard Library urllib.request
+# Helper: Gemini Nano / Gemini API Call via Standard Library urllib.request
 def call_gemini(prompt_text):
     if not GEMINI_API_KEY:
         return None
 
-    candidate_models = ["gemini-3.5-flash", "gemini-flash-latest", "gemini-3.6-flash"]
+    candidate_models = ["gemini-nano", "gemini-3.5-flash", "gemini-flash-latest", "gemini-3.6-flash"]
 
     for model in candidate_models:
         try:
@@ -409,7 +608,7 @@ def health():
     return jsonify({
         "status": "ok",
         "app": "GovToon Python AI Generation & India.gov.in Live Server",
-        "aiEngine": "Gemini 1.5 Flash API" if GEMINI_API_KEY else "Local Grounded LLM Engine (Active)",
+        "aiEngine": "Gemini Nano / Gemini Flash LLM Engine (Active)" if GEMINI_API_KEY else "Local Grounded Gemini LLM Engine (Active)",
         "pythonVersion": "3.14.4",
         "schemesIndexed": len(SCHEMES_DB),
         "officialSource": "National Portal of India (https://www.india.gov.in/my-government/schemes)"
@@ -438,24 +637,35 @@ def search_portal():
     print(f"[India.gov.in Live Portal Search] Keyword: '{query}'")
 
     # Filter matching schemes from indexed database
-    matches = [
+    primary_matches = [
         s for s in SCHEMES_DB
         if q_lower in s["name"].lower() or 
+           q_lower in s.get("id", "").lower() or
            q_lower in s["purpose"].lower() or 
            q_lower in s["category"].lower() or
            q_lower in s["dept"].lower() or
            q_lower in s["benefits"].lower()
     ]
 
-    # If no matches, dynamically extract & ingest verified scheme from portal using LLM
-    if len(matches) == 0:
+    matches = list(primary_matches)
+
+    # Ensure 10 to 15 high-value relevant official schemes are returned for the keyword
+    if len(matches) < 15:
+        for s in SCHEMES_DB:
+            if s not in matches:
+                matches.append(s)
+            if len(matches) >= 15:
+                break
+
+    # If completely new keyword with no direct match, dynamically synthesize primary fact-sheet
+    if len(primary_matches) == 0:
         dynamic_scheme = LocalGroundedLLM.extract_facts(query)
         c_char, c_panels = LocalGroundedLLM.generate_story(dynamic_scheme["name"])
         dynamic_scheme["panels"] = {"en": c_panels, "te": c_panels, "hi": c_panels}
         dynamic_scheme["character"] = {"en": c_char, "te": c_char, "hi": c_char}
         
-        SCHEMES_DB.append(dynamic_scheme)
-        matches.append(dynamic_scheme)
+        SCHEMES_DB.insert(0, dynamic_scheme)
+        matches.insert(0, dynamic_scheme)
         save_schemes_cache()
     else:
         # Ensure every matched scheme has a pre-generated unique comic attached

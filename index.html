@@ -73,7 +73,7 @@
           <div class="hero-search-box">
             <div class="search-input-wrapper">
               <span class="search-icon">🔍</span>
-              <input type="text" id="hero-search-input" placeholder="What government scheme do you want to understand? (e.g. PM-Kisan, Ayushman Bharat, Scholarships)..." data-i18n-ph="hero_ph" />
+              <input type="text" id="hero-search-input" placeholder="What government scheme do you want to understand? (e.g. PM-Kisan, Ayushman Bharat, Scholarships)..." data-i18n-ph="hero_ph" onkeypress="if(event.key==='Enter') handleHeroSearch()" />
               <button class="btn btn-saffron" data-i18n="btn_search_schemes" onclick="handleHeroSearch()">Search Schemes</button>
             </div>
             <div class="search-prompts">

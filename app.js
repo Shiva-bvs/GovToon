@@ -739,12 +739,45 @@ document.addEventListener("DOMContentLoaded", async () => {
   setupLanguageSelector();
   setupAccessibilityControls();
   setupExploreFilters();
-  checkServerHealth();
+  await checkServerHealth();
   updateLanguageUI();
   renderDirectory(SCHEMES_DATABASE);
   renderReaderView();
   renderLibrary();
+  fetchSchemesFromPortal();
 });
+
+// Fetch All Latest Portal & Cached Schemes from Backend API
+async function fetchSchemesFromPortal() {
+  try {
+    const res = await fetch(`${API_BASE_URL}/search-portal`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query: "" })
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.schemes && Array.isArray(data.schemes) && data.schemes.length > 0) {
+        data.schemes.forEach(s => {
+          let idx = SCHEMES_DATABASE.findIndex(item => item.id === s.id || item.name.toLowerCase() === s.name.toLowerCase());
+          if (idx !== -1) {
+            SCHEMES_DATABASE[idx] = s;
+          } else {
+            SCHEMES_DATABASE.push(s);
+          }
+        });
+        if (!appState.selectedScheme) {
+          appState.selectedScheme = SCHEMES_DATABASE[0];
+        }
+        renderDirectory(SCHEMES_DATABASE);
+        renderReaderView();
+        console.log(`🌐 [Live Portal Sync]: Successfully retrieved & loaded ${SCHEMES_DATABASE.length} schemes from India.gov.in portal cache.`);
+      }
+    }
+  } catch (err) {
+    console.warn("Portal sync warning:", err);
+  }
+}
 
 // Accessibility Controls Setup (Contrast Toggle)
 function setupAccessibilityControls() {
@@ -762,16 +795,17 @@ function setupExploreFilters() {
   const catSelect = document.getElementById('filter-category');
   const levelSelect = document.getElementById('filter-level');
 
-  const applyFilters = () => {
+  const applyFilters = async () => {
     const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
     const cat = catSelect ? catSelect.value.toLowerCase() : 'all';
     const lvl = levelSelect ? levelSelect.value.toLowerCase() : 'all';
 
-    const filtered = SCHEMES_DATABASE.filter(s => {
+    let filtered = SCHEMES_DATABASE.filter(s => {
       const matchQuery = !query || 
                          s.name.toLowerCase().includes(query) || 
                          s.purpose.toLowerCase().includes(query) || 
-                         (s.category && s.category.toLowerCase().includes(query));
+                         (s.category && s.category.toLowerCase().includes(query)) ||
+                         (s.benefits && s.benefits.toLowerCase().includes(query));
       
       const sCat = (s.category || '').toLowerCase();
       const matchCat = (cat === 'all') || sCat.includes(cat) || cat.includes(sCat);
@@ -782,10 +816,37 @@ function setupExploreFilters() {
       return matchQuery && matchCat && matchLvl;
     });
 
+    if (filtered.length === 0 && query.length >= 2) {
+      try {
+        const res = await fetch(`${API_BASE_URL}/search-portal`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query: query })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.scheme) {
+            let idx = SCHEMES_DATABASE.findIndex(s => s.id === data.scheme.id || s.name.toLowerCase() === data.scheme.name.toLowerCase());
+            if (idx === -1) SCHEMES_DATABASE.unshift(data.scheme);
+            else SCHEMES_DATABASE[idx] = data.scheme;
+            
+            filtered = [data.scheme];
+          }
+        }
+      } catch (e) {
+        console.warn("Live search fallback error:", e);
+      }
+    }
+
     renderDirectory(filtered);
   };
 
-  if (searchInput) searchInput.addEventListener('input', applyFilters);
+  if (searchInput) {
+    searchInput.addEventListener('input', applyFilters);
+    searchInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') applyFilters();
+    });
+  }
   if (catSelect) catSelect.addEventListener('change', applyFilters);
   if (levelSelect) levelSelect.addEventListener('change', applyFilters);
 }
@@ -1033,7 +1094,18 @@ function renderReaderView() {
   const panelsContainer = document.getElementById('reader-panels-container');
   if (panelsContainer) {
     panelsContainer.innerHTML = '';
-    const defaultImages = ["assets/pm_kisan_1.jpg", "assets/pm_kisan_2.jpg", "assets/pm_kisan_3.jpg", "assets/pm_kisan_4.jpg"];
+    const schemeImageMap = {
+      pm_kisan: ["assets/pm_kisan_1.jpg", "assets/pm_kisan_2.jpg", "assets/pm_kisan_3.jpg", "assets/pm_kisan_4.jpg"],
+      pension: ["assets/pension_1.jpg", "assets/pm_kisan_2.jpg", "assets/pm_kisan_3.jpg", "assets/pm_kisan_4.jpg"],
+      ayushman: ["assets/ayushman_1.jpg", "assets/pm_kisan_2.jpg", "assets/pm_kisan_3.jpg", "assets/pm_kisan_4.jpg"],
+      surya_ghar: ["assets/surya_ghar_1.jpg", "assets/pm_kisan_2.jpg", "assets/pm_kisan_3.jpg", "assets/pm_kisan_4.jpg"],
+      pm_svanidhi: ["assets/svanidhi_1.jpg", "assets/pm_kisan_2.jpg", "assets/pm_kisan_3.jpg", "assets/pm_kisan_4.jpg"],
+      mudra_loan: ["assets/mudra_1.jpg", "assets/pm_kisan_2.jpg", "assets/pm_kisan_3.jpg", "assets/pm_kisan_4.jpg"],
+      sukanya: ["assets/sukanya_1.jpg", "assets/pm_kisan_2.jpg", "assets/pm_kisan_3.jpg", "assets/pm_kisan_4.jpg"],
+      nsp_scholarship: ["assets/scholarship_1.jpg", "assets/pm_kisan_2.jpg", "assets/pm_kisan_3.jpg", "assets/pm_kisan_4.jpg"]
+    };
+
+    const defaultImages = schemeImageMap[s.id] || ["assets/pm_kisan_1.jpg", "assets/pm_kisan_2.jpg", "assets/pm_kisan_3.jpg", "assets/pm_kisan_4.jpg"];
 
     panelsList.forEach((p, idx) => {
       const imgSrc = p.image || defaultImages[idx % 4];
@@ -1472,7 +1544,7 @@ async function startProcessingPipeline(schemeTitle, schemeId, rawInputText) {
   if (overlay) {
     overlay.style.display = 'flex';
     const nameElem = document.getElementById('proc-scheme-name');
-    if (nameElem) nameElem.innerText = `AI Generating Comic for: ${title}`;
+    if (nameElem) nameElem.innerText = `Gemini Nano AI Generating Comic for: ${title}`;
 
     for (let i = 1; i <= 6; i++) {
       const stepElem = document.getElementById(`pstep-${i}`);
@@ -1488,7 +1560,7 @@ async function startProcessingPipeline(schemeTitle, schemeId, rawInputText) {
     await new Promise(r => setTimeout(r, 200));
     const s3 = document.getElementById('pstep-3'); if (s3) { s3.classList.add('active'); s3.style.opacity = '1'; }
     await new Promise(r => setTimeout(r, 200));
-    const s4 = document.getElementById('pstep-4'); if (s4) { s4.classList.add('active'); s4.style.opacity = '1'; }
+    const s4 = document.getElementById('pstep-4'); if (s4) { s4.classList.add('active'); s4.style.opacity = '1'; s4.innerText = '✓ 4. Gemini Nano LLM Generating 4-Panel Script'; }
   }
 
   let generatedPanels = null;
@@ -1986,19 +2058,82 @@ function quickSearch(query) {
   handleHeroSearch();
 }
 
-function handleHeroSearch() {
-  const inputElem = document.getElementById('hero-search-input');
-  const query = inputElem ? inputElem.value.trim() : '';
+async function handleHeroSearch(customQuery) {
+  let query = customQuery;
+  if (!query || typeof query !== 'string') {
+    const heroInput = document.getElementById('hero-search-input');
+    const dirInput = document.getElementById('directory-search');
+    query = (heroInput && heroInput.value.trim()) || (dirInput && dirInput.value.trim()) || '';
+  }
+  
   if (!query) {
     navigateTo('explore');
     return;
   }
-  let matched = SCHEMES_DATABASE.find(s => s.name.toLowerCase().includes(query.toLowerCase()) || s.purpose.toLowerCase().includes(query.toLowerCase()));
+
+  const qLower = query.toLowerCase();
+
+  // 1. Instant local match lookup across name, id, purpose, category, benefits, dept
+  let matched = SCHEMES_DATABASE.find(s => 
+    s.name.toLowerCase().includes(qLower) || 
+    (s.id && s.id.toLowerCase().includes(qLower)) ||
+    (s.purpose && s.purpose.toLowerCase().includes(qLower)) ||
+    (s.category && s.category.toLowerCase().includes(qLower)) ||
+    (s.benefits && s.benefits.toLowerCase().includes(qLower))
+  );
+
   if (matched) {
-    generateComicForScheme(matched.id);
-  } else {
-    startProcessingPipeline(query, null);
+    appState.selectedScheme = matched;
+    renderReaderView();
+    navigateTo('reader');
+    return;
   }
+
+  // 2. If not matched locally, query the live backend portal API (/api/search-portal)
+  const overlay = document.getElementById('processing-overlay');
+  if (overlay) {
+    overlay.style.display = 'flex';
+    const nameElem = document.getElementById('proc-scheme-name');
+    if (nameElem) nameElem.innerText = `Searching India.gov.in Portal for: ${query}`;
+  }
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/search-portal`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query: query })
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.schemes && Array.isArray(data.schemes) && data.schemes.length > 0) {
+        data.schemes.forEach(s => {
+          let idx = SCHEMES_DATABASE.findIndex(item => item.id === s.id || item.name.toLowerCase() === s.name.toLowerCase());
+          if (idx !== -1) {
+            SCHEMES_DATABASE[idx] = s;
+          } else {
+            SCHEMES_DATABASE.unshift(s);
+          }
+        });
+
+        const targetScheme = data.scheme || data.schemes[0];
+        appState.selectedScheme = targetScheme;
+        renderReaderView();
+        renderDirectory(data.schemes);
+        navigateTo('explore');
+        if (overlay) overlay.style.display = 'none';
+        return;
+      }
+    }
+  } catch (err) {
+    console.warn("Live portal search warning:", err);
+  }
+
+  if (overlay) overlay.style.display = 'none';
+  // 3. Fallback: filter directory grid
+  const searchInput = document.getElementById('directory-search');
+  if (searchInput) searchInput.value = query;
+  navigateTo('explore');
+  setupExploreFilters();
 }
 
 // Custom Document & Ingestion Handlers
