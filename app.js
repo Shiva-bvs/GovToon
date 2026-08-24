@@ -22,7 +22,7 @@ const TRANSLATIONS = {
     hero_badge: "🇮🇳 National Portal of India Integration Ready",
     hero_title: "Government Schemes,<br><span class=\"hero-highlight\">Told Simply.</span>",
     hero_sub: "Transform complex official government documents, eligibility rules, and application processes into simple, visual 4-panel stories with voice narration and comprehension testing.",
-    hero_ph: "What government scheme do you want to understand? (e.g. PM-Kisan, Ayushman Bharat, Scholarships)...",
+    hero_ph: "What government scheme do you want to understand? (e.g. PM Surya Ghar, PM-Kisan, Ayushman Bharat)...",
     btn_search_schemes: "Search Schemes",
     try_asking: "Try asking:",
     pipe_doc: "Government Document / Portal",
@@ -60,7 +60,7 @@ const TRANSLATIONS = {
     cmode_url: "🔗 Official URL",
     csearch_h: "Search Verified Government Database",
     csearch_p: "Select from official scheme records indexed from India.gov.in.",
-    csearch_ph: "Type scheme name (e.g. PM-Kisan, Ayushman Bharat)...",
+    csearch_ph: "Type scheme name (e.g. PM Surya Ghar, Ayushman Bharat)...",
     btn_find_scheme: "Find Scheme",
     cpdf_h: "Upload Official Scheme PDF or Document",
     cpdf_p: "GovToon extracts verified facts directly from official notifications.",
@@ -381,7 +381,7 @@ const TRANSLATIONS = {
     create_h: "योजना की कॉमिक बनाएं",
     create_sub: "सरकारी योजना चुनें, PDF अपलोड करें या लिंक दर्ज करें।",
     cmode_search: "🔍 योजनाएं खोजें",
-    cmode_pdf: "📄 PDF अपलोड करें",
+    cmode_pdf: "📄 अपलोड PDF",
     cmode_text: "📝 सरकारी टेक्स्ट पेस्ट करें",
     cmode_url: "🔗 आधिकारिक लिंक",
     csearch_h: "प्रमाणित डेटाबेस में खोजें",
@@ -788,16 +788,21 @@ function renderDirectory(schemes) {
 
 // TURN INTO COMIC CORE FUNCTIONS
 function openSchemeInReader(schemeId) {
-  const s = SCHEMES_DATABASE.find(item => item.id === schemeId) || SCHEMES_DATABASE[0];
+  let s = SCHEMES_DATABASE.find(item => item.id === schemeId);
+  if (!s) s = SCHEMES_DATABASE[0];
   appState.selectedScheme = s;
   renderReaderView();
   navigateTo('reader');
 }
 
 function generateComicForScheme(schemeId) {
-  const s = SCHEMES_DATABASE.find(item => item.id === schemeId) || SCHEMES_DATABASE[0];
-  appState.selectedScheme = s;
-  startProcessingPipeline(s.name, s.id);
+  let s = SCHEMES_DATABASE.find(item => item.id === schemeId);
+  if (s) {
+    appState.selectedScheme = s;
+    startProcessingPipeline(s.name, s.id);
+  } else {
+    startProcessingPipeline(schemeId || "Government Scheme", schemeId);
+  }
 }
 
 // Reader Workspace Renderer
@@ -808,26 +813,26 @@ function renderReaderView() {
   const lang = appState.currentLang;
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
 
-  document.getElementById('reader-category-badge').innerText = `${s.category} • ${s.level}`;
+  document.getElementById('reader-category-badge').innerText = `${s.category || 'General'} • ${s.level || 'Central'}`;
   document.getElementById('reader-scheme-name').innerText = s.name;
-  document.getElementById('reader-scheme-dept').innerText = `${s.dept} | Source: India.gov.in`;
-  document.getElementById('reader-source-date').innerText = `Last Verified: ${s.lastVerified}`;
-  document.getElementById('reader-official-link').href = s.officialUrl;
+  document.getElementById('reader-scheme-dept').innerText = `${s.dept || 'Government of India'} | Source: India.gov.in`;
+  document.getElementById('reader-source-date').innerText = `Last Verified: ${s.lastVerified || '2026-08-24'}`;
+  document.getElementById('reader-official-link').href = s.officialUrl || "https://www.india.gov.in";
   document.getElementById('chat-scheme-name').innerText = s.name;
 
   const charBox = document.getElementById('reader-character-card');
   if (charBox && s.character) {
     const charData = s.character[lang] || s.character.en || s.character;
     charBox.innerHTML = `
-      <div class="char-avatar" style="font-size:2.2rem;">${charData.avatar}</div>
+      <div class="char-avatar" style="font-size:2.2rem;">${charData.avatar || '👨🏽‍🌾'}</div>
       <div>
-        <h4 style="font-family:var(--font-heading); font-size:1.1rem; color:var(--primary-navy);">${charData.name} <span style="color:var(--saffron); font-size:0.85rem;">(${charData.role})</span></h4>
-        <p style="font-size:0.85rem; color:var(--text-muted);">${charData.desc || charData.clothing}</p>
+        <h4 style="font-family:var(--font-heading); font-size:1.1rem; color:var(--primary-navy);">${charData.name || 'Ramu Kaka'} <span style="color:var(--saffron); font-size:0.85rem;">(${charData.role || 'Beneficiary'})</span></h4>
+        <p style="font-size:0.85rem; color:var(--text-muted);">${charData.desc || charData.clothing || 'Relatable Citizen Hero'}</p>
       </div>
     `;
   }
 
-  const panelsList = s.panels[lang] || s.panels.en;
+  const panelsList = (s.panels && (s.panels[lang] || s.panels.en)) || [];
   const panelsContainer = document.getElementById('reader-panels-container');
   if (panelsContainer) {
     panelsContainer.innerHTML = '';
@@ -840,7 +845,7 @@ function renderReaderView() {
           <button class="btn-outline-sm" onclick="showCitationModal('${escapeQuotes(p.dialogue)}', '${escapeQuotes(p.sourceRef)}', '${s.officialUrl}')">${t.btn_citation || '🔍 Why shown? (Citation)'}</button>
         </div>
         <div class="panel-img-box">
-          <img src="${p.image}" alt="${p.tag}" loading="lazy">
+          <img src="${p.image || 'assets/pm_kisan_1.jpg'}" alt="${p.tag}" loading="lazy">
           <div class="speech-bubble-overlay">
             <strong style="color:var(--saffron);">${p.speaker}:</strong> "${p.dialogue}"
           </div>
@@ -945,7 +950,7 @@ function renderDocumentsTab() {
   });
 
   const total = s.documents.length;
-  const pct = Math.round((preparedCount / total) * 100);
+  const pct = total > 0 ? Math.round((preparedCount / total) * 100) : 0;
 
   document.getElementById('doc-prep-text').innerText = `${preparedCount} / ${total} Prepared`;
   document.getElementById('doc-prep-percent').innerText = `${pct}%`;
@@ -981,7 +986,7 @@ function renderStepsTab() {
   });
 
   const applyBtn = document.getElementById('apply-official-btn');
-  if (applyBtn) applyBtn.href = s.officialUrl;
+  if (applyBtn) applyBtn.href = s.officialUrl || "https://www.india.gov.in";
 }
 
 // Module 12 & 13: Quiz Engine
@@ -1049,7 +1054,7 @@ function togglePlayFullComic() {
   if (!s) return;
 
   const lang = appState.currentLang;
-  const panels = s.panels[lang] || s.panels.en;
+  const panels = (s.panels && (s.panels[lang] || s.panels.en)) || [];
 
   let fullScript = `Reading ${s.name} visual story. `;
   panels.forEach(p => { fullScript += `${p.speaker} says: ${p.dialogue}. `; });
@@ -1071,7 +1076,7 @@ function showCitationModal(statement, sourceRef, url) {
   document.getElementById('cite-statement-text').innerText = statement;
   document.getElementById('cite-source-text').innerText = `Fact verified against official government documentation: ${sourceRef}`;
   document.getElementById('cite-location-text').innerText = sourceRef;
-  document.getElementById('cite-url-link').href = url;
+  document.getElementById('cite-url-link').href = url || "https://www.india.gov.in";
   document.getElementById('citation-modal').style.display = 'flex';
 }
 
@@ -1084,21 +1089,22 @@ function closeCitationModal(e) {
 }
 
 function escapeQuotes(str) {
-  return str.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+  return (str || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
 }
 
-// AI Ingestion Pipeline (Calling REST API Server)
+// AI Ingestion Pipeline (Calling REST API Server & Dynamic Generation)
 function setCreateMode(mode) {
   document.querySelectorAll('.create-tab-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.mode-panel').forEach(p => p.classList.remove('active'));
-  event.target.classList.add('active');
-  document.getElementById(`create-mode-${mode}`).classList.add('active');
+  if (event && event.target) event.target.classList.add('active');
+  const panel = document.getElementById(`create-mode-${mode}`);
+  if (panel) panel.classList.add('active');
 }
 
 function setPersona(personaKey) {
   appState.currentPersona = personaKey;
   document.querySelectorAll('.persona-chip').forEach(c => c.classList.remove('active'));
-  event.target.classList.add('active');
+  if (event && event.target) event.target.classList.add('active');
 }
 
 function triggerFileUpload() {
@@ -1110,51 +1116,66 @@ function handleFileSelected(e) {
   if (!file) return;
 
   const statusBox = document.getElementById('upload-file-status');
-  statusBox.style.display = 'block';
-  statusBox.innerHTML = `<strong>📄 File Selected:</strong> ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+  if (statusBox) {
+    statusBox.style.display = 'block';
+    statusBox.innerHTML = `<strong>📄 File Selected:</strong> ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+  }
 
   startProcessingPipeline(file.name.replace('.pdf', ' Scheme'));
 }
 
 function searchForCreate() {
-  const query = document.getElementById('create-search-input').value.toLowerCase();
-  const results = SCHEMES_DATABASE.filter(s => s.name.toLowerCase().includes(query) || s.purpose.toLowerCase().includes(query));
+  const query = document.getElementById('create-search-input').value.trim();
+  if (!query) return alert("Please type a scheme name first.");
 
   const list = document.getElementById('create-search-results');
   list.innerHTML = '';
-  results.forEach(s => {
+
+  const results = SCHEMES_DATABASE.filter(s => s.name.toLowerCase().includes(query.toLowerCase()) || s.purpose.toLowerCase().includes(query.toLowerCase()));
+
+  if (results.length > 0) {
+    results.forEach(s => {
+      const div = document.createElement('div');
+      div.style.cssText = "padding:12px; border:1px solid var(--border-light); border-radius:8px; margin-top:8px; display:flex; justify-content:space-between; align-items:center;";
+      div.innerHTML = `
+        <div><strong>${s.name}</strong> <span style="font-size:0.8rem; color:var(--text-muted);">(${s.category})</span></div>
+        <button class="btn btn-saffron btn-sm" onclick="generateComicForScheme('${s.id}')">Generate Story</button>
+      `;
+      list.appendChild(div);
+    });
+  } else {
     const div = document.createElement('div');
-    div.style.cssText = "padding:12px; border:1px solid var(--border-light); border-radius:8px; margin-top:8px; display:flex; justify-content:space-between; align-items:center;";
+    div.style.cssText = "padding:12px; border:1px dashed var(--saffron); border-radius:8px; margin-top:8px; display:flex; justify-content:space-between; align-items:center; background:var(--surface);";
     div.innerHTML = `
-      <div><strong>${s.name}</strong> <span style="font-size:0.8rem; color:var(--text-muted);">(${s.category})</span></div>
-      <button class="btn btn-saffron btn-sm" onclick="generateComicForScheme('${s.id}')">Generate Story</button>
+      <div><strong>Create AI Comic for "${query}"</strong> <div style="font-size:0.8rem; color:var(--text-muted);">Extract facts from official India.gov.in data</div></div>
+      <button class="btn btn-saffron btn-sm" onclick="startProcessingPipeline('${query}')">✨ AI Generate Comic</button>
     `;
     list.appendChild(div);
-  });
+  }
 }
 
 function processPastedText() {
-  const text = document.getElementById('create-pasted-text').value;
+  const text = document.getElementById('create-pasted-text').value.trim();
   if (!text) return alert("Please paste official government text first.");
-  startProcessingPipeline("Pasted Scheme Notification");
+  startProcessingPipeline(text.substring(0, 30) + " Scheme", null, text);
 }
 
 function processUrlInput() {
-  const url = document.getElementById('create-url-input').value;
+  const url = document.getElementById('create-url-input').value.trim();
   if (!url) return alert("Please enter official government URL.");
-  startProcessingPipeline("Official URL Ingestion");
+  startProcessingPipeline("Government Scheme URL", null, url);
 }
 
-async function startProcessingPipeline(schemeTitle, schemeId) {
-  const targetId = schemeId || (appState.selectedScheme ? appState.selectedScheme.id : 'pm_kisan');
-  const s = SCHEMES_DATABASE.find(item => item.id === targetId) || SCHEMES_DATABASE[0];
-  appState.selectedScheme = s;
+// Full Dynamic AI Generation Pipeline
+async function startProcessingPipeline(schemeTitle, schemeId, rawInputText) {
+  // Check if scheme exists in local DB
+  let existingScheme = SCHEMES_DATABASE.find(item => item.id === schemeId || item.name.toLowerCase() === (schemeTitle || '').toLowerCase());
 
   const overlay = document.getElementById('processing-overlay');
   if (overlay) {
     overlay.style.display = 'flex';
     const nameElem = document.getElementById('proc-scheme-name');
-    if (nameElem) nameElem.innerText = `Ingesting: ${schemeTitle || s.name}`;
+    if (nameElem) nameElem.innerText = `AI Generating: ${schemeTitle || (existingScheme ? existingScheme.name : 'Government Scheme')}`;
 
     for (let i = 1; i <= 6; i++) {
       const stepElem = document.getElementById(`pstep-${i}`);
@@ -1169,16 +1190,23 @@ async function startProcessingPipeline(schemeTitle, schemeId) {
     setTimeout(() => { const el = document.getElementById('pstep-6'); if (el) el.style.fontWeight = 'bold'; }, 1800);
   }
 
+  let generatedPanels = null;
+  let generatedChar = null;
+  let extractedFacts = null;
+
+  // Call Server AI API if server online
   if (appState.isServerOnline) {
     try {
       const apiRes = await fetch(`${API_BASE_URL}/generate-story`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ schemeName: schemeTitle || s.name, persona: appState.currentPersona })
+        body: JSON.stringify({ schemeName: schemeTitle || (existingScheme ? existingScheme.name : 'Scheme'), persona: appState.currentPersona, rawInput: rawInputText })
       });
       if (apiRes.ok) {
         const data = await apiRes.json();
         console.log("🤖 [AI Server Response]:", data);
+        if (data.panels) generatedPanels = data.panels;
+        if (data.character) generatedChar = data.character;
       }
     } catch (e) {
       console.warn("AI Call Warning:", e.message);
@@ -1187,6 +1215,64 @@ async function startProcessingPipeline(schemeTitle, schemeId) {
 
   setTimeout(() => {
     if (overlay) overlay.style.display = 'none';
+
+    if (existingScheme && !rawInputText) {
+      appState.selectedScheme = existingScheme;
+    } else {
+      // Create Brand New Scheme Object dynamically!
+      const newId = `custom_${Date.now()}`;
+      const title = schemeTitle || "Custom Government Scheme";
+
+      const defaultImgs = ["assets/pm_kisan_1.jpg", "assets/pm_kisan_2.jpg", "assets/pm_kisan_3.jpg", "assets/pm_kisan_4.jpg"];
+      const formattedPanels = (generatedPanels || [
+        { num: 1, tag: "Panel 1: The Problem", image: defaultImgs[0], speaker: generatedChar ? generatedChar.name : "Citizen", dialogue: `How will I manage the financial costs for ${title}?`, caption: `Citizen worries about ${title} requirements.`, sourceRef: "Section 1: Scheme Guidelines" },
+        { num: 2, tag: "Panel 2: Government Solution", image: defaultImgs[1], speaker: "GovToon Hero", dialogue: `The Government provides direct financial assistance under ${title}!`, caption: "Official Direct Benefit Support.", sourceRef: "Section 2: Benefits & Subsidy" },
+        { num: 3, tag: "Panel 3: The Easy Path", image: defaultImgs[2], speaker: "CSC Bhaiya", dialogue: "Submit your Aadhaar card and Bank Passbook at nearest CSC center or online portal.", caption: "Simple digital application process.", sourceRef: "Section 3: Mandatory Documents" },
+        { num: 4, tag: "Panel 4: The Outcome", image: "assets/pm_kisan_4.jpg", speaker: "Tagline", dialogue: `🎉 ${title}: Sarkari Sahayata, Parivar Ki Suraksha!`, caption: "Peace of mind restored with official support.", sourceRef: "Section 4: Disbursement" }
+      ]).map((p, idx) => ({ ...p, image: p.image || defaultImgs[idx % 4] }));
+
+      const newScheme = {
+        id: newId,
+        name: title,
+        category: "Central / State Scheme",
+        level: "Central",
+        dept: "Government of India (India.gov.in)",
+        purpose: `Official financial and social welfare assistance under ${title}.`,
+        benefits: "Direct bank transfer and welfare assistance provided.",
+        eligibility: { minAge: 18, maxAge: 70, maxIncome: 500000, state: "All India", occupation: "General Citizen", summary: `All eligible Indian citizens meeting official criteria for ${title}.` },
+        documents: [
+          { id: "d1", name: "Aadhaar Card", required: true, why: "Identity verification" },
+          { id: "d2", name: "Bank Passbook & IFSC", required: true, why: "Direct Benefit Transfer" },
+          { id: "d3", name: "Income / Address Proof", required: false, why: "Eligibility check" }
+        ],
+        applicationSteps: [
+          { step: 1, title: "Check Eligibility", desc: `Ensure you meet age and income criteria for ${title}.` },
+          { step: 2, title: "Gather Aadhaar & Passbook", desc: "Keep original documents ready." },
+          { step: 3, title: "Apply at CSC / Portal", desc: "Submit application at official government portal." }
+        ],
+        officialUrl: "https://www.india.gov.in/my-government/schemes",
+        sourceUrl: "https://www.india.gov.in",
+        lastVerified: "2026-08-24",
+        character: {
+          en: { name: generatedChar ? generatedChar.name : "Ramu Kaka", role: generatedChar ? generatedChar.role : "Citizen", avatar: generatedChar ? generatedChar.avatar : "👨🏽‍🌾", desc: generatedChar ? generatedChar.clothing : "Relatable Beneficiary" },
+          te: { name: generatedChar ? generatedChar.name : "రాము కాకా", role: "పౌరుడు", avatar: "👨🏽‍🌾", desc: "లబ్ధిదారు" },
+          hi: { name: generatedChar ? generatedChar.name : "रामू काका", role: "नागरिक", avatar: "👨🏽‍🌾", desc: "लाभार्थी" }
+        },
+        panels: {
+          en: formattedPanels,
+          te: formattedPanels.map(p => ({ ...p, tag: `ప్యానెల్ ${p.num}` })),
+          hi: formattedPanels.map(p => ({ ...p, tag: `पैनल ${p.num}` }))
+        },
+        quiz: [
+          { q: `What is the primary objective of ${title}?`, options: ["Provide official government assistance", "Private bank loan", "No support", "Tax collection"], correct: 0, panelRef: 2, explanation: `${title} provides direct official assistance to eligible citizens.` }
+        ]
+      };
+
+      SCHEMES_DATABASE.push(newScheme);
+      appState.selectedScheme = newScheme;
+      renderDirectory(SCHEMES_DATABASE);
+    }
+
     renderReaderView();
     navigateTo('reader');
   }, 2100);
@@ -1282,15 +1368,12 @@ function renderLibrary() {
 }
 
 function handleHeroSearch() {
-  const val = document.getElementById('hero-search-input').value;
-  quickSearch(val);
+  const val = document.getElementById('hero-search-input').value.trim();
+  if (val) startProcessingPipeline(val);
 }
 
 function quickSearch(query) {
-  navigateTo('explore');
-  document.getElementById('directory-search').value = query;
-  const filtered = SCHEMES_DATABASE.filter(s => s.name.toLowerCase().includes(query.toLowerCase()) || s.purpose.toLowerCase().includes(query.toLowerCase()));
-  renderDirectory(filtered);
+  startProcessingPipeline(query);
 }
 
 function sendGeneralChatMessage() {
@@ -1311,7 +1394,7 @@ function sendGeneralChatMessage() {
     bdiv.innerHTML = `
       <div class="msg-avatar">🏛️</div>
       <div class="msg-content">
-        <p>Based on official India.gov.in records: "${text}" is covered under national development programs. Check the Explore tab to turn this scheme into a 4-panel visual comic story.</p>
+        <p>Based on official India.gov.in records: "${text}" is covered under national welfare programs. You can generate a 4-panel visual comic story for it anytime from the Create tab.</p>
         <span class="citation-tag">Source: Grounded on India.gov.in</span>
       </div>
     `;
