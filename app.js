@@ -308,7 +308,7 @@ const TRANSLATIONS = {
     astat_3: "సగటు పౌరుల అవగాహన",
     astat_4: "యాక్టివ్ భాషలు (ఇంగ్లీష్, తెలుగు, హిందీ)",
     conf_h: "📊 పౌరుల అయోమయ విశ్లేషణలు",
-    conf_sub: "ప్రభుత్వ పథకాలను అర్థం చేసుకోవడంలో ప్రజలు ఎక్కడ ఎక్కువ ఇబ్బంది పడుతున్నారు:",
+    conf_sub: "ప్రభుత్వ పథకాలను అర్థం చేసుకోవడంలో ప్రజలు ఎక్కడ ఎక్కువ ఇబ్బంది పడుతున్నారో చూడండి:",
     conf_1: "అర్హత నిబంధనలు & ఆదాయ పరిమితులు",
     conf_2: "అవసరమైన పత్రాలు & ధృవీకరణ",
     conf_3: "దరఖాస్తు విధానం & పోర్టల్ సబ్మిషన్",
@@ -496,7 +496,7 @@ const TRANSLATIONS = {
   }
 };
 
-// Multilingual Scheme Database
+// Multilingual Scheme Database Grounded on India.gov.in
 const SCHEMES_DATABASE = [
   {
     id: "pm_kisan",
@@ -587,22 +587,22 @@ const SCHEMES_DATABASE = [
     },
     panels: {
       en: [
-        { num: 1, tag: "Panel 1: The Tension", image: "assets/panel1.jpg", speaker: "Kalu", dialogue: "Didi, my bones ache. I can't sell tea forever. What happens when I am too old to stand?", caption: "Kalu worries about his future.", sourceRef: "Section 1" },
-        { num: 2, tag: "Panel 2: The Solution", image: "assets/panel2.jpg", speaker: "Didi", dialogue: "Kalu, think of this scheme like planting a banyan tree. Drop coins today, get shade (money) every month when old.", caption: "Old age support grows with you.", sourceRef: "Section 2" },
-        { num: 3, tag: "Panel 3: The Easy Path", image: "assets/panel3.jpg", speaker: "Didi", dialogue: "Just take your Aadhaar card to the Blue Building down the street. Tell them you want to save ₹20 a day.", caption: "Simple registration at Jan Seva Kendra.", sourceRef: "Section 3" },
-        { num: 4, tag: "Panel 4: The Khushali", image: "assets/panel4.jpg", speaker: "Alert", dialogue: "🎉 Monthly Pension Received: ₹3,000", caption: "Save a little now, get a 'Salary' for life when you retire.", sourceRef: "Section 4" }
+        { num: 1, tag: "Panel 1: The Tension", image: "assets/pm_kisan_1.jpg", speaker: "Kalu", dialogue: "Didi, my bones ache. I can't sell tea forever. What happens when I am too old to stand?", caption: "Kalu worries about his future.", sourceRef: "Section 1" },
+        { num: 2, tag: "Panel 2: The Solution", image: "assets/pm_kisan_2.jpg", speaker: "Didi", dialogue: "Kalu, think of this scheme like planting a banyan tree. Drop coins today, get shade (money) every month when old.", caption: "Old age support grows with you.", sourceRef: "Section 2" },
+        { num: 3, tag: "Panel 3: The Easy Path", image: "assets/pm_kisan_3.jpg", speaker: "Didi", dialogue: "Just take your Aadhaar card to the Blue Building down the street. Tell them you want to save ₹20 a day.", caption: "Simple registration at Jan Seva Kendra.", sourceRef: "Section 3" },
+        { num: 4, tag: "Panel 4: The Khushali", image: "assets/pm_kisan_4.jpg", speaker: "Alert", dialogue: "🎉 Monthly Pension Received: ₹3,000", caption: "Save a little now, get a 'Salary' for life when you retire.", sourceRef: "Section 4" }
       ],
       te: [
-        { num: 1, tag: "ప్యానెల్ 1: ఆందోళన", image: "assets/panel1.jpg", speaker: "కాలు", dialogue: "దిదీ, వయసు పైబడుతోంది. ఎల్లప్పుడూ టీ అమ్మలేను. వృద్ధాప్యంలో ఏమిటి పరిస్థితి?", caption: "భవిష్యత్తు గురించి ఆందోళన.", sourceRef: "Section 1" },
-        { num: 2, tag: "ప్యానెల్ 2: పరిష్కారం", image: "assets/panel2.jpg", speaker: "దిదీ", dialogue: "ఈ పథకాన్ని ఒక మర్రిచెట్టు నాటడం లాంటిదిగా భావించు. ఈరోజు కొన్ని నాణేలు దాచితే, వృద్ధాప్యంలో ప్రతినెల నీడ (డబ్బు) ఇస్తుంది.", caption: "వృద్ధాప్య ఆసరా.", sourceRef: "Section 2" },
-        { num: 3, tag: "ప్యానెల్ 3: నమోదు", image: "assets/panel3.jpg", speaker: "దిదీ", dialogue: "మీ ఆధార్ కార్డు తీసుకెళ్లి సేవ కేంద్రంలో ఇవ్వండి. రోజుకు 20 రూపాయలు దాచుకుంటానని చెప్పండి.", caption: "సులువైన నమోదు.", sourceRef: "Section 3" },
-        { num: 4, tag: "ప్యానెల్ 4: ఆనందం", image: "assets/panel4.jpg", speaker: "అలర్ట్", dialogue: "🎉 నెలవారీ పెన్షన్ లభించింది: ₹3,000", caption: "నెలవారీ పెన్షన్ హామీ.", sourceRef: "Section 4" }
+        { num: 1, tag: "ప్యానెల్ 1: ఆందోళన", image: "assets/pm_kisan_1.jpg", speaker: "కాలు", dialogue: "దిదీ, వయసు పైబడుతోంది. ఎల్లప్పుడూ టీ అమ్మలేను. వృద్ధాప్యంలో ఏమిటి పరిస్థితి?", caption: "భవిష్యత్తు గురించి ఆందోళన.", sourceRef: "Section 1" },
+        { num: 2, tag: "ప్యానెల్ 2: పరిష్కారం", image: "assets/pm_kisan_2.jpg", speaker: "దిదీ", dialogue: "ఈ పథకాన్ని ఒక మర్రిచెట్టు నాటడం లాంటిదిగా భావించు. ఈరోజు కొన్ని నాణేలు దాచితే, వృద్ధాప్యంలో ప్రతినెల నీడ (డబ్బు) ఇస్తుంది.", caption: "వృద్ధాప్య ఆసరా.", sourceRef: "Section 2" },
+        { num: 3, tag: "ప్యానెల్ 3: నమోదు", image: "assets/pm_kisan_3.jpg", speaker: "దిదీ", dialogue: "మీ ఆధార్ కార్డు తీసుకెళ్లి సేవ కేంద్రంలో ఇవ్వండి. రోజుకు 20 రూపాయలు దాచుకుంటానని చెప్పండి.", caption: "సులువైన నమోదు.", sourceRef: "Section 3" },
+        { num: 4, tag: "ప్యానెల్ 4: ఆనందం", image: "assets/pm_kisan_4.jpg", speaker: "అలర్ట్", dialogue: "🎉 నెలవారీ పెన్షన్ లభించింది: ₹3,000", caption: "నెలవారీ పెన్షన్ హామీ.", sourceRef: "Section 4" }
       ],
       hi: [
-        { num: 1, tag: "पैनल 1: चिंता", image: "assets/panel1.jpg", speaker: "कालू", dialogue: "दीदी, अब शरीर थकने लगा है। हमेशा चाय नहीं बेच सकता। बुढ़ापे में क्या होगा?", caption: "भविष्य की चिंता।", sourceRef: "Section 1" },
-        { num: 2, tag: "पैनल 2: समाधान", image: "assets/panel2.jpg", speaker: "दीदी", dialogue: "कालू, इसे बरगद का पेड़ लगाने जैसा समझो। आज थोड़े सिक्के डालो, बुढ़ापे में हर महीने ठंडी छांव मिलेगी।", caption: "बूढ़ापे की मजबूत लाठी।", sourceRef: "Section 2" },
-        { num: 3, tag: "पैनल 3: आसान पंजीकरण", image: "assets/panel3.jpg", speaker: "दीदी", dialogue: "बस अपना आधार कार्ड नीले जन सेवा केंद्र ले जाओ और बचत शुरू करो।", caption: "आसान पंजीकरण।", sourceRef: "Section 3" },
-        { num: 4, tag: "पैनल 4: खुशहाली", image: "assets/panel4.jpg", speaker: "अलर्ट", dialogue: "🎉 मासिक पेंशन प्राप्त: ₹3,000", caption: "हर महीने ₹3,000 की गारंटी।", sourceRef: "Section 4" }
+        { num: 1, tag: "पैनल 1: चिंता", image: "assets/pm_kisan_1.jpg", speaker: "कालू", dialogue: "दीदी, अब शरीर थकने लगा है। हमेशा चाय नहीं बेच सकता। बुढ़ापे में क्या होगा?", caption: "भविष्य की चिंता।", sourceRef: "Section 1" },
+        { num: 2, tag: "पैनल 2: समाधान", image: "assets/pm_kisan_2.jpg", speaker: "दीदी", dialogue: "कालू, इसे बरगद का पेड़ लगाने जैसा समझो। आज थोड़े सिक्के डालो, बुढ़ापे में हर महीने ठंडी छांव मिलेगी।", caption: "बूढ़ापे की मजबूत लाठी।", sourceRef: "Section 2" },
+        { num: 3, tag: "पैनल 3: आसान पंजीकरण", image: "assets/pm_kisan_3.jpg", speaker: "दीदी", dialogue: "बस अपना आधार कार्ड नीले जन सेवा केंद्र ले जाओ और बचत शुरू करो।", caption: "आसान पंजीकरण।", sourceRef: "Section 3" },
+        { num: 4, tag: "पैनल 4: खुशहाली", image: "assets/pm_kisan_4.jpg", speaker: "अलर्ट", dialogue: "🎉 मासिक पेंशन प्राप्त: ₹3,000", caption: "हर महीने ₹3,000 की गारंटी।", sourceRef: "Section 4" }
       ]
     },
     quiz: [
@@ -638,26 +638,81 @@ const SCHEMES_DATABASE = [
     },
     panels: {
       en: [
-        { num: 1, tag: "Panel 1: The Emergency", image: "assets/panel1.jpg", speaker: "Lata Tai", dialogue: "Doctor says operation costs ₹1 Lakh! Where will we get this money at midnight?", caption: "Medical emergencies cause unexpected panic.", sourceRef: "Section 1" },
-        { num: 2, tag: "Panel 2: The Solution", image: "assets/panel2.jpg", speaker: "Asha Didi", dialogue: "Don't sell your gold! Show this Ayushman Card. Government pays up to ₹5 Lakh directly!", caption: "Golden Health Shield covers hospital bills.", sourceRef: "Section 2" },
-        { num: 3, tag: "Panel 3: The Easy Path", image: "assets/panel3.jpg", speaker: "Arogyamitra", dialogue: "Just scan fingerprint with Aadhaar. Zero cash required at hospital counter.", caption: "Instant cashless authorization.", sourceRef: "Section 3" },
-        { num: 4, tag: "Panel 4: The Recovery", image: "assets/panel4.jpg", speaker: "Lata Tai", dialogue: "Paid zero rupees! My family is healthy and debt-free.", caption: "Full hospital treatment with zero cash out of pocket.", sourceRef: "Section 4" }
+        { num: 1, tag: "Panel 1: The Emergency", image: "assets/pm_kisan_1.jpg", speaker: "Lata Tai", dialogue: "Doctor says operation costs ₹1 Lakh! Where will we get this money at midnight?", caption: "Medical emergencies cause unexpected panic.", sourceRef: "Section 1" },
+        { num: 2, tag: "Panel 2: The Solution", image: "assets/pm_kisan_2.jpg", speaker: "Asha Didi", dialogue: "Don't sell your gold! Show this Ayushman Card. Government pays up to ₹5 Lakh directly!", caption: "Golden Health Shield covers hospital bills.", sourceRef: "Section 2" },
+        { num: 3, tag: "Panel 3: The Easy Path", image: "assets/pm_kisan_3.jpg", speaker: "Arogyamitra", dialogue: "Just scan fingerprint with Aadhaar. Zero cash required at hospital counter.", caption: "Instant cashless authorization.", sourceRef: "Section 3" },
+        { num: 4, tag: "Panel 4: The Recovery", image: "assets/pm_kisan_4.jpg", speaker: "Lata Tai", dialogue: "Paid zero rupees! My family is healthy and debt-free.", caption: "Full hospital treatment with zero cash out of pocket.", sourceRef: "Section 4" }
       ],
       te: [
-        { num: 1, tag: "ప్యానెల్ 1: అత్యవసరం", image: "assets/panel1.jpg", speaker: "లతా తాయి", dialogue: "ఆపరేషన్‌కు లక్ష రూపాయలు అవుతాయని డాక్టర్ చెప్పారు! అర్ధరాత్రి అంత డబ్బు ఎక్కడ తెచ్చేది?", caption: "వైద్య అత్యవసర పరిస్థితి.", sourceRef: "Section 1" },
-        { num: 2, tag: "ప్యానెల్ 2: ఆయుష్మాన్ కార్డ్", image: "assets/panel2.jpg", speaker: "ఆశా దిదీ", dialogue: "బంగారం అమ్మకండి! ఆయుష్మాన్ గోల్డెన్ కార్డ్ చూపించండి. ప్రభుత్వం 5 లక్షల వరకు ఉచిత వైద్యం అందిస్తుంది!", caption: "ఉచిత వైద్య భద్రత.", sourceRef: "Section 2" },
-        { num: 3, tag: "ప్యానెల్ 3: ఉచిత చికిత్స", image: "assets/panel3.jpg", speaker: "ఆరోగ్యమిత్ర", dialogue: "ఆధార్ వేలిముద్ర వేస్తే సరిపోతుంది. కౌంటర్లో ఒక్క రూపాయి కూడా చెల్లించనవసరం లేదు.", caption: "క్యాష్‌లెస్ చికిత్స.", sourceRef: "Section 3" },
-        { num: 4, tag: "ప్యానెల్ 4: ఆనందం", image: "assets/panel4.jpg", speaker: "లతా తాయి", dialogue: "సున్నా రూపాయలు చెల్లించాం! కుటుంబం ఆరోగ్యంగా ఉంది.", caption: "రుణాలు లేని ఉచిత చికిత్స.", sourceRef: "Section 4" }
+        { num: 1, tag: "ప్యానెల్ 1: అత్యవసరం", image: "assets/pm_kisan_1.jpg", speaker: "లతా తాయి", dialogue: "ఆపరేషన్‌కు లక్ష రూపాయలు అవుతాయని డాక్టర్ చెప్పారు! అర్ధరాత్రి అంత డబ్బు ఎక్కడ తెచ్చేది?", caption: "వైద్య అత్యవసర పరిస్థితి.", sourceRef: "Section 1" },
+        { num: 2, tag: "ప్యానెల్ 2: ఆయుష్మాన్ కార్డ్", image: "assets/pm_kisan_2.jpg", speaker: "ఆశా దిదీ", dialogue: "బంగారం అమ్మకండి! ఆయుష్మాన్ గోల్డెన్ కార్డ్ చూపించండి. ప్రభుత్వం 5 లక్షల వరకు ఉచిత వైద్యం అందిస్తుంది!", caption: "ఉచిత వైద్య భద్రత.", sourceRef: "Section 2" },
+        { num: 3, tag: "ప్యానెల్ 3: ఉచిత చికిత్స", image: "assets/pm_kisan_3.jpg", speaker: "ఆరోగ్యమిత్ర", dialogue: "ఆధార్ వేలిముద్ర వేస్తే సరిపోతుంది. కౌంటర్లో ఒక్క రూపాయి కూడా చెల్లించనవసరం లేదు.", caption: "క్యాష్‌లెస్ చికిత్స.", sourceRef: "Section 3" },
+        { num: 4, tag: "ప్యానెల్ 4: ఆనందం", image: "assets/pm_kisan_4.jpg", speaker: "లతా తాయి", dialogue: "సున్నా రూపాయలు చెల్లించాం! కుటుంబం ఆరోగ్యంగా ఉంది.", caption: "రుణాలు లేని ఉచిత చికిత్స.", sourceRef: "Section 4" }
       ],
       hi: [
-        { num: 1, tag: "पैनल 1: आपात स्थिति", image: "assets/panel1.jpg", speaker: "लता ताई", dialogue: "डॉक्टर साहब कह रहे हैं ऑपरेशन में ₹1 लाख लगेगा! आधी रात को इतना पैसा कहां से लाऊं?", caption: "अस्पताल के खर्च से चिंता।", sourceRef: "Section 1" },
-        { num: 2, tag: "पैनल 2: समाधान", image: "assets/panel2.jpg", speaker: "आशा दीदी", dialogue: "गहने मत बेचो! आयुष्मान कार्ड दिखाओ। सरकार ₹5 लाख तक का अस्पताल खर्च खुद देगी!", caption: "₹5 लाख का मुफ्त इलाज।", sourceRef: "Section 2" },
-        { num: 3, tag: "पैनल 3: कैशलेस प्रक्रिया", image: "assets/panel3.jpg", speaker: "आरोग्यमित्र", dialogue: "बस आधार से फिंगरप्रिंट लगाएं। अस्पताल में ₹1 भी नगद नहीं देना होगा।", caption: "कैशलेस अस्पताल सेवा।", sourceRef: "Section 3" },
-        { num: 4, tag: "पैनल 4: स्वस्थ परिवार", image: "assets/panel4.jpg", speaker: "लता ताई", dialogue: "₹0 में पूरा इलाज हो गया! परिवार सुरक्षित है।", caption: "बिना कर्ज के इलाज।", sourceRef: "Section 4" }
+        { num: 1, tag: "पैनल 1: आपात स्थिति", image: "assets/pm_kisan_1.jpg", speaker: "लता ताई", dialogue: "डॉक्टर साहब कह रहे हैं ऑपरेशन में ₹1 लाख लगेगा! आधी रात को इतना पैसा कहां से लाऊं?", caption: "अस्पताल के खर्च से चिंता।", sourceRef: "Section 1" },
+        { num: 2, tag: "पैनल 2: समाधान", image: "assets/pm_kisan_2.jpg", speaker: "आशा दीदी", dialogue: "गहने मत बेचो! आयुष्मान कार्ड दिखाओ। सरकार ₹5 लाख तक का अस्पताल खर्च खुद देगी!", caption: "₹5 लाख का मुफ्त इलाज।", sourceRef: "Section 2" },
+        { num: 3, tag: "पैनल 3: कैशलेस प्रक्रिया", image: "assets/pm_kisan_3.jpg", speaker: "आरोग्यमित्र", dialogue: "बस आधार से फिंगरप्रिंट लगाएं। अस्पताल में ₹1 भी नगद नहीं देना होगा।", caption: "कैशलेस अस्पताल सेवा।", sourceRef: "Section 3" },
+        { num: 4, tag: "पैनल 4: स्वस्थ परिवार", image: "assets/pm_kisan_4.jpg", speaker: "लता ताई", dialogue: "₹0 में पूरा इलाज हो गया! परिवार सुरक्षित है।", caption: "बिना कर्ज के इलाज।", sourceRef: "Section 4" }
       ]
     },
     quiz: [
       { q: "What is the annual health cover provided per family under Ayushman Bharat?", options: ["₹50,000", "₹5 Lakhs per family per year", "₹1 Lakh", "₹10 Lakhs"], correct: 1, panelRef: 2, explanation: "Ayushman Bharat provides ₹5 Lakh cashless hospitalization cover per family per year." }
+    ]
+  },
+  {
+    id: "surya_ghar",
+    name: "PM Surya Ghar: Muft Bijli Yojana",
+    category: "Housing & Energy",
+    level: "Central",
+    dept: "Ministry of New and Renewable Energy (MNRE)",
+    purpose: "Provide up to 300 units of free electricity per month to 1 Crore households by assisting with rooftop solar panel installations.",
+    benefits: "Direct financial subsidy up to ₹78,000 for 3kW rooftop solar installation + 300 units free electricity per month.",
+    eligibility: {
+      minAge: 18, maxAge: 100, maxIncome: 1000000, state: "All India", occupation: "General Citizen",
+      summary: "Indian citizen families owning a suitable roof structure and valid electricity connection."
+    },
+    documents: [
+      { id: "d1", name: "Electricity Bill", required: true, why: "Verification of active electricity connection & consumer number" },
+      { id: "d2", name: "Aadhaar Card", required: true, why: "Identity proof for subsidy bank transfer" },
+      { id: "d3", name: "Roof Ownership / House Document", required: true, why: "Confirms solar panel installation feasibility" }
+    ],
+    applicationSteps: [
+      { step: 1, title: "Register on Portal", desc: "Visit pmsuryaghar.gov.in and enter your Electricity Consumer Number." },
+      { step: 2, title: "Select Empanelled Vendor", desc: "Choose an official solar installer for technical survey." },
+      { step: 3, title: "Get DISCOM Approval", desc: "Local power company inspects net-meter feasibility." },
+      { step: 4, title: "Receive ₹78,000 Subsidy", desc: "Subsidy credited directly to your bank account within 30 days." }
+    ],
+    officialUrl: "https://www.india.gov.in/my-government/schemes/pm-surya-ghar",
+    sourceUrl: "https://pmsuryaghar.gov.in",
+    lastVerified: "2026-08-24",
+    character: {
+      en: { name: "Raju", role: "Youth / Student", avatar: "🎓", desc: "Tech-savvy youth keen on green solar energy for family home" },
+      te: { name: "రాజు", role: "విద్యార్థి", avatar: "🎓", desc: "సోలార్ విద్యుత్ ద్వారా కరెంట్ బిల్లు తగ్గించుకోవాలనే విద్యార్థి" },
+      hi: { name: "राजू", role: "युवा / छात्र", avatar: "🎓", desc: "सोलर ऊर्जा से मुफ्त बिजली पाने वाला छात्र" }
+    },
+    panels: {
+      en: [
+        { num: 1, tag: "Panel 1: The Tension", image: "assets/pm_kisan_1.jpg", speaker: "Raju", dialogue: "Father is stressed about heavy electricity bills every month! How can we reduce light charges?", caption: "Rising electricity bills cause family worry.", sourceRef: "Section 1" },
+        { num: 2, tag: "Panel 2: The Solution", image: "assets/pm_kisan_2.jpg", speaker: "GovToon Hero", dialogue: "Install PM Surya Ghar Rooftop Solar! Get 300 units of FREE electricity every month + ₹78,000 subsidy!", caption: "Free Solar Power for 1 Crore Homes.", sourceRef: "Section 2" },
+        { num: 3, tag: "Panel 3: The Easy Path", image: "assets/pm_kisan_3.jpg", speaker: "Raju & DISCOM", dialogue: "Register consumer number at pmsuryaghar.gov.in with Aadhaar and Electricity Bill.", caption: "Simple online registration.", sourceRef: "Section 3" },
+        { num: 4, tag: "Panel 4: The Outcome", image: "assets/pm_kisan_4.jpg", speaker: "Tagline", dialogue: "☀️ PM Surya Ghar: Zero Light Bill, Permanent Savings!", caption: "300 units free electricity every month.", sourceRef: "Section 4" }
+      ],
+      te: [
+        { num: 1, tag: "ప్యానెల్ 1: ఆందోళన", image: "assets/pm_kisan_1.jpg", speaker: "రాజు", dialogue: "ప్రతినెలా కరెంట్ బిల్లు ఎక్కువగా వస్తోంది. ఏం చేయాలి?", caption: "కరెంట్ బిల్లుపై ఆందోళన.", sourceRef: "Section 1" },
+        { num: 2, tag: "ప్యానెల్ 2: పిఎమ్ సూర్య ఘర్", image: "assets/pm_kisan_2.jpg", speaker: "హీరో", dialogue: "పిఎమ్ సూర్య ఘర్ సోలార్ ప్యానెల్ అమర్చుకోండి! ప్రతినెలా 300 యూనిట్ల ఉచిత విద్యుత్ పొందండి!", caption: "ఉచిత సోలార్ విద్యుత్.", sourceRef: "Section 2" },
+        { num: 3, tag: "ప్యానెల్ 3: నమోదు", image: "assets/pm_kisan_3.jpg", speaker: "రాజు", dialogue: "కరెంట్ బిల్లు, ఆధార్ కార్డుతో pmsuryaghar.gov.in పోర్టల్‌లో నమోదు చేసుకోండి.", caption: "సులువైన నమోదు.", sourceRef: "Section 3" },
+        { num: 4, tag: "ప్యానెల్ 4: వెలుగులు", image: "assets/pm_kisan_4.jpg", speaker: "ట్యాగ్‌లైన్", dialogue: "☀️ పిఎమ్ సూర్య ఘర్: సున్నా కరెంట్ బిల్లు, నిరంతర పొదుపు!", caption: "ఉచిత విద్యుత్ సంతోషం.", sourceRef: "Section 4" }
+      ],
+      hi: [
+        { num: 1, tag: "पैनल 1: चिंता", image: "assets/pm_kisan_1.jpg", speaker: "राजू", dialogue: "हर महीने बिजली बिल बहुत भारी आता है! क्या उपाय है?", caption: "बिजली बिल की चिंता।", sourceRef: "Section 1" },
+        { num: 2, tag: "पैनल 2: समाधान", image: "assets/pm_kisan_2.jpg", speaker: "हीरो", dialogue: "पीएम सूर्य घर सोलर लगवाएं! हर महीने 300 यूनिट मुफ्त बिजली पाएँ!", caption: "मुफ्त सोलर बिजली।", sourceRef: "Section 2" },
+        { num: 3, tag: "पैनल 3: पंजीकरण", image: "assets/pm_kisan_3.jpg", speaker: "राजू", dialogue: "बस बिजली बिल और आधार के साथ pmsuryaghar.gov.in पर रजिस्टर करें।", caption: "आसान ऑनलाइन आवेदन।", sourceRef: "Section 3" },
+        { num: 4, tag: "पैनल 4: खुशहाली", image: "assets/pm_kisan_4.jpg", speaker: "टैगलाइन", dialogue: "☀️ पीएम सूर्य घर: जीरो बिजली बिल, पक्की बचत!", caption: "हर महीने 300 यूनिट फ्री।", sourceRef: "Section 4" }
+      ]
+    },
+    quiz: [
+      { q: "How many units of free electricity per month are supported under PM Surya Ghar?", options: ["50 Units", "100 Units", "300 Units per month", "500 Units"], correct: 2, panelRef: 2, explanation: "PM Surya Ghar provides up to 300 units of free electricity every month." }
     ]
   }
 ];
@@ -676,14 +731,64 @@ let appState = {
 
 // Initialize App
 document.addEventListener("DOMContentLoaded", async () => {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.getVoices();
+    window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.getVoices(); };
+  }
   setupNavigation();
   setupLanguageSelector();
+  setupAccessibilityControls();
+  setupExploreFilters();
   checkServerHealth();
   updateLanguageUI();
   renderDirectory(SCHEMES_DATABASE);
   renderReaderView();
   renderLibrary();
 });
+
+// Accessibility Controls Setup (Contrast Toggle)
+function setupAccessibilityControls() {
+  const contrastBtn = document.getElementById('btn-contrast-toggle');
+  if (contrastBtn) {
+    contrastBtn.addEventListener('click', () => {
+      document.body.classList.toggle('theme-contrast');
+    });
+  }
+}
+
+// Explore Filters & Live Search Setup
+function setupExploreFilters() {
+  const searchInput = document.getElementById('directory-search');
+  const catSelect = document.getElementById('filter-category');
+  const levelSelect = document.getElementById('filter-level');
+
+  const applyFilters = () => {
+    const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+    const cat = catSelect ? catSelect.value.toLowerCase() : 'all';
+    const lvl = levelSelect ? levelSelect.value.toLowerCase() : 'all';
+
+    const filtered = SCHEMES_DATABASE.filter(s => {
+      const matchQuery = !query || 
+                         s.name.toLowerCase().includes(query) || 
+                         s.purpose.toLowerCase().includes(query) || 
+                         (s.category && s.category.toLowerCase().includes(query));
+      
+      const sCat = (s.category || '').toLowerCase();
+      const matchCat = (cat === 'all') || sCat.includes(cat) || cat.includes(sCat);
+
+      const sLvl = (s.level || '').toLowerCase();
+      const matchLvl = (lvl === 'all') || sLvl.includes(lvl) || lvl.includes(sLvl);
+
+      return matchQuery && matchCat && matchLvl;
+    });
+
+    renderDirectory(filtered);
+  };
+
+  if (searchInput) searchInput.addEventListener('input', applyFilters);
+  if (catSelect) catSelect.addEventListener('change', applyFilters);
+  if (levelSelect) levelSelect.addEventListener('change', applyFilters);
+}
 
 // Check AI Server Health
 async function checkServerHealth() {
@@ -692,10 +797,10 @@ async function checkServerHealth() {
     if (res.ok) {
       const data = await res.json();
       appState.isServerOnline = true;
-      console.log("✅ [GovToon API Server Connected]:", data.aiEngine);
+      console.log("✅ [GovToon API Connected]:", data.aiEngine);
     }
   } catch (err) {
-    console.warn("⚠️ [GovToon API Offline] Operating with local Fact Grounded AI Engine.");
+    console.warn("⚠️ Operating with local Fact Grounded AI Engine.");
     appState.isServerOnline = false;
   }
 }
@@ -779,7 +884,7 @@ function renderDirectory(schemes) {
       <p class="scard-desc">${s.purpose}</p>
       <div class="scard-footer">
         <span class="scard-source">✓ Source: India.gov.in</span>
-        <button class="btn btn-saffron" onclick="generateComicForScheme('${s.id}')">${t.btn_create_nav || '+ Turn into Comic'}</button>
+        <button class="btn btn-saffron" onclick="generateComicForScheme('${s.id}')">${t.btn_create_nav || '+ Turn Scheme into Comic'}</button>
       </div>
     `;
     grid.appendChild(card);
@@ -805,53 +910,82 @@ function generateComicForScheme(schemeId) {
   }
 }
 
-// Reader Workspace Renderer
+// READER WORKSPACE RENDERER
 function renderReaderView() {
   const s = appState.selectedScheme;
   if (!s) return;
 
-  const lang = appState.currentLang;
+  const lang = appState.currentLang || 'en';
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
 
-  document.getElementById('reader-category-badge').innerText = `${s.category || 'General'} • ${s.level || 'Central'}`;
-  document.getElementById('reader-scheme-name').innerText = s.name;
-  document.getElementById('reader-scheme-dept').innerText = `${s.dept || 'Government of India'} | Source: India.gov.in`;
-  document.getElementById('reader-source-date').innerText = `Last Verified: ${s.lastVerified || '2026-08-24'}`;
-  document.getElementById('reader-official-link').href = s.officialUrl || "https://www.india.gov.in";
-  document.getElementById('chat-scheme-name').innerText = s.name;
+  // 1. Update Header Info
+  const catBadge = document.getElementById('reader-category-badge');
+  if (catBadge) catBadge.innerText = `${s.category || 'General'} • ${s.level || 'Central'}`;
 
+  const schemeNameElem = document.getElementById('reader-scheme-name');
+  if (schemeNameElem) schemeNameElem.innerText = s.name;
+
+  const schemeDeptElem = document.getElementById('reader-scheme-dept');
+  if (schemeDeptElem) schemeDeptElem.innerText = `${s.dept || 'Government of India'} | Source: India.gov.in`;
+
+  const sourceDateElem = document.getElementById('reader-source-date');
+  if (sourceDateElem) sourceDateElem.innerText = `Last Verified: ${s.lastVerified || '2026-08-24'}`;
+
+  const officialLinkElem = document.getElementById('reader-official-link');
+  if (officialLinkElem) officialLinkElem.href = s.officialUrl || "https://www.india.gov.in";
+
+  const chatSchemeNameElem = document.getElementById('chat-scheme-name');
+  if (chatSchemeNameElem) chatSchemeNameElem.innerText = s.name;
+
+  // 2. Character Bible Card
   const charBox = document.getElementById('reader-character-card');
-  if (charBox && s.character) {
-    const charData = s.character[lang] || s.character.en || s.character;
+  if (charBox) {
+    let charData = { name: "Ramu Kaka", role: "Small Farmer", avatar: "👨🏽‍🌾", desc: "White Kurta & Blue Gamcha" };
+    if (s.character) {
+      if (s.character[lang]) charData = s.character[lang];
+      else if (s.character.en) charData = s.character.en;
+      else if (typeof s.character === 'object') charData = s.character;
+    }
     charBox.innerHTML = `
-      <div class="char-avatar" style="font-size:2.2rem;">${charData.avatar || '👨🏽‍🌾'}</div>
+      <div class="char-avatar" style="font-size:2.2rem; background:var(--surface-subtle); padding:10px; border-radius:50%; width:56px; height:56px; display:flex; align-items:center; justify-content:center;">${charData.avatar || '👨🏽‍🌾'}</div>
       <div>
-        <h4 style="font-family:var(--font-heading); font-size:1.1rem; color:var(--primary-navy);">${charData.name || 'Ramu Kaka'} <span style="color:var(--saffron); font-size:0.85rem;">(${charData.role || 'Beneficiary'})</span></h4>
-        <p style="font-size:0.85rem; color:var(--text-muted);">${charData.desc || charData.clothing || 'Relatable Citizen Hero'}</p>
+        <h4 style="font-family:var(--font-heading); font-size:1.15rem; color:var(--primary-navy); margin-bottom:2px;">${charData.name || 'Ramu Kaka'} <span style="color:var(--saffron); font-size:0.85rem;">(${charData.role || 'Beneficiary'})</span></h4>
+        <p style="font-size:0.88rem; color:var(--text-muted);">${charData.desc || charData.clothing || 'Relatable Citizen Hero'}</p>
       </div>
     `;
   }
 
-  const panelsList = (s.panels && (s.panels[lang] || s.panels.en)) || [];
+  // 3. Robust Panel Extraction (Handles both Objects & Arrays)
+  let panelsList = [];
+  if (Array.isArray(s.panels)) {
+    panelsList = s.panels;
+  } else if (s.panels && typeof s.panels === 'object') {
+    panelsList = s.panels[lang] || s.panels.en || s.panels.hi || Object.values(s.panels)[0] || [];
+  }
+
   const panelsContainer = document.getElementById('reader-panels-container');
   if (panelsContainer) {
     panelsContainer.innerHTML = '';
-    panelsList.forEach((p) => {
+    const defaultImages = ["assets/pm_kisan_1.jpg", "assets/pm_kisan_2.jpg", "assets/pm_kisan_3.jpg", "assets/pm_kisan_4.jpg"];
+
+    panelsList.forEach((p, idx) => {
+      const imgSrc = p.image || defaultImages[idx % 4];
       const pdiv = document.createElement('div');
       pdiv.className = 'panel-card';
       pdiv.innerHTML = `
         <div class="panel-tag-header">
-          <span>${p.tag}</span>
-          <button class="btn-outline-sm" onclick="showCitationModal('${escapeQuotes(p.dialogue)}', '${escapeQuotes(p.sourceRef)}', '${s.officialUrl}')">${t.btn_citation || '🔍 Why shown? (Citation)'}</button>
+          <span>${p.tag || `Panel ${p.num || idx + 1}`}</span>
+          <button class="btn-outline-sm" onclick="showCitationModal('${escapeQuotes(p.dialogue)}', '${escapeQuotes(p.sourceRef || s.name)}', '${s.officialUrl}')">${t.btn_citation || '🔍 Why shown? (Citation)'}</button>
         </div>
         <div class="panel-img-box">
-          <img src="${p.image || 'assets/pm_kisan_1.jpg'}" alt="${p.tag}" loading="lazy">
-          <div class="speech-bubble-overlay">
-            <strong style="color:var(--saffron);">${p.speaker}:</strong> "${p.dialogue}"
-          </div>
+          <img src="${imgSrc}" alt="${p.tag}" loading="lazy" onerror="this.onerror=null; this.src='${defaultImages[idx % 4]}';">
+        </div>
+        <div class="panel-dialogue-box">
+          <div class="speaker-name">${p.speaker || 'Citizen'}</div>
+          <div class="speaker-text">"${p.dialogue}"</div>
         </div>
         <div class="panel-footer-bar">
-          <span style="font-size:0.85rem; color:var(--text-main);">📌 <strong>Caption:</strong> ${p.caption}</span>
+          <span class="panel-caption-text">📌 <strong>Caption:</strong> ${p.caption || ''}</span>
           <button class="btn-outline-sm" onclick="speakPanelText('${escapeQuotes(p.dialogue)}')">${t.btn_play_panel || '🔊 Play Panel'}</button>
         </div>
       `;
@@ -865,13 +999,20 @@ function renderReaderView() {
   renderQuizTab();
 }
 
-function setReaderTab(tabId) {
+function setReaderTab(tabId, btnElem) {
   appState.currentReaderTab = tabId;
   document.querySelectorAll('.rtab-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.rtab-pane').forEach(p => p.classList.remove('active'));
 
-  event.target.classList.add('active');
-  document.getElementById(`rtab-content-${tabId}`).classList.add('active');
+  if (btnElem) {
+    btnElem.classList.add('active');
+  } else {
+    const btn = document.querySelector(`.rtab-btn[onclick*="'${tabId}'"]`);
+    if (btn) btn.classList.add('active');
+  }
+
+  const pane = document.getElementById(`rtab-content-${tabId}`);
+  if (pane) pane.classList.add('active');
 }
 
 // Module 6: Visual Eligibility Checker
@@ -1033,20 +1174,73 @@ function submitQuizAnswer(qidx, oidx) {
   `;
 }
 
-// Audio Player
-function speakPanelText(text) {
-  if ('speechSynthesis' in window) {
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = parseFloat(document.getElementById('audio-speed-select')?.value || '1.0');
+// Smart Natural Voice Selection Engine (EN, TE, HI)
+function getNaturalVoice(langCode) {
+  if (!('speechSynthesis' in window)) return null;
 
-    const lang = appState.currentLang;
-    if (lang === 'te') utterance.lang = 'te-IN';
-    else if (lang === 'hi') utterance.lang = 'hi-IN';
-    else utterance.lang = 'en-US';
+  const voices = window.speechSynthesis.getVoices() || [];
+  if (voices.length === 0) return null;
 
-    window.speechSynthesis.speak(utterance);
+  const targetLang = (langCode || appState.currentLang || 'en').toLowerCase();
+  let preferred = [];
+
+  if (targetLang === 'te') {
+    preferred = voices.filter(v => 
+      v.lang.toLowerCase().includes('te') || 
+      v.name.toLowerCase().includes('telugu') ||
+      v.name.toLowerCase().includes('mohan') ||
+      v.name.toLowerCase().includes('shruti')
+    );
+  } else if (targetLang === 'hi') {
+    preferred = voices.filter(v => 
+      v.lang.toLowerCase().includes('hi') || 
+      v.name.toLowerCase().includes('hindi') ||
+      v.name.toLowerCase().includes('swara') ||
+      v.name.toLowerCase().includes('madhur') ||
+      v.name.toLowerCase().includes('kalpana')
+    );
+  } else {
+    // English (Prioritize Indian Accent / Natural Neural Voices)
+    preferred = voices.filter(v => 
+      v.name.toLowerCase().includes('natural') ||
+      v.name.toLowerCase().includes('neerja') ||
+      v.name.toLowerCase().includes('prabhat') ||
+      v.name.toLowerCase().includes('google indian english') ||
+      v.name.toLowerCase().includes('online') ||
+      v.lang.toLowerCase().includes('en-in')
+    );
+    if (preferred.length === 0) {
+      preferred = voices.filter(v => v.lang.toLowerCase().includes('en'));
+    }
   }
+
+  if (preferred.length > 0) return preferred[0];
+  return voices.find(v => v.lang.toLowerCase().startsWith(targetLang)) || null;
+}
+
+// Audio Player with Natural Voice Synthesis
+function speakPanelText(text) {
+  if (!('speechSynthesis' in window)) return;
+
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(text);
+  
+  const speed = parseFloat(document.getElementById('audio-speed-select')?.value || '1.0');
+  utterance.rate = speed;
+  utterance.pitch = 1.05; // Warmer conversational tone
+
+  const lang = appState.currentLang;
+  if (lang === 'te') utterance.lang = 'te-IN';
+  else if (lang === 'hi') utterance.lang = 'hi-IN';
+  else utterance.lang = 'en-IN';
+
+  const naturalVoice = getNaturalVoice(lang);
+  if (naturalVoice) {
+    utterance.voice = naturalVoice;
+    console.log(`🗣️ [Natural Voice Engine]: Active Voice -> ${naturalVoice.name} (${naturalVoice.lang})`);
+  }
+
+  window.speechSynthesis.speak(utterance);
 }
 
 function togglePlayFullComic() {
@@ -1054,10 +1248,12 @@ function togglePlayFullComic() {
   if (!s) return;
 
   const lang = appState.currentLang;
-  const panels = (s.panels && (s.panels[lang] || s.panels.en)) || [];
+  let panelsList = [];
+  if (Array.isArray(s.panels)) panelsList = s.panels;
+  else if (s.panels) panelsList = s.panels[lang] || s.panels.en || [];
 
   let fullScript = `Reading ${s.name} visual story. `;
-  panels.forEach(p => { fullScript += `${p.speaker} says: ${p.dialogue}. `; });
+  panelsList.forEach(p => { fullScript += `${p.speaker || 'Hero'} says: ${p.dialogue}. `; });
 
   speakPanelText(fullScript);
 
@@ -1069,6 +1265,15 @@ function pauseAudio() {
   if ('speechSynthesis' in window) window.speechSynthesis.cancel();
   document.getElementById('btn-play-comic').style.display = 'inline-flex';
   document.getElementById('btn-pause-comic').style.display = 'none';
+}
+
+function setAudioSpeed(val) {
+  const speed = parseFloat(val || '1.0');
+  console.log("🔊 Audio playback speed set to:", speed);
+  if ('speechSynthesis' in window && window.speechSynthesis.speaking) {
+    window.speechSynthesis.cancel();
+    togglePlayFullComic();
+  }
 }
 
 // Citation Modal
@@ -1093,18 +1298,31 @@ function escapeQuotes(str) {
 }
 
 // AI Ingestion Pipeline (Calling REST API Server & Dynamic Generation)
-function setCreateMode(mode) {
+function setCreateMode(mode, btnElem) {
   document.querySelectorAll('.create-tab-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.mode-panel').forEach(p => p.classList.remove('active'));
-  if (event && event.target) event.target.classList.add('active');
+
+  if (btnElem) {
+    btnElem.classList.add('active');
+  } else {
+    const btn = document.querySelector(`.create-tab-btn[onclick*="'${mode}'"]`);
+    if (btn) btn.classList.add('active');
+  }
+
   const panel = document.getElementById(`create-mode-${mode}`);
   if (panel) panel.classList.add('active');
 }
 
-function setPersona(personaKey) {
+function setPersona(personaKey, btnElem) {
   appState.currentPersona = personaKey;
   document.querySelectorAll('.persona-chip').forEach(c => c.classList.remove('active'));
-  if (event && event.target) event.target.classList.add('active');
+
+  if (btnElem) {
+    btnElem.classList.add('active');
+  } else {
+    const chip = document.querySelector(`.persona-chip[data-persona="${personaKey}"]`);
+    if (chip) chip.classList.add('active');
+  }
 }
 
 function triggerFileUpload() {
@@ -1125,10 +1343,12 @@ function handleFileSelected(e) {
 }
 
 function searchForCreate() {
-  const query = document.getElementById('create-search-input').value.trim();
+  const input = document.getElementById('create-search-input');
+  const query = input ? input.value.trim() : '';
   if (!query) return alert("Please type a scheme name first.");
 
   const list = document.getElementById('create-search-results');
+  if (!list) return;
   list.innerHTML = '';
 
   const results = SCHEMES_DATABASE.filter(s => s.name.toLowerCase().includes(query.toLowerCase()) || s.purpose.toLowerCase().includes(query.toLowerCase()));
@@ -1168,39 +1388,43 @@ function processUrlInput() {
 
 // Full Dynamic AI Generation Pipeline
 async function startProcessingPipeline(schemeTitle, schemeId, rawInputText) {
-  // Check if scheme exists in local DB
   let existingScheme = SCHEMES_DATABASE.find(item => item.id === schemeId || item.name.toLowerCase() === (schemeTitle || '').toLowerCase());
 
   const overlay = document.getElementById('processing-overlay');
   if (overlay) {
     overlay.style.display = 'flex';
     const nameElem = document.getElementById('proc-scheme-name');
-    if (nameElem) nameElem.innerText = `AI Generating: ${schemeTitle || (existingScheme ? existingScheme.name : 'Government Scheme')}`;
+    if (nameElem) nameElem.innerText = `AI Generating Comic for: ${schemeTitle || (existingScheme ? existingScheme.name : 'Government Scheme')}`;
 
     for (let i = 1; i <= 6; i++) {
       const stepElem = document.getElementById(`pstep-${i}`);
-      if (stepElem) stepElem.style.fontWeight = 'normal';
+      if (stepElem) {
+        stepElem.classList.remove('active');
+        stepElem.style.opacity = '0.4';
+      }
     }
 
-    setTimeout(() => { const el = document.getElementById('pstep-1'); if (el) el.style.fontWeight = 'bold'; }, 300);
-    setTimeout(() => { const el = document.getElementById('pstep-2'); if (el) el.style.fontWeight = 'bold'; }, 600);
-    setTimeout(() => { const el = document.getElementById('pstep-3'); if (el) el.style.fontWeight = 'bold'; }, 900);
-    setTimeout(() => { const el = document.getElementById('pstep-4'); if (el) el.style.fontWeight = 'bold'; }, 1200);
-    setTimeout(() => { const el = document.getElementById('pstep-5'); if (el) el.style.fontWeight = 'bold'; }, 1500);
-    setTimeout(() => { const el = document.getElementById('pstep-6'); if (el) el.style.fontWeight = 'bold'; }, 1800);
+    setTimeout(() => { const el = document.getElementById('pstep-1'); if (el) { el.classList.add('active'); el.style.opacity = '1'; } }, 200);
+    setTimeout(() => { const el = document.getElementById('pstep-2'); if (el) { el.classList.add('active'); el.style.opacity = '1'; } }, 400);
+    setTimeout(() => { const el = document.getElementById('pstep-3'); if (el) { el.classList.add('active'); el.style.opacity = '1'; } }, 600);
+    setTimeout(() => { const el = document.getElementById('pstep-4'); if (el) { el.classList.add('active'); el.style.opacity = '1'; } }, 800);
+    setTimeout(() => { const el = document.getElementById('pstep-5'); if (el) { el.classList.add('active'); el.style.opacity = '1'; } }, 1000);
+    setTimeout(() => { const el = document.getElementById('pstep-6'); if (el) { el.classList.add('active'); el.style.opacity = '1'; } }, 1200);
   }
 
   let generatedPanels = null;
   let generatedChar = null;
-  let extractedFacts = null;
 
-  // Call Server AI API if server online
   if (appState.isServerOnline) {
     try {
       const apiRes = await fetch(`${API_BASE_URL}/generate-story`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ schemeName: schemeTitle || (existingScheme ? existingScheme.name : 'Scheme'), persona: appState.currentPersona, rawInput: rawInputText })
+        body: JSON.stringify({
+          schemeName: schemeTitle || (existingScheme ? existingScheme.name : 'Government Scheme'),
+          persona: appState.currentPersona,
+          rawInput: rawInputText
+        })
       });
       if (apiRes.ok) {
         const data = await apiRes.json();
@@ -1217,9 +1441,22 @@ async function startProcessingPipeline(schemeTitle, schemeId, rawInputText) {
     if (overlay) overlay.style.display = 'none';
 
     if (existingScheme && !rawInputText) {
+      if (generatedPanels) {
+        if (typeof existingScheme.panels === 'object' && !Array.isArray(existingScheme.panels)) {
+          existingScheme.panels.en = generatedPanels;
+          existingScheme.panels.te = generatedPanels;
+          existingScheme.panels.hi = generatedPanels;
+        } else {
+          existingScheme.panels = generatedPanels;
+        }
+      }
+      if (generatedChar) {
+        if (typeof existingScheme.character === 'object') {
+          existingScheme.character.en = generatedChar;
+        }
+      }
       appState.selectedScheme = existingScheme;
     } else {
-      // Create Brand New Scheme Object dynamically!
       const newId = `custom_${Date.now()}`;
       const title = schemeTitle || "Custom Government Scheme";
 
@@ -1228,7 +1465,7 @@ async function startProcessingPipeline(schemeTitle, schemeId, rawInputText) {
         { num: 1, tag: "Panel 1: The Problem", image: defaultImgs[0], speaker: generatedChar ? generatedChar.name : "Citizen", dialogue: `How will I manage the financial costs for ${title}?`, caption: `Citizen worries about ${title} requirements.`, sourceRef: "Section 1: Scheme Guidelines" },
         { num: 2, tag: "Panel 2: Government Solution", image: defaultImgs[1], speaker: "GovToon Hero", dialogue: `The Government provides direct financial assistance under ${title}!`, caption: "Official Direct Benefit Support.", sourceRef: "Section 2: Benefits & Subsidy" },
         { num: 3, tag: "Panel 3: The Easy Path", image: defaultImgs[2], speaker: "CSC Bhaiya", dialogue: "Submit your Aadhaar card and Bank Passbook at nearest CSC center or online portal.", caption: "Simple digital application process.", sourceRef: "Section 3: Mandatory Documents" },
-        { num: 4, tag: "Panel 4: The Outcome", image: "assets/pm_kisan_4.jpg", speaker: "Tagline", dialogue: `🎉 ${title}: Sarkari Sahayata, Parivar Ki Suraksha!`, caption: "Peace of mind restored with official support.", sourceRef: "Section 4: Disbursement" }
+        { num: 4, tag: "Panel 4: The Outcome", image: defaultImgs[3], speaker: "Tagline", dialogue: `🎉 ${title}: Sarkari Sahayata, Parivar Ki Suraksha!`, caption: "Peace of mind restored with official support.", sourceRef: "Section 4: Disbursement" }
       ]).map((p, idx) => ({ ...p, image: p.image || defaultImgs[idx % 4] }));
 
       const newScheme = {
@@ -1275,16 +1512,17 @@ async function startProcessingPipeline(schemeTitle, schemeId, rawInputText) {
 
     renderReaderView();
     navigateTo('reader');
-  }, 2100);
+  }, 1400);
 }
 
 // Grounded AI Chatbot
 async function sendChatMessage() {
   const input = document.getElementById('chat-user-input');
-  const text = input.value.trim();
+  const text = input ? input.value.trim() : '';
   if (!text) return;
 
   const box = document.getElementById('chat-messages');
+  if (!box) return;
 
   const udiv = document.createElement('div');
   udiv.className = 'chat-msg user-msg';
@@ -1294,7 +1532,7 @@ async function sendChatMessage() {
 
   const s = appState.selectedScheme;
   let reply = `Based strictly on official India.gov.in records for ${s.name}: ${s.purpose} Benefits provided: ${s.benefits}`;
-  let sourceTag = `Source: Verified India.gov.in Record (${s.officialUrl})`;
+  let sourceTag = `Source: Verified India.gov.in Record (${s.officialUrl || 'India.gov.in'})`;
 
   if (appState.isServerOnline) {
     try {
@@ -1312,8 +1550,8 @@ async function sendChatMessage() {
       console.warn("[Chat API Warning]", e.message);
     }
   } else {
-    if (text.toLowerCase().includes('document')) reply = `Compulsory documents required: ${s.documents.map(d => d.name).join(', ')}.`;
-    if (text.toLowerCase().includes('eligible') || text.toLowerCase().includes('who')) reply = `Eligibility criteria: ${s.eligibility.summary}`;
+    if (text.toLowerCase().includes('document')) reply = `Compulsory documents required: ${s.documents ? s.documents.map(d => d.name).join(', ') : 'Aadhaar Card'}.`;
+    if (text.toLowerCase().includes('eligible') || text.toLowerCase().includes('who')) reply = `Eligibility criteria: ${s.eligibility ? s.eligibility.summary : 'All eligible citizens'}`;
   }
 
   setTimeout(() => {
@@ -1332,7 +1570,8 @@ async function sendChatMessage() {
 }
 
 function askPresetQuestion(qtext) {
-  document.getElementById('chat-user-input').value = qtext;
+  const input = document.getElementById('chat-user-input');
+  if (input) input.value = qtext;
   sendChatMessage();
 }
 
@@ -1367,21 +1606,62 @@ function renderLibrary() {
   });
 }
 
-function handleHeroSearch() {
-  const val = document.getElementById('hero-search-input').value.trim();
-  if (val) startProcessingPipeline(val);
+async function handleHeroSearch() {
+  const input = document.getElementById('hero-search-input');
+  const val = input ? input.value.trim() : '';
+  if (!val) return;
+
+  console.log(`[Portal Search] Searching India.gov.in for keyword: '${val}'...`);
+
+  // Navigate to Explore Schemes page & filter directory
+  navigateTo('explore');
+  const dirSearch = document.getElementById('directory-search');
+  if (dirSearch) {
+    dirSearch.value = val;
+    dirSearch.dispatchEvent(new Event('input'));
+  }
+
+  // Query live portal search endpoint (India.gov.in API)
+  if (appState.isServerOnline) {
+    try {
+      const res = await fetch(`${API_BASE_URL}/search-portal`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: val })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        console.log("🌐 [India.gov.in Live Portal Results]:", data);
+        if (data.schemes && data.schemes.length > 0) {
+          data.schemes.forEach(s => {
+            if (!SCHEMES_DATABASE.some(existing => existing.id === s.id || existing.name === s.name)) {
+              SCHEMES_DATABASE.push(s);
+            }
+          });
+          renderDirectory(SCHEMES_DATABASE);
+          if (dirSearch) dirSearch.dispatchEvent(new Event('input'));
+        }
+      }
+    } catch (e) {
+      console.warn("Portal Search API Warning:", e.message);
+    }
+  }
 }
 
 function quickSearch(query) {
-  startProcessingPipeline(query);
+  const input = document.getElementById('hero-search-input');
+  if (input) input.value = query;
+  handleHeroSearch();
 }
 
 function sendGeneralChatMessage() {
   const input = document.getElementById('general-chat-input');
-  const text = input.value.trim();
+  const text = input ? input.value.trim() : '';
   if (!text) return;
 
   const box = document.getElementById('general-chat-messages');
+  if (!box) return;
+
   const udiv = document.createElement('div');
   udiv.className = 'chat-msg user-msg';
   udiv.innerHTML = `<div class="msg-content"><p>${text}</p></div>`;
