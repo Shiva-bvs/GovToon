@@ -2,13 +2,728 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=GovToon/">
-  <title>GovToon - Government Schemes, Told Simply.</title>
-  <script>
-    window.location.replace("./GovToon/");
-  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GovToon | Government Schemes, Told Simply.</title>
+  <meta name="description" content="GovToon transforms official India.gov.in government schemes into simple visual stories, AI comics, multilingual voice narrations, visual eligibility checks, and comprehension tests.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-  <p>Loading GovToon... <a href="./GovToon/">Click here if not redirected</a>.</p>
+<body class="theme-default">
+  <div class="app-wrapper">
+    <!-- Top Bar Notice -->
+    <div class="trust-banner">
+      <div class="trust-content">
+        <span class="trust-badge" data-i18n="trust_badge">🛡️ Official Source Grounding</span>
+        <span class="trust-text" data-i18n="trust_text">Data sourced from <strong>India.gov.in National Portal of India</strong>. We don't change what the government says — we change how easily citizens understand it.</span>
+      </div>
+      <div class="accessibility-controls">
+        <button id="btn-contrast-toggle" class="icon-btn" title="Toggle High Contrast" data-i18n="btn_contrast">👁️ Contrast</button>
+      </div>
+    </div>
+
+    <!-- Header Navigation -->
+    <header class="navbar">
+      <div class="nav-container">
+        <div class="logo" onclick="navigateTo('home')">
+          <div class="logo-emblem">🏛️</div>
+          <div class="logo-brand">
+            <h1>GovToon</h1>
+            <p data-i18n="logo_sub">Government Schemes, Told Simply.</p>
+          </div>
+        </div>
+
+        <nav class="nav-menu">
+          <button class="nav-link active" data-nav="home" data-i18n="nav_home">🏠 Home</button>
+          <button class="nav-link" data-nav="explore" data-i18n="nav_explore">🔍 Explore Schemes</button>
+          <button class="nav-link" data-nav="create" data-i18n="nav_create">⚡ Create Comic</button>
+          <button class="nav-link" data-nav="reader" data-i18n="nav_reader">📖 Comic Reader</button>
+          <button class="nav-link" data-nav="library" data-i18n="nav_library">📚 My Library</button>
+          <button class="nav-link" data-nav="ask" data-i18n="nav_ask">💬 Ask GovToon</button>
+          <button class="nav-link" data-nav="admin" data-i18n="nav_admin">📊 Admin</button>
+        </nav>
+
+        <div class="nav-actions">
+          <!-- Multilingual Selector -->
+          <div class="lang-selector">
+            <span class="lang-icon">🌐</span>
+            <select id="app-language-select">
+              <option value="en">English</option>
+              <option value="te">తెలుగు (Telugu)</option>
+              <option value="hi">हिन्दी (Hindi)</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" data-i18n="btn_create_nav" onclick="navigateTo('create')">+ Turn Scheme into Comic</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main View Container -->
+    <main id="main-content" class="main-content">
+      
+      <!-- ================= PAGE 1: HOMEPAGE ================= -->
+      <section id="view-home" class="page-view active">
+        <!-- Hero Section -->
+        <div class="hero-section">
+          <div class="hero-badge" data-i18n="hero_badge">🇮🇳 National Portal of India Integration Ready</div>
+          <h1 class="hero-title" data-i18n="hero_title">Government Schemes,<br><span class="hero-highlight">Told Simply.</span></h1>
+          <p class="hero-subtitle" data-i18n="hero_sub">Transform complex official government documents, eligibility rules, and application processes into simple, visual 4-panel stories with voice narration and comprehension testing.</p>
+
+          <!-- Interactive Search & Input Bar -->
+          <div class="hero-search-box">
+            <div class="search-input-wrapper">
+              <span class="search-icon">🔍</span>
+              <input type="text" id="hero-search-input" placeholder="What government scheme do you want to understand? (e.g. PM-Kisan, Ayushman Bharat, Scholarships)..." data-i18n-ph="hero_ph" />
+              <button class="btn btn-saffron" data-i18n="btn_search_schemes" onclick="handleHeroSearch()">Search Schemes</button>
+            </div>
+            <div class="search-prompts">
+              <span data-i18n="try_asking">Try asking:</span>
+              <button class="prompt-chip" onclick="quickSearch('PM-Kisan')">🌾 PM-Kisan Support</button>
+              <button class="prompt-chip" onclick="quickSearch('Ayushman Bharat')">🏥 Ayushman Health Shield</button>
+              <button class="prompt-chip" onclick="quickSearch('PM SVANidhi')">🛒 Street Vendor Loan</button>
+              <button class="prompt-chip" onclick="quickSearch('Scholarship')">🎓 Student Scholarships</button>
+            </div>
+          </div>
+
+          <!-- Animated Transformation Pipeline Demo -->
+          <div class="transformation-pipeline">
+            <div class="pipeline-step">
+              <div class="step-icon pdf-icon">📄</div>
+              <div class="step-label" data-i18n="pipe_doc">Government Document / Portal</div>
+            </div>
+            <div class="pipeline-arrow">➔</div>
+            <div class="pipeline-step">
+              <div class="step-icon ai-icon">🧠</div>
+              <div class="step-label" data-i18n="pipe_ai">AI Fact Extraction</div>
+            </div>
+            <div class="pipeline-arrow">➔</div>
+            <div class="pipeline-step">
+              <div class="step-icon story-icon">🎨</div>
+              <div class="step-label" data-i18n="pipe_story">Visual Comic Story</div>
+            </div>
+            <div class="pipeline-arrow">➔</div>
+            <div class="pipeline-step">
+              <div class="step-icon voice-icon">🔊</div>
+              <div class="step-label" data-i18n="pipe_voice">Multilingual Voice</div>
+            </div>
+            <div class="pipeline-arrow">➔</div>
+            <div class="pipeline-step">
+              <div class="step-icon quiz-icon">✅</div>
+              <div class="step-label" data-i18n="pipe_quiz">Comprehension Quiz</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Before/After Comprehension Impact Banner -->
+        <div class="impact-metrics-banner">
+          <div class="impact-card">
+            <div class="impact-number red-text">62%</div>
+            <div class="impact-label" data-i18n="impact_orig">Average Citizen Understanding of Official PDF Text</div>
+          </div>
+          <div class="impact-divider">VS</div>
+          <div class="impact-card">
+            <div class="impact-number green-text">88%</div>
+            <div class="impact-label" data-i18n="impact_govtoon">Understanding Score After Reading GovToon Visual Comics</div>
+          </div>
+        </div>
+
+        <!-- How GovToon Works Section -->
+        <div class="features-grid-section">
+          <h2 class="section-title" data-i18n="feat_title">How GovToon Empowers Citizens</h2>
+          <p class="section-subtitle" data-i18n="feat_sub">Bridging the gap between complex administrative legalese and citizen understanding.</p>
+
+          <div class="features-cards-grid">
+            <div class="feature-card">
+              <div class="feature-icon">🛡️</div>
+              <h3 data-i18n="f1_h">1. Grounded in Official Sources</h3>
+              <p data-i18n="f1_p">Directly linked to India.gov.in / myScheme. Every fact, date, benefit, and requirement maintains an exact source citation.</p>
+            </div>
+
+            <div class="feature-card">
+              <div class="feature-icon">🎨</div>
+              <h3 data-i18n="f2_h">2. Relatable Character Stories</h3>
+              <p data-i18n="f2_p">Character-bible technology ensures consistent visual storytelling featuring farmers, students, women, and street vendors.</p>
+            </div>
+
+            <div class="feature-card">
+              <div class="feature-icon">🗣️</div>
+              <h3 data-i18n="f3_h">3. Desi Basti-Speak & Voice</h3>
+              <p data-i18n="f3_p">Translates 'Babu-speak' into everyday language with instant English, Telugu, and Hindi audio narration.</p>
+            </div>
+
+            <div class="feature-card">
+              <div class="feature-icon">🟢</div>
+              <h3 data-i18n="f4_h">4. Visual Eligibility & Documents</h3>
+              <p data-i18n="f4_p">Match your age, income, and state against scheme rules and track your document readiness progress.</p>
+            </div>
+
+            <div class="feature-card">
+              <div class="feature-icon">🎯</div>
+              <h3 data-i18n="f5_h">5. Comprehension Testing</h3>
+              <p data-i18n="f5_p">Take interactive quizzes to verify your understanding with automatic panel-jump help for tricky questions.</p>
+            </div>
+
+            <div class="feature-card">
+              <div class="feature-icon">💬</div>
+              <h3 data-i18n="f6_h">6. Grounded AI Q&A Assistant</h3>
+              <p data-i18n="f6_p">Ask anything about the scheme. GovToon answers strictly from official source data with page citations.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= PAGE 2: EXPLORE SCHEMES ================= -->
+      <section id="view-explore" class="page-view">
+        <div class="page-header">
+          <div class="header-text">
+            <span class="badge blue-badge" data-i18n="exp_badge">India.gov.in Scheme Directory</span>
+            <h2 data-i18n="exp_h">Explore Official Government Schemes</h2>
+            <p data-i18n="exp_sub">Browse verified schemes from Central & State Ministries. Click any scheme to generate a visual comic.</p>
+          </div>
+          <div class="source-status-pill">
+            <span class="pulse-dot"></span> <span data-i18n="source_pill">Source: National Portal of India / myScheme Ecosystem</span>
+          </div>
+        </div>
+
+        <!-- Filter & Search Controls -->
+        <div class="filter-controls-bar">
+          <input type="text" id="directory-search" placeholder="Search by scheme name, keyword, or benefit..." data-i18n-ph="dir_search_ph" />
+          
+          <select id="filter-category">
+            <option value="all">All Categories</option>
+            <option value="Agriculture">🌾 Agriculture & Farming</option>
+            <option value="Health">🏥 Health & Medical</option>
+            <option value="Banking & Finance">💰 Financial Security & Pension</option>
+            <option value="Business">🛒 Micro-Business & Loans</option>
+            <option value="Education">🎓 Education & Scholarships</option>
+            <option value="Housing & Energy">☀️ Solar & Housing</option>
+          </select>
+
+          <select id="filter-level">
+            <option value="all">Central & State</option>
+            <option value="Central">Central Scheme</option>
+            <option value="State">State Scheme</option>
+          </select>
+        </div>
+
+        <!-- Schemes Grid Container -->
+        <div id="schemes-directory-grid" class="schemes-grid">
+          <!-- Rendered dynamically -->
+        </div>
+      </section>
+
+      <!-- ================= PAGE 3: CREATE COMIC / INGESTION ================= -->
+      <section id="view-create" class="page-view">
+        <div class="page-header">
+          <div class="header-text">
+            <span class="badge saffron-badge" data-i18n="create_badge">Module 1 & 2 Ingestion Pipeline</span>
+            <h2 data-i18n="create_h">Create a Scheme Comic</h2>
+            <p data-i18n="create_sub">Select an official scheme, upload a government PDF, paste text, or enter an official URL.</p>
+          </div>
+        </div>
+
+        <div class="create-layout">
+          <!-- Mode Tabs -->
+          <div class="create-tabs">
+            <button class="create-tab-btn active" onclick="setCreateMode('search')" data-i18n="cmode_search">🔍 Search Schemes</button>
+            <button class="create-tab-btn" onclick="setCreateMode('pdf')" data-i18n="cmode_pdf">📄 Upload PDF / Document</button>
+            <button class="create-tab-btn" onclick="setCreateMode('text')" data-i18n="cmode_text">📝 Paste Government Text</button>
+            <button class="create-tab-btn" onclick="setCreateMode('url')" data-i18n="cmode_url">🔗 Official URL</button>
+          </div>
+
+          <!-- Mode Panels -->
+          <div class="create-content-box">
+            <!-- Mode A: Search -->
+            <div id="create-mode-search" class="mode-panel active">
+              <h3 data-i18n="csearch_h">Search Verified Government Database</h3>
+              <p class="panel-desc" data-i18n="csearch_p">Select from official scheme records indexed from India.gov.in.</p>
+              <div class="search-select-wrapper">
+                <input type="text" id="create-search-input" placeholder="Type scheme name (e.g. PM-Kisan, Ayushman Bharat)..." data-i18n-ph="csearch_ph" />
+                <button class="btn btn-saffron" data-i18n="btn_find_scheme" onclick="searchForCreate()">Find Scheme</button>
+              </div>
+              <div id="create-search-results" class="search-results-list"></div>
+            </div>
+
+            <!-- Mode B: PDF Upload -->
+            <div id="create-mode-pdf" class="mode-panel">
+              <h3 data-i18n="cpdf_h">Upload Official Scheme PDF or Document</h3>
+              <p class="panel-desc" data-i18n="cpdf_p">GovToon extracts verified facts directly from official notifications.</p>
+              <div class="upload-dropzone" onclick="triggerFileUpload()">
+                <div class="dropzone-icon">📥</div>
+                <h4 data-i18n="cpdf_drop_h">Drag & Drop Official Scheme PDF here</h4>
+                <p data-i18n="cpdf_drop_p">or click to browse files from your computer</p>
+                <input type="file" id="pdf-file-input" accept=".pdf,.doc,.docx,.txt" style="display:none;" onchange="handleFileSelected(event)">
+              </div>
+              <div id="upload-file-status" class="file-status-box" style="display:none;"></div>
+            </div>
+
+            <!-- Mode C: Paste Text -->
+            <div id="create-mode-text" class="mode-panel">
+              <h3 data-i18n="ctext_h">Paste Official Scheme Notification Text</h3>
+              <p class="panel-desc" data-i18n="ctext_p">Paste raw government text, eligibility guidelines, or press releases.</p>
+              <textarea id="create-pasted-text" rows="6" placeholder="Paste official text here..." data-i18n-ph="ctext_ph"></textarea>
+              <button class="btn btn-primary" data-i18n="btn_proc_text" onclick="processPastedText()">Process Government Text</button>
+            </div>
+
+            <!-- Mode D: URL -->
+            <div id="create-mode-url" class="mode-panel">
+              <h3 data-i18n="curl_h">Enter Official Government Source URL</h3>
+              <p class="panel-desc" data-i18n="curl_p">Provide a direct link from India.gov.in or official ministry portal.</p>
+              <input type="text" id="create-url-input" placeholder="https://www.india.gov.in/my-government/schemes/..." />
+              <button class="btn btn-primary" data-i18n="btn_proc_url" onclick="processUrlInput()">Ingest Official Source URL</button>
+            </div>
+          </div>
+
+          <!-- Audience Persona Selector (Module 14) -->
+          <div class="persona-selector-card">
+            <h3 data-i18n="persona_h">👤 Who is this visual story for? (Audience Persona)</h3>
+            <p data-i18n="persona_sub">Select target beneficiary context. The underlying government facts remain 100% unchanged.</p>
+
+            <div class="persona-chips">
+              <button class="persona-chip active" data-persona="farmer" onclick="setPersona('farmer')" data-i18n="p_farmer">👨‍🌾 Small Farmer (Ramu Kaka)</button>
+              <button class="persona-chip" data-persona="vendor" onclick="setPersona('vendor')" data-i18n="p_vendor">🛒 Street Vendor (Kalu)</button>
+              <button class="persona-chip" data-persona="woman" onclick="setPersona('woman')" data-i18n="p_woman">👩 Domestic Worker (Lata Tai)</button>
+              <button class="persona-chip" data-persona="student" onclick="setPersona('student')" data-i18n="p_student">🎓 Student / Youth (Raju)</button>
+              <button class="persona-chip" data-persona="senior" onclick="setPersona('senior')" data-i18n="p_senior">👴 Senior Citizen (Sharma Ji)</button>
+            </div>
+          </div>
+
+          <!-- Processing Timeline Overlay (Module 45 Hackathon Wow Moment) -->
+          <div id="processing-overlay" class="processing-modal" style="display:none;">
+            <div class="processing-card">
+              <div class="processing-spinner"></div>
+              <h3 data-i18n="proc_title">Generating GovToon Visual Comic...</h3>
+              <p class="processing-scheme-name" id="proc-scheme-name">Scheme Fact Pipeline in Progress</p>
+              
+              <div class="processing-timeline">
+                <div class="proc-step" id="pstep-1" data-i18n="ps_1">✓ Ingesting official government text from India.gov.in</div>
+                <div class="proc-step" id="pstep-2" data-i18n="ps_2">✓ Extracting structured facts & eligibility rules</div>
+                <div class="proc-step" id="pstep-3" data-i18n="ps_3">✓ Building character bible & environment context</div>
+                <div class="proc-step" id="pstep-4" data-i18n="ps_4">✓ Rendering 4-panel visual comic art</div>
+                <div class="proc-step" id="pstep-5" data-i18n="ps_5">✓ Translating to multilingual Basti-speak & audio</div>
+                <div class="proc-step" id="pstep-6" data-i18n="ps_6">✓ Preparing comprehension test & source citations</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= PAGE 4: COMIC READER & WORKSPACE ================= -->
+      <section id="view-reader" class="page-view">
+        <!-- Top Verified Banner -->
+        <div class="reader-header-bar">
+          <div class="reader-title-area">
+            <span class="badge green-badge" id="reader-category-badge">🌾 Agriculture • Central</span>
+            <h2 id="reader-scheme-name">PM-Kisan Samman Nidhi</h2>
+            <p id="reader-scheme-dept">Ministry of Agriculture & Farmers Welfare | Source: India.gov.in</p>
+          </div>
+          
+          <div class="reader-source-card">
+            <div class="source-info">
+              <span class="source-verified-icon" data-i18n="source_verified">✓ Official Source Verified</span>
+              <span class="source-date" id="reader-source-date">Last Verified: Aug 2026</span>
+            </div>
+            <a id="reader-official-link" href="https://www.india.gov.in/my-government/schemes" target="_blank" class="btn btn-outline-sm" data-i18n="btn_verify_portal">🔗 Verify Official Portal</a>
+          </div>
+        </div>
+
+        <!-- Reader Navigation Tabs -->
+        <div class="reader-nav-tabs">
+          <button class="rtab-btn active" onclick="setReaderTab('comic')" data-i18n="rtab_comic">🎨 4-Panel Comic</button>
+          <button class="rtab-btn" onclick="setReaderTab('eligibility')" data-i18n="rtab_eligibility">🟢 Visual Eligibility</button>
+          <button class="rtab-btn" onclick="setReaderTab('documents')" data-i18n="rtab_documents">📄 Required Documents</button>
+          <button class="rtab-btn" onclick="setReaderTab('steps')" data-i18n="rtab_steps">🗺️ Application Steps</button>
+          <button class="rtab-btn" onclick="setReaderTab('ask')" data-i18n="rtab_ask">💬 Ask GovToon AI</button>
+          <button class="rtab-btn" onclick="setReaderTab('quiz')" data-i18n="rtab_quiz">✅ Comprehension Quiz</button>
+        </div>
+
+        <!-- READER TAB 1: 4-Panel Visual Comic -->
+        <div id="rtab-content-comic" class="rtab-pane active">
+          <!-- Audio Toolbar & Controls -->
+          <div class="comic-toolbar">
+            <div class="audio-player-box">
+              <button id="btn-play-comic" class="btn btn-primary" onclick="togglePlayFullComic()" data-i18n="btn_listen">▶ Listen to Full Comic</button>
+              <button id="btn-pause-comic" class="btn btn-secondary" onclick="pauseAudio()" style="display:none;" data-i18n="btn_pause">⏸ Pause</button>
+              <div class="speed-selector">
+                <label data-i18n="lbl_speed">Speed:</label>
+                <select id="audio-speed-select" onchange="setAudioSpeed(this.value)">
+                  <option value="0.8">0.8x (Slow)</option>
+                  <option value="1.0" selected>1.0x (Normal)</option>
+                  <option value="1.25">1.25x (Fast)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="toolbar-actions">
+              <button class="btn btn-outline" onclick="bookmarkCurrentScheme()" data-i18n="btn_bookmark">🔖 Bookmark</button>
+              <button class="btn btn-outline" onclick="window.print()" data-i18n="btn_print">🖨️ Print 1-Page Flyer</button>
+            </div>
+          </div>
+
+          <!-- Character Bible Card -->
+          <div class="character-bible-card" id="reader-character-card">
+            <!-- Rendered dynamically -->
+          </div>
+
+          <!-- 4-Panel Grid -->
+          <div class="comic-panels-grid" id="reader-panels-container">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- READER TAB 2: Visual Eligibility (Module 6) -->
+        <div id="rtab-content-eligibility" class="rtab-pane">
+          <div class="eligibility-container">
+            <div class="elig-header">
+              <h3 data-i18n="elig_h">🟢 Visual Eligibility Assessment</h3>
+              <p data-i18n="elig_sub">Enter your basic details to check preliminary match against official rules.</p>
+            </div>
+
+            <div class="eligibility-form-grid">
+              <div class="form-group">
+                <label data-i18n="lbl_age">Your Age (Years)</label>
+                <input type="number" id="elig-user-age" value="35" oninput="runEligibilityCheck()">
+              </div>
+              <div class="form-group">
+                <label data-i18n="lbl_income">Annual Family Income (₹)</label>
+                <input type="number" id="elig-user-income" value="150000" oninput="runEligibilityCheck()">
+              </div>
+              <div class="form-group">
+                <label data-i18n="lbl_state">State of Residence</label>
+                <select id="elig-user-state" onchange="runEligibilityCheck()">
+                  <option value="Bihar">Bihar</option>
+                  <option value="Telangana">Telangana</option>
+                  <option value="Maharashtra">Maharashtra</option>
+                  <option value="Uttar Pradesh">Uttar Pradesh</option>
+                  <option value="All India">All India</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label data-i18n="lbl_occ">Occupation / Category</label>
+                <select id="elig-user-occ" onchange="runEligibilityCheck()">
+                  <option value="Farmer">Small/Marginal Farmer</option>
+                  <option value="Vendor">Street Vendor / Informal Worker</option>
+                  <option value="Student">Student / Youth</option>
+                  <option value="Senior">Senior Citizen</option>
+                </select>
+              </div>
+            </div>
+
+            <div id="eligibility-result-box" class="eligibility-result">
+              <!-- Rendered dynamically -->
+            </div>
+
+            <div class="disclaimer-box" data-i18n="elig_disclaimer">
+              ⚠️ <strong>Official Disclaimer:</strong> This is a preliminary assessment based on available scheme rules. Always verify current requirements on the official government website before applying.
+            </div>
+          </div>
+        </div>
+
+        <!-- READER TAB 3: Required Documents (Module 7) -->
+        <div id="rtab-content-documents" class="rtab-pane">
+          <div class="documents-container">
+            <div class="doc-header">
+              <h3 data-i18n="doc_h">📄 Required Documents Checklist</h3>
+              <p data-i18n="doc_sub">Check off documents as you prepare them before visiting the official portal or Panchayat office.</p>
+              
+              <div class="doc-progress-bar-wrapper">
+                <div class="doc-progress-info">
+                  <span><span data-i18n="doc_prep_label">Preparation Progress:</span> <strong id="doc-prep-text">0 / 4 Prepared</strong></span>
+                  <span id="doc-prep-percent">0%</span>
+                </div>
+                <div class="progress-track">
+                  <div id="doc-progress-fill" class="progress-fill" style="width: 0%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="documents-cards-grid" id="reader-docs-grid">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+        </div>
+
+        <!-- READER TAB 4: Application Steps (Module 8) -->
+        <div id="rtab-content-steps" class="rtab-pane">
+          <div class="steps-container">
+            <div class="steps-header">
+              <h3 data-i18n="steps_h">🗺️ Step-by-Step Application Roadmap</h3>
+              <p data-i18n="steps_sub">Follow these official steps to submit your application safely.</p>
+            </div>
+
+            <div class="timeline-steps-list" id="reader-steps-list">
+              <!-- Rendered dynamically -->
+            </div>
+
+            <div class="apply-cta-box">
+              <h4 data-i18n="cta_ready">Ready to Apply?</h4>
+              <p data-i18n="cta_desc">Submit your application directly on the official government portal.</p>
+              <a id="apply-official-btn" href="https://www.india.gov.in/my-government/schemes" target="_blank" class="btn btn-saffron btn-lg" data-i18n="btn_go_portal">🚀 Go to Official Government Application Portal</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- READER TAB 5: Ask GovToon AI (Module 10) -->
+        <div id="rtab-content-ask" class="rtab-pane">
+          <div class="ask-container">
+            <div class="ask-header">
+              <h3 data-i18n="ask_h">💬 Ask GovToon Grounded AI Assistant</h3>
+              <p data-i18n="ask_sub">Answers strictly from official India.gov.in scheme data with page citations.</p>
+            </div>
+
+            <div class="chat-preset-buttons">
+              <span data-i18n="sug_q">Suggested Questions:</span>
+              <button class="chip-btn" onclick="askPresetQuestion('Who is eligible for this scheme?')" data-i18n="q1">Who is eligible?</button>
+              <button class="chip-btn" onclick="askPresetQuestion('What exact benefits will I get?')" data-i18n="q2">What benefits will I get?</button>
+              <button class="chip-btn" onclick="askPresetQuestion('What documents are compulsory?')" data-i18n="q3">What documents are compulsory?</button>
+              <button class="chip-btn" onclick="askPresetQuestion('Where should I submit the form?')" data-i18n="q4">Where should I submit?</button>
+            </div>
+
+            <div class="chat-messages-box" id="chat-messages">
+              <div class="chat-msg bot-msg">
+                <div class="msg-avatar">🏛️</div>
+                <div class="msg-content">
+                  <p data-i18n="bot_welcome">Namaste! I am your GovToon Assistant. I can answer questions about <strong><span id="chat-scheme-name">this scheme</span></strong> strictly based on official government records.</p>
+                  <span class="citation-tag" data-i18n="cit_verified">Source: Verified India.gov.in Record</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="chat-input-bar">
+              <input type="text" id="chat-user-input" placeholder="Ask a question about this scheme..." data-i18n-ph="chat_ph" onkeypress="handleChatKeyPress(event)" />
+              <button class="btn btn-primary" data-i18n="btn_send_q" onclick="sendChatMessage()">Send Question</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- READER TAB 6: Comprehension Quiz (Module 12 & 13) -->
+        <div id="rtab-content-quiz" class="rtab-pane">
+          <div class="quiz-container">
+            <div class="quiz-header">
+              <h3 data-i18n="quiz_h">✅ Scheme Comprehension Test</h3>
+              <p data-i18n="quiz_sub">Test your understanding of the verified scheme facts.</p>
+            </div>
+
+            <div id="quiz-questions-wrapper">
+              <!-- Rendered dynamically -->
+            </div>
+
+            <div id="quiz-results-card" class="quiz-score-card" style="display:none;">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= PAGE 5: MY LIBRARY ================= -->
+      <section id="view-library" class="page-view">
+        <div class="page-header">
+          <div class="header-text">
+            <h2 data-i18n="lib_h">📚 My Library</h2>
+            <p data-i18n="lib_sub">Your saved schemes, created comics, and completed comprehension test scores.</p>
+          </div>
+        </div>
+
+        <div class="library-grid">
+          <div class="library-card">
+            <h3 data-i18n="lib_bm">🔖 Bookmarked Schemes</h3>
+            <div id="bookmarked-list" class="library-items-list"></div>
+          </div>
+
+          <div class="library-card">
+            <h3 data-i18n="lib_created">🎨 Created Comics</h3>
+            <div id="created-comics-list" class="library-items-list"></div>
+          </div>
+
+          <div class="library-card">
+            <h3 data-i18n="lib_quiz_hist">🎯 Comprehension Test History</h3>
+            <div id="quiz-history-list" class="library-items-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= PAGE 6: ASK GOVTOON GENERAL ================= -->
+      <section id="view-ask" class="page-view">
+        <div class="page-header">
+          <div class="header-text">
+            <h2 data-i18n="gask_h">💬 Ask GovToon AI (All Schemes)</h2>
+            <p data-i18n="gask_sub">Ask questions across the entire National Portal of India scheme directory.</p>
+          </div>
+        </div>
+
+        <div class="general-ask-box">
+          <div class="chat-messages-box" id="general-chat-messages">
+            <div class="chat-msg bot-msg">
+              <div class="msg-avatar">🏛️</div>
+              <div class="msg-content">
+                <p data-i18n="gbot_welcome">Hello! Ask me about any government scheme in India — scholarships, pensions, farmer support, or healthcare cards.</p>
+                <span class="citation-tag" data-i18n="cit_india_gov">Source: Grounded on India.gov.in</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="chat-input-bar">
+            <input type="text" id="general-chat-input" placeholder="e.g. Which scheme provides solar rooftop subsidies?" data-i18n-ph="gchat_ph" onkeypress="handleGeneralChatKeyPress(event)" />
+            <button class="btn btn-primary" data-i18n="btn_ask_govtoon" onclick="sendGeneralChatMessage()">Ask GovToon</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= PAGE 7: ADMIN DASHBOARD (Module 21, 22, 23, 24) ================= -->
+      <section id="view-admin" class="page-view">
+        <div class="page-header">
+          <div class="header-text">
+            <span class="badge red-badge" data-i18n="admin_badge">Admin Access Only</span>
+            <h2 data-i18n="admin_h">GovToon Administrative & Confusion Analytics Dashboard</h2>
+            <p data-i18n="admin_sub">Monitor ingested schemes, version updates, AI extraction logs, and citizen confusion analytics.</p>
+          </div>
+        </div>
+
+        <!-- Admin Stats Bar -->
+        <div class="admin-stats-grid">
+          <div class="astat-card">
+            <div class="astat-num">248</div>
+            <div class="astat-label" data-i18n="astat_1">Indexed Government Schemes</div>
+          </div>
+          <div class="astat-card">
+            <div class="astat-num">1,840</div>
+            <div class="astat-label" data-i18n="astat_2">Visual Comics Generated</div>
+          </div>
+          <div class="astat-card">
+            <div class="astat-num">88%</div>
+            <div class="astat-label" data-i18n="astat_3">Average Citizen Comprehension</div>
+          </div>
+          <div class="astat-card">
+            <div class="astat-num">3</div>
+            <div class="astat-label" data-i18n="astat_4">Active Languages (EN, TE, HI)</div>
+          </div>
+        </div>
+
+        <!-- Citizen Confusion Analytics (Module 24) -->
+        <div class="admin-section-card">
+          <h3 data-i18n="conf_h">📊 Citizen Confusion Analytics</h3>
+          <p data-i18n="conf_sub">Where citizens encounter the most difficulty in understanding government schemes:</p>
+
+          <div class="confusion-bar-wrapper">
+            <div class="cbar-item">
+              <span class="cbar-label" data-i18n="conf_1">Eligibility Criteria & Income Thresholds</span>
+              <div class="cbar-track"><div class="cbar-fill red-fill" style="width: 42%;">42%</div></div>
+            </div>
+            <div class="cbar-item">
+              <span class="cbar-label" data-i18n="conf_2">Required Documents & Verification</span>
+              <div class="cbar-track"><div class="cbar-fill amber-fill" style="width: 31%;">31%</div></div>
+            </div>
+            <div class="cbar-item">
+              <span class="cbar-label" data-i18n="conf_3">Application Process & Portal Submission</span>
+              <div class="cbar-track"><div class="cbar-fill blue-fill" style="width: 18%;">18%</div></div>
+            </div>
+            <div class="cbar-item">
+              <span class="cbar-label" data-i18n="conf_4">Benefit Calculation & Disbursement</span>
+              <div class="cbar-track"><div class="cbar-fill green-fill" style="width: 9%;">9%</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scheme Version Comparison & Ingestion Log (Module 22 & 23) -->
+        <div class="admin-section-card">
+          <h3 data-i18n="log_h">🔄 Scheme Update & Ingestion Logs</h3>
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th data-i18n="th_name">Scheme Name</th>
+                <th data-i18n="th_url">Source URL</th>
+                <th data-i18n="th_date">Last Ingested</th>
+                <th data-i18n="th_status">Status</th>
+                <th data-i18n="th_changes">Detected Version Changes</th>
+                <th data-i18n="th_action">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>PM-Kisan Samman Nidhi</strong></td>
+                <td>india.gov.in/pm-kisan</td>
+                <td>2026-08-24</td>
+                <td><span class="badge green-badge">Verified</span></td>
+                <td>0 Changes</td>
+                <td><button class="btn btn-outline-sm" onclick="reindexScheme('pm_kisan')">Re-Ingest</button></td>
+              </tr>
+              <tr>
+                <td><strong>Ayushman Bharat Pradhan Mantri Jan Arogya</strong></td>
+                <td>india.gov.in/ayushman</td>
+                <td>2026-08-24</td>
+                <td><span class="badge green-badge">Verified</span></td>
+                <td>1 Change (Senior 70+ Cover added)</td>
+                <td><button class="btn btn-outline-sm" onclick="reindexScheme('ayushman')">Re-Ingest</button></td>
+              </tr>
+              <tr>
+                <td><strong>PM SVANidhi Micro-Credit</strong></td>
+                <td>india.gov.in/svanidhi</td>
+                <td>2026-08-24</td>
+                <td><span class="badge green-badge">Verified</span></td>
+                <td>0 Changes</td>
+                <td><button class="btn btn-outline-sm" onclick="reindexScheme('svanidhi')">Re-Ingest</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Source Citation Modal / Drawer (Module 18 & 26) -->
+    <div id="citation-modal" class="modal-overlay" style="display:none;" onclick="closeCitationModal(event)">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3 data-i18n="cite_h">🔍 Panel Source Citation</h3>
+          <button class="modal-close-btn" onclick="hideCitationModal()">✕</button>
+        </div>
+        <div class="modal-body">
+          <p><strong data-i18n="cite_stmt">Panel Statement:</strong></p>
+          <blockquote id="cite-statement-text" class="cite-quote"></blockquote>
+
+          <p><strong data-i18n="cite_src_txt">Authoritative Source Text (India.gov.in):</strong></p>
+          <div id="cite-source-text" class="source-fact-box"></div>
+
+          <div class="cite-meta">
+            <p><strong data-i18n="cite_loc">Source Location:</strong> <span id="cite-location-text">Section 2: Eligibility Rules</span></p>
+            <p><strong data-i18n="cite_date">Retrieved Date:</strong> <span id="cite-date-text">2026-08-24</span></p>
+            <p><strong data-i18n="cite_url">Official Source URL:</strong> <a id="cite-url-link" href="#" target="_blank" data-i18n="cite_view_link">View Official Document ↗</a></p>
+          </div>
+        </div>
+      </div>
+    <!-- AI Generation Processing Modal Overlay -->
+    <div id="processing-overlay" class="processing-modal" style="display: none;">
+      <div class="processing-card">
+        <div class="processing-spinner"></div>
+        <h3 id="proc-scheme-name" style="font-family: var(--font-heading); font-size: 1.4rem; color: var(--primary-navy); margin-bottom: 12px;">AI Generating Visual Story...</h3>
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px;">Synthesizing verified facts from India.gov.in into a 4-panel visual comic.</p>
+        <div class="processing-timeline">
+          <div id="pstep-1" class="proc-step">✓ 1. Ingesting Official Portal Document</div>
+          <div id="pstep-2" class="proc-step">✓ 2. Extracting Grounded Scheme Facts</div>
+          <div id="pstep-3" class="proc-step">✓ 3. Building Persona Character Bible</div>
+          <div id="pstep-4" class="proc-step">✓ 4. Rendering 4-Panel Visual Comic</div>
+          <div id="pstep-5" class="proc-step">✓ 5. Generating Multilingual Audio</div>
+          <div id="pstep-6" class="proc-step">✓ 6. Preparing Comprehension Test</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div class="footer-container">
+        <div class="footer-brand">
+          <h3>GovToon</h3>
+          <p data-i18n="footer_quote">"We don't change what the government says. We change how easily citizens understand it."</p>
+        </div>
+        <div class="footer-attribution">
+          <p><span data-i18n="footer_src_label">Source Data:</span> <strong>National Portal of India (India.gov.in) / myScheme Ecosystem</strong></p>
+          <p class="footer-disclaimer" data-i18n="footer_disclaimer">GovToon simplifies publicly available government information for visual comprehension. It does not replace official government websites, departments, or application portals.</p>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
 </body>
 </html>

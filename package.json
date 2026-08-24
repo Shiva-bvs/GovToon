@@ -1,16 +1,22 @@
 {
-  "name": "gdg",
+  "name": "govtoon",
   "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
+  "description": "Government Schemes, Told Simply — Visual AI Comics & Multilingual Explainer Platform grounded on India.gov.in National Portal of India.",
+  "main": "backend/server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node --watch server.js",
-    "python-server": "python server.py",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node backend/server.js",
+    "dev": "node backend/server.js",
+    "py-server": "python backend/server.py",
+    "test": "node -c app.js && python -m py_compile backend/server.py"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "government-schemes",
+    "india-gov-in",
+    "ai-comics",
+    "gemini-api",
+    "multilingual-tts"
+  ],
+  "author": "GovToon Team",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
