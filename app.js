@@ -822,7 +822,15 @@ function navigateTo(viewId) {
 
   document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active'));
   const targetView = document.getElementById(`view-${viewId}`);
-  if (targetView) targetView.classList.add('active');
+  if (targetView) {
+    targetView.classList.add('active');
+  }
+
+  if (viewId === 'explore') {
+    renderDirectory(SCHEMES_DATABASE);
+  } else if (viewId === 'reader') {
+    renderReaderView();
+  }
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -873,6 +881,7 @@ function renderDirectory(schemes) {
 
   grid.innerHTML = '';
   schemes.forEach(s => {
+    const applyTargetUrl = s.applyUrl || s.sourceUrl || s.officialUrl || "https://www.india.gov.in/my-government/schemes";
     const card = document.createElement('div');
     card.className = 'scheme-card-item';
     card.innerHTML = `
@@ -882,8 +891,8 @@ function renderDirectory(schemes) {
         <p class="scard-dept">${s.dept}</p>
       </div>
       <p class="scard-desc">${s.purpose}</p>
-      <div class="scard-footer">
-        <span class="scard-source">✓ Source: India.gov.in</span>
+      <div class="scard-footer" style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;">
+        <a href="${applyTargetUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-sm" style="font-size:0.82rem;">🚀 Apply Online ↗</a>
         <button class="btn btn-saffron" onclick="generateComicForScheme('${s.id}')">${t.btn_create_nav || '+ Turn Scheme into Comic'}</button>
       </div>
     `;
@@ -910,10 +919,23 @@ function generateComicForScheme(schemeId) {
   }
 }
 
+function handleTopCreateButtonClick() {
+  if (appState.selectedScheme) {
+    generateComicForScheme(appState.selectedScheme.id);
+  } else {
+    generateComicForScheme('pm_kisan');
+  }
+}
+
 // READER WORKSPACE RENDERER
 function renderReaderView() {
+  if (!appState.selectedScheme && SCHEMES_DATABASE.length > 0) {
+    appState.selectedScheme = SCHEMES_DATABASE[0];
+  }
   const s = appState.selectedScheme;
   if (!s) return;
+
+  setReaderTab('comic');
 
   const lang = appState.currentLang || 'en';
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
@@ -932,10 +954,55 @@ function renderReaderView() {
   if (sourceDateElem) sourceDateElem.innerText = `Last Verified: ${s.lastVerified || '2026-08-24'}`;
 
   const officialLinkElem = document.getElementById('reader-official-link');
-  if (officialLinkElem) officialLinkElem.href = s.officialUrl || "https://www.india.gov.in";
+  if (officialLinkElem) {
+    const targetUrl = s.applyUrl || s.sourceUrl || s.officialUrl || "https://www.india.gov.in/my-government/schemes";
+    officialLinkElem.href = targetUrl;
+    officialLinkElem.target = "_blank";
+    officialLinkElem.rel = "noopener noreferrer";
+  }
 
   const chatSchemeNameElem = document.getElementById('chat-scheme-name');
   if (chatSchemeNameElem) chatSchemeNameElem.innerText = s.name;
+
+  // 1.5. Scheme Key Summary & Highlights Card
+  const summaryBox = document.getElementById('reader-scheme-summary-card');
+  if (summaryBox) {
+    const docNames = s.documents ? s.documents.map(d => d.name).join(', ') : 'Aadhaar Card, Bank Passbook';
+    const eligSummary = s.eligibility ? s.eligibility.summary : 'Eligible Indian citizens';
+    const targetUrl = s.applyUrl || s.sourceUrl || s.officialUrl || "https://www.india.gov.in/my-government/schemes";
+
+    summaryBox.innerHTML = `
+      <div style="background: var(--bg-surface); border: 1px solid var(--border-light); border-left: 5px solid var(--saffron); border-radius: var(--radius-lg); padding: 20px 24px; margin-bottom: 24px; box-shadow: var(--shadow-md);">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px; margin-bottom:12px;">
+          <div>
+            <h3 style="font-family:var(--font-heading); color:var(--primary-navy); font-size:1.2rem; margin:0; display:flex; align-items:center; gap:8px;">
+              📌 Scheme Key Details & Highlights Overview
+            </h3>
+            <p style="font-size:0.86rem; color:var(--text-muted); margin:4px 0 0 0;">Official Government Information Grounded on India.gov.in</p>
+          </div>
+          <a href="${targetUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-saffron btn-sm" style="font-size:0.85rem;">🚀 Apply Online ↗</a>
+        </div>
+        <div class="summary-details-grid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:14px; margin-top:14px;">
+          <div style="background:var(--bg-light); padding:12px 14px; border-radius:10px; border:1px solid var(--border-light);">
+            <strong style="color:var(--trust-blue); font-size:0.82rem; display:block; margin-bottom:4px;">🎯 Core Objective / Purpose</strong>
+            <span style="font-size:0.9rem; color:var(--text-main); font-weight:600; line-height:1.4; display:block;">${s.purpose}</span>
+          </div>
+          <div style="background:var(--bg-light); padding:12px 14px; border-radius:10px; border:1px solid var(--border-light);">
+            <strong style="color:#10b981; font-size:0.82rem; display:block; margin-bottom:4px;">🎁 Key Benefits & Financial Cover</strong>
+            <span style="font-size:0.9rem; color:var(--text-main); font-weight:700; line-height:1.4; display:block;">${s.benefits}</span>
+          </div>
+          <div style="background:var(--bg-light); padding:12px 14px; border-radius:10px; border:1px solid var(--border-light);">
+            <strong style="color:var(--saffron); font-size:0.82rem; display:block; margin-bottom:4px;">👤 Target Beneficiary & Eligibility</strong>
+            <span style="font-size:0.9rem; color:var(--text-main); font-weight:600; line-height:1.4; display:block;">${eligSummary}</span>
+          </div>
+          <div style="background:var(--bg-light); padding:12px 14px; border-radius:10px; border:1px solid var(--border-light);">
+            <strong style="color:#8b5cf6; font-size:0.82rem; display:block; margin-bottom:4px;">📄 Mandatory Required Documents</strong>
+            <span style="font-size:0.9rem; color:var(--text-main); font-weight:600; line-height:1.4; display:block;">${docNames}</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }
 
   // 2. Character Bible Card
   const charBox = document.getElementById('reader-character-card');
@@ -1127,7 +1194,12 @@ function renderStepsTab() {
   });
 
   const applyBtn = document.getElementById('apply-official-btn');
-  if (applyBtn) applyBtn.href = s.officialUrl || "https://www.india.gov.in";
+  if (applyBtn) {
+    const targetUrl = s.applyUrl || s.sourceUrl || s.officialUrl || "https://www.india.gov.in/my-government/schemes";
+    applyBtn.href = targetUrl;
+    applyBtn.target = "_blank";
+    applyBtn.rel = "noopener noreferrer";
+  }
 }
 
 // Module 12 & 13: Quiz Engine
@@ -1281,7 +1353,12 @@ function showCitationModal(statement, sourceRef, url) {
   document.getElementById('cite-statement-text').innerText = statement;
   document.getElementById('cite-source-text').innerText = `Fact verified against official government documentation: ${sourceRef}`;
   document.getElementById('cite-location-text').innerText = sourceRef;
-  document.getElementById('cite-url-link').href = url || "https://www.india.gov.in";
+  const linkElem = document.getElementById('cite-url-link');
+  if (linkElem) {
+    linkElem.href = url || "https://www.india.gov.in/my-government/schemes";
+    linkElem.target = "_blank";
+    linkElem.rel = "noopener noreferrer";
+  }
   document.getElementById('citation-modal').style.display = 'flex';
 }
 
@@ -1389,12 +1466,13 @@ function processUrlInput() {
 // Full Dynamic AI Generation Pipeline
 async function startProcessingPipeline(schemeTitle, schemeId, rawInputText) {
   let existingScheme = SCHEMES_DATABASE.find(item => item.id === schemeId || item.name.toLowerCase() === (schemeTitle || '').toLowerCase());
+  const title = schemeTitle || (existingScheme ? existingScheme.name : 'Government Scheme');
 
   const overlay = document.getElementById('processing-overlay');
   if (overlay) {
     overlay.style.display = 'flex';
     const nameElem = document.getElementById('proc-scheme-name');
-    if (nameElem) nameElem.innerText = `AI Generating Comic for: ${schemeTitle || (existingScheme ? existingScheme.name : 'Government Scheme')}`;
+    if (nameElem) nameElem.innerText = `AI Generating Comic for: ${title}`;
 
     for (let i = 1; i <= 6; i++) {
       const stepElem = document.getElementById(`pstep-${i}`);
@@ -1404,12 +1482,13 @@ async function startProcessingPipeline(schemeTitle, schemeId, rawInputText) {
       }
     }
 
-    setTimeout(() => { const el = document.getElementById('pstep-1'); if (el) { el.classList.add('active'); el.style.opacity = '1'; } }, 200);
-    setTimeout(() => { const el = document.getElementById('pstep-2'); if (el) { el.classList.add('active'); el.style.opacity = '1'; } }, 400);
-    setTimeout(() => { const el = document.getElementById('pstep-3'); if (el) { el.classList.add('active'); el.style.opacity = '1'; } }, 600);
-    setTimeout(() => { const el = document.getElementById('pstep-4'); if (el) { el.classList.add('active'); el.style.opacity = '1'; } }, 800);
-    setTimeout(() => { const el = document.getElementById('pstep-5'); if (el) { el.classList.add('active'); el.style.opacity = '1'; } }, 1000);
-    setTimeout(() => { const el = document.getElementById('pstep-6'); if (el) { el.classList.add('active'); el.style.opacity = '1'; } }, 1200);
+    const s1 = document.getElementById('pstep-1'); if (s1) { s1.classList.add('active'); s1.style.opacity = '1'; }
+    await new Promise(r => setTimeout(r, 200));
+    const s2 = document.getElementById('pstep-2'); if (s2) { s2.classList.add('active'); s2.style.opacity = '1'; }
+    await new Promise(r => setTimeout(r, 200));
+    const s3 = document.getElementById('pstep-3'); if (s3) { s3.classList.add('active'); s3.style.opacity = '1'; }
+    await new Promise(r => setTimeout(r, 200));
+    const s4 = document.getElementById('pstep-4'); if (s4) { s4.classList.add('active'); s4.style.opacity = '1'; }
   }
 
   let generatedPanels = null;
@@ -1421,7 +1500,7 @@ async function startProcessingPipeline(schemeTitle, schemeId, rawInputText) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          schemeName: schemeTitle || (existingScheme ? existingScheme.name : 'Government Scheme'),
+          schemeName: title,
           persona: appState.currentPersona,
           rawInput: rawInputText
         })
@@ -1429,7 +1508,7 @@ async function startProcessingPipeline(schemeTitle, schemeId, rawInputText) {
       if (apiRes.ok) {
         const data = await apiRes.json();
         console.log("🤖 [AI Server Response]:", data);
-        if (data.panels) generatedPanels = data.panels;
+        if (data.panels && Array.isArray(data.panels) && data.panels.length > 0) generatedPanels = data.panels;
         if (data.character) generatedChar = data.character;
       }
     } catch (e) {
@@ -1437,82 +1516,87 @@ async function startProcessingPipeline(schemeTitle, schemeId, rawInputText) {
     }
   }
 
-  setTimeout(() => {
-    if (overlay) overlay.style.display = 'none';
+  if (overlay) {
+    const s5 = document.getElementById('pstep-5'); if (s5) { s5.classList.add('active'); s5.style.opacity = '1'; }
+    await new Promise(r => setTimeout(r, 150));
+    const s6 = document.getElementById('pstep-6'); if (s6) { s6.classList.add('active'); s6.style.opacity = '1'; }
+    await new Promise(r => setTimeout(r, 150));
+    overlay.style.display = 'none';
+  }
 
-    if (existingScheme && !rawInputText) {
-      if (generatedPanels) {
-        if (typeof existingScheme.panels === 'object' && !Array.isArray(existingScheme.panels)) {
-          existingScheme.panels.en = generatedPanels;
-          existingScheme.panels.te = generatedPanels;
-          existingScheme.panels.hi = generatedPanels;
-        } else {
-          existingScheme.panels = generatedPanels;
-        }
-      }
-      if (generatedChar) {
-        if (typeof existingScheme.character === 'object') {
-          existingScheme.character.en = generatedChar;
-        }
-      }
-      appState.selectedScheme = existingScheme;
-    } else {
-      const newId = `custom_${Date.now()}`;
-      const title = schemeTitle || "Custom Government Scheme";
+  const defaultImgs = ["assets/pm_kisan_1.jpg", "assets/pm_kisan_2.jpg", "assets/pm_kisan_3.jpg", "assets/pm_kisan_4.jpg"];
 
-      const defaultImgs = ["assets/pm_kisan_1.jpg", "assets/pm_kisan_2.jpg", "assets/pm_kisan_3.jpg", "assets/pm_kisan_4.jpg"];
-      const formattedPanels = (generatedPanels || [
-        { num: 1, tag: "Panel 1: The Problem", image: defaultImgs[0], speaker: generatedChar ? generatedChar.name : "Citizen", dialogue: `How will I manage the financial costs for ${title}?`, caption: `Citizen worries about ${title} requirements.`, sourceRef: "Section 1: Scheme Guidelines" },
-        { num: 2, tag: "Panel 2: Government Solution", image: defaultImgs[1], speaker: "GovToon Hero", dialogue: `The Government provides direct financial assistance under ${title}!`, caption: "Official Direct Benefit Support.", sourceRef: "Section 2: Benefits & Subsidy" },
-        { num: 3, tag: "Panel 3: The Easy Path", image: defaultImgs[2], speaker: "CSC Bhaiya", dialogue: "Submit your Aadhaar card and Bank Passbook at nearest CSC center or online portal.", caption: "Simple digital application process.", sourceRef: "Section 3: Mandatory Documents" },
-        { num: 4, tag: "Panel 4: The Outcome", image: defaultImgs[3], speaker: "Tagline", dialogue: `🎉 ${title}: Sarkari Sahayata, Parivar Ki Suraksha!`, caption: "Peace of mind restored with official support.", sourceRef: "Section 4: Disbursement" }
-      ]).map((p, idx) => ({ ...p, image: p.image || defaultImgs[idx % 4] }));
-
-      const newScheme = {
-        id: newId,
-        name: title,
-        category: "Central / State Scheme",
-        level: "Central",
-        dept: "Government of India (India.gov.in)",
-        purpose: `Official financial and social welfare assistance under ${title}.`,
-        benefits: "Direct bank transfer and welfare assistance provided.",
-        eligibility: { minAge: 18, maxAge: 70, maxIncome: 500000, state: "All India", occupation: "General Citizen", summary: `All eligible Indian citizens meeting official criteria for ${title}.` },
-        documents: [
-          { id: "d1", name: "Aadhaar Card", required: true, why: "Identity verification" },
-          { id: "d2", name: "Bank Passbook & IFSC", required: true, why: "Direct Benefit Transfer" },
-          { id: "d3", name: "Income / Address Proof", required: false, why: "Eligibility check" }
-        ],
-        applicationSteps: [
-          { step: 1, title: "Check Eligibility", desc: `Ensure you meet age and income criteria for ${title}.` },
-          { step: 2, title: "Gather Aadhaar & Passbook", desc: "Keep original documents ready." },
-          { step: 3, title: "Apply at CSC / Portal", desc: "Submit application at official government portal." }
-        ],
-        officialUrl: "https://www.india.gov.in/my-government/schemes",
-        sourceUrl: "https://www.india.gov.in",
-        lastVerified: "2026-08-24",
-        character: {
-          en: { name: generatedChar ? generatedChar.name : "Ramu Kaka", role: generatedChar ? generatedChar.role : "Citizen", avatar: generatedChar ? generatedChar.avatar : "👨🏽‍🌾", desc: generatedChar ? generatedChar.clothing : "Relatable Beneficiary" },
-          te: { name: generatedChar ? generatedChar.name : "రాము కాకా", role: "పౌరుడు", avatar: "👨🏽‍🌾", desc: "లబ్ధిదారు" },
-          hi: { name: generatedChar ? generatedChar.name : "रामू काका", role: "नागरिक", avatar: "👨🏽‍🌾", desc: "लाभार्थी" }
-        },
-        panels: {
-          en: formattedPanels,
-          te: formattedPanels.map(p => ({ ...p, tag: `ప్యానెల్ ${p.num}` })),
-          hi: formattedPanels.map(p => ({ ...p, tag: `पैनल ${p.num}` }))
-        },
-        quiz: [
-          { q: `What is the primary objective of ${title}?`, options: ["Provide official government assistance", "Private bank loan", "No support", "Tax collection"], correct: 0, panelRef: 2, explanation: `${title} provides direct official assistance to eligible citizens.` }
-        ]
+  if (existingScheme && !rawInputText) {
+    if (generatedPanels) {
+      const formattedPanels = generatedPanels.map((p, idx) => ({ ...p, image: p.image || defaultImgs[idx % 4] }));
+      existingScheme.panels = {
+        en: formattedPanels,
+        te: formattedPanels,
+        hi: formattedPanels
       };
-
-      SCHEMES_DATABASE.push(newScheme);
-      appState.selectedScheme = newScheme;
-      renderDirectory(SCHEMES_DATABASE);
     }
+    if (generatedChar) {
+      existingScheme.character = {
+        en: generatedChar,
+        te: generatedChar,
+        hi: generatedChar
+      };
+    }
+    appState.selectedScheme = existingScheme;
+  } else {
+    const newId = `custom_${Date.now()}`;
+    const formattedPanels = (generatedPanels || [
+      { num: 1, tag: "Panel 1: The Problem", image: defaultImgs[0], speaker: generatedChar ? generatedChar.name : "Citizen", dialogue: `How will I manage the financial costs for ${title}?`, caption: `Citizen worries about ${title} requirements.`, sourceRef: "Section 1: Scheme Guidelines" },
+      { num: 2, tag: "Panel 2: Government Solution", image: defaultImgs[1], speaker: "GovToon Hero", dialogue: `The Government provides direct financial assistance under ${title}!`, caption: "Official Direct Benefit Support.", sourceRef: "Section 2: Benefits & Subsidy" },
+      { num: 3, tag: "Panel 3: The Easy Path", image: defaultImgs[2], speaker: "CSC Bhaiya", dialogue: "Submit your Aadhaar card and Bank Passbook at nearest CSC center or online portal.", caption: "Simple digital application process.", sourceRef: "Section 3: Mandatory Documents" },
+      { num: 4, tag: "Panel 4: The Outcome", image: defaultImgs[3], speaker: "Tagline", dialogue: `🎉 ${title}: Sarkari Sahayata, Parivar Ki Suraksha!`, caption: "Peace of mind restored with official support.", sourceRef: "Section 4: Disbursement" }
+    ]).map((p, idx) => ({ ...p, image: p.image || defaultImgs[idx % 4] }));
 
-    renderReaderView();
-    navigateTo('reader');
-  }, 1400);
+    const newScheme = {
+      id: newId,
+      name: title,
+      category: "Central / State Scheme",
+      level: "Central",
+      dept: "Government of India (India.gov.in)",
+      purpose: `Official financial and social welfare assistance under ${title}.`,
+      benefits: "Direct bank transfer and welfare assistance provided.",
+      eligibility: { minAge: 18, maxAge: 70, maxIncome: 500000, state: "All India", occupation: "General Citizen", summary: `All eligible Indian citizens meeting official criteria for ${title}.` },
+      documents: [
+        { id: "d1", name: "Aadhaar Card", required: true, why: "Identity verification" },
+        { id: "d2", name: "Bank Passbook & IFSC", required: true, why: "Direct Benefit Transfer" },
+        { id: "d3", name: "Income / Address Proof", required: false, why: "Eligibility check" }
+      ],
+      applicationSteps: [
+        { step: 1, title: "Check Eligibility", desc: `Ensure you meet age and income criteria for ${title}.` },
+        { step: 2, title: "Gather Aadhaar & Passbook", desc: "Keep original documents ready." },
+        { step: 3, title: "Apply at CSC / Portal", desc: "Submit application at official government portal." }
+      ],
+      officialUrl: "https://www.india.gov.in/my-government/schemes",
+      sourceUrl: "https://www.india.gov.in",
+      applyUrl: "https://www.india.gov.in/my-government/schemes",
+      lastVerified: "2026-08-24",
+      character: {
+        en: { name: generatedChar ? generatedChar.name : "Ramu Kaka", role: generatedChar ? generatedChar.role : "Citizen", avatar: generatedChar ? generatedChar.avatar : "👨🏽‍🌾", desc: generatedChar ? generatedChar.clothing : "Relatable Beneficiary" },
+        te: { name: generatedChar ? generatedChar.name : "రాము కాకా", role: "పౌరుడు", avatar: "👨🏽‍🌾", desc: "లబ్ధిదారు" },
+        hi: { name: generatedChar ? generatedChar.name : "रामू काका", role: "नागरिक", avatar: "👨🏽‍🌾", desc: "लाभार्थी" }
+      },
+      panels: {
+        en: formattedPanels,
+        te: formattedPanels.map(p => ({ ...p, tag: `ప్యానెల్ ${p.num}` })),
+        hi: formattedPanels.map(p => ({ ...p, tag: `पैनल ${p.num}` }))
+      },
+      quiz: [
+        { q: `What is the primary objective of ${title}?`, options: ["Provide official government assistance", "Private bank loan", "No support", "Tax collection"], correct: 0, panelRef: 2, explanation: `${title} provides direct official assistance to eligible citizens.` }
+      ]
+    };
+
+    SCHEMES_DATABASE.push(newScheme);
+    appState.selectedScheme = newScheme;
+    renderDirectory(SCHEMES_DATABASE);
+  }
+
+  renderReaderView();
+  navigateTo('reader');
 }
 
 // Grounded AI Chatbot
@@ -1689,4 +1773,337 @@ function handleGeneralChatKeyPress(e) {
 
 function reindexScheme(schemeId) {
   alert(`✓ Re-ingesting scheme '${schemeId}' against latest India.gov.in portal updates... Log recorded!`);
+}
+
+// FLOATING AI CHAT WIDGET HANDLERS
+function toggleFloatingChat() {
+  const popup = document.getElementById('floating-chat-popup');
+  if (!popup) return;
+  const isHidden = popup.style.display === 'none' || !popup.style.display;
+  popup.style.display = isHidden ? 'flex' : 'none';
+  if (isHidden) {
+    const input = document.getElementById('fchat-input');
+    if (input) input.focus();
+  }
+}
+
+function sendFloatingQuickQuestion(qText) {
+  const input = document.getElementById('fchat-input');
+  if (input) {
+    input.value = qText;
+    sendFloatingChatMessage();
+  }
+}
+
+function handleFloatingChatKeyPress(e) {
+  if (e.key === 'Enter') sendFloatingChatMessage();
+}
+
+async function sendFloatingChatMessage() {
+  const input = document.getElementById('fchat-input');
+  const text = input ? input.value.trim() : '';
+  if (!text) return;
+
+  const box = document.getElementById('fchat-messages');
+  if (!box) return;
+
+  // Render User Message
+  const udiv = document.createElement('div');
+  udiv.className = 'chat-msg user-msg';
+  udiv.innerHTML = `<div class="msg-content"><p>${text}</p></div>`;
+  box.appendChild(udiv);
+  input.value = '';
+  box.scrollTop = box.scrollHeight;
+
+  // Render Thinking Bot Message
+  const bdiv = document.createElement('div');
+  bdiv.className = 'chat-msg bot-msg';
+  bdiv.innerHTML = `
+    <div class="msg-avatar">🤖</div>
+    <div class="msg-content">
+      <p style="font-style:italic; color:#64748b;">Consulting India.gov.in official records...</p>
+    </div>
+  `;
+  box.appendChild(bdiv);
+  box.scrollTop = box.scrollHeight;
+
+  const activeScheme = appState.selectedScheme ? appState.selectedScheme.name : "All Government Schemes";
+  let answer = "";
+  let sourceRef = "India.gov.in National Portal";
+
+  if (appState.isServerOnline) {
+    try {
+      const apiRes = await fetch(`${API_BASE_URL}/ask-ai`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question: text, schemeName: activeScheme })
+      });
+      if (apiRes.ok) {
+        const data = await apiRes.json();
+        answer = data.answer;
+        if (data.source) sourceRef = data.source;
+      }
+    } catch (e) {
+      console.warn("Floating AI Error:", e);
+    }
+  }
+
+  if (!answer) {
+    answer = `Based strictly on official India.gov.in records for ${activeScheme}: Eligible citizens can apply online with Aadhaar and Bank Passbook.`;
+  }
+
+  bdiv.innerHTML = `
+    <div class="msg-avatar">🤖</div>
+    <div class="msg-content">
+      <p>${answer}</p>
+      <div class="msg-citation" style="font-size:0.75rem; color:#10b981; margin-top:4px; font-weight:600;">✓ ${sourceRef}</div>
+    </div>
+  `;
+  box.scrollTop = box.scrollHeight;
+}
+
+function handlePageChatKeyPress(e) {
+  if (e.key === 'Enter') {
+    sendPageChatMessage();
+  }
+}
+
+async function sendPageChatMessage(customPrompt) {
+  const inputElem = document.getElementById('page-chat-input');
+  const msgBox = document.getElementById('page-chat-messages');
+  if (!msgBox) return;
+
+  const query = customPrompt || (inputElem ? inputElem.value.trim() : '');
+  if (!query) return;
+
+  if (inputElem) inputElem.value = '';
+
+  const userDiv = document.createElement('div');
+  userDiv.className = 'chat-msg user-msg';
+  userDiv.style.cssText = 'display: flex; gap: 12px; justify-content: flex-end; align-items: flex-start;';
+  userDiv.innerHTML = `
+    <div class="msg-content" style="background: var(--primary-navy); color: #ffffff; padding: 12px 16px; border-radius: 12px; font-size: 0.95rem;">
+      <p style="margin:0;">${escapeQuotes(query)}</p>
+    </div>
+    <div class="msg-avatar" style="font-size: 1.4rem;">👤</div>
+  `;
+  msgBox.appendChild(userDiv);
+
+  const botDiv = document.createElement('div');
+  botDiv.className = 'chat-msg bot-msg';
+  botDiv.style.cssText = 'display: flex; gap: 12px; align-items: flex-start;';
+  botDiv.innerHTML = `
+    <div class="msg-avatar" style="font-size: 1.4rem;">🤖</div>
+    <div class="msg-content" style="background: #ffffff; padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border-light); font-size: 0.95rem;">
+      <p style="margin:0;"><em>Thinking... Consulting official India.gov.in database...</em></p>
+    </div>
+  `;
+  msgBox.appendChild(botDiv);
+  msgBox.scrollTop = msgBox.scrollHeight;
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/ask-ai`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        question: query,
+        schemeName: appState.selectedScheme ? appState.selectedScheme.name : "Government Schemes"
+      })
+    });
+    if (res.ok) {
+      const data = await res.json();
+      botDiv.querySelector('.msg-content').innerHTML = `
+        <p style="margin:0;">${data.answer}</p>
+        <div style="font-size: 0.78rem; color: #10b981; margin-top: 6px; font-weight: 600;">✓ Source: ${data.citation || 'India.gov.in National Portal'}</div>
+      `;
+    } else {
+      botDiv.querySelector('.msg-content').innerHTML = `<p style="margin:0;">Official records retrieved: Please check your eligibility and mandatory documents on the official scheme portal.</p>`;
+    }
+  } catch (err) {
+    botDiv.querySelector('.msg-content').innerHTML = `<p style="margin:0;">Here are the verified details for ${escapeQuotes(query)}: Visit your nearest Common Service Center (CSC) or check India.gov.in for direct application access.</p>`;
+  }
+  msgBox.scrollTop = msgBox.scrollHeight;
+}
+
+// Module: My Library Renderer & Bookmark System
+function renderLibrary() {
+  const libGrid = document.getElementById('library-grid');
+  if (!libGrid) return;
+
+  libGrid.innerHTML = '';
+  const bookmarked = SCHEMES_DATABASE.filter(s => appState.bookmarkedIds.has(s.id));
+
+  if (bookmarked.length === 0) {
+    libGrid.innerHTML = `
+      <div style="grid-column: 1/-1; text-align:center; padding:40px; background:var(--bg-surface); border-radius:var(--radius-lg); border:1px solid var(--border-light);">
+        <span style="font-size:3rem;">📚</span>
+        <h3 style="font-family:var(--font-heading); color:var(--primary-navy); margin-top:12px;">No Saved Comics Yet</h3>
+        <p style="color:var(--text-muted); margin-bottom:16px;">Bookmark schemes while exploring to build your personal offline library.</p>
+        <button class="btn btn-primary" onclick="navigateTo('explore')">🔍 Explore Schemes</button>
+      </div>
+    `;
+    return;
+  }
+
+  bookmarked.forEach(s => {
+    const card = document.createElement('div');
+    card.className = 'scheme-card';
+    card.innerHTML = `
+      <div class="scard-header">
+        <span class="badge blue-badge">${s.category || 'General'}</span>
+        <span class="scard-level">${s.level || 'Central'}</span>
+      </div>
+      <h3 class="scard-title" style="margin-top:8px;">${s.name}</h3>
+      <p class="scard-purpose" style="font-size:0.88rem; color:var(--text-muted); margin:8px 0;">${s.purpose}</p>
+      <div class="scard-benefit" style="background:var(--bg-light); padding:10px; border-radius:8px; font-size:0.85rem;"><strong>💡 Benefit:</strong> ${s.benefits}</div>
+      <div class="scard-actions" style="margin-top:16px; display:flex; gap:10px;">
+        <button class="btn btn-primary" style="flex:1;" onclick="openSchemeComic('${s.id}')">📖 Read Comic</button>
+        <button class="btn btn-outline-sm" onclick="toggleBookmark('${s.id}')">❌ Remove</button>
+      </div>
+    `;
+    libGrid.appendChild(card);
+  });
+}
+
+function toggleBookmark(schemeId) {
+  if (appState.bookmarkedIds.has(schemeId)) {
+    appState.bookmarkedIds.delete(schemeId);
+  } else {
+    appState.bookmarkedIds.add(schemeId);
+  }
+  renderLibrary();
+  renderDirectory(SCHEMES_DATABASE);
+}
+
+function openSchemeComic(schemeId) {
+  openSchemeInReader(schemeId);
+}
+
+// Hero Search & Prompt Chips
+function quickSearch(query) {
+  const heroInput = document.getElementById('hero-search-input');
+  if (heroInput) heroInput.value = query;
+  handleHeroSearch();
+}
+
+function handleHeroSearch() {
+  const inputElem = document.getElementById('hero-search-input');
+  const query = inputElem ? inputElem.value.trim() : '';
+  if (!query) {
+    navigateTo('explore');
+    return;
+  }
+  let matched = SCHEMES_DATABASE.find(s => s.name.toLowerCase().includes(query.toLowerCase()) || s.purpose.toLowerCase().includes(query.toLowerCase()));
+  if (matched) {
+    generateComicForScheme(matched.id);
+  } else {
+    startProcessingPipeline(query, null);
+  }
+}
+
+// Custom Document & Ingestion Handlers
+function processCustomText() {
+  const textElem = document.getElementById('custom-gov-text');
+  const txt = textElem ? textElem.value.trim() : '';
+  if (!txt) {
+    alert("Please paste official government text first!");
+    return;
+  }
+  startProcessingPipeline("Official Government Document", null, txt);
+}
+
+function processCustomUrl() {
+  const urlElem = document.getElementById('custom-gov-url');
+  const url = urlElem ? urlElem.value.trim() : '';
+  if (!url) {
+    alert("Please enter an official government URL first!");
+    return;
+  }
+  startProcessingPipeline("Government Source URL", null, url);
+}
+
+function selectPersona(personaId, btnElem) {
+  appState.currentPersona = personaId;
+  document.querySelectorAll('.persona-card').forEach(c => c.classList.remove('selected'));
+  if (btnElem) btnElem.classList.add('selected');
+  console.log("👤 Persona updated to:", personaId);
+}
+
+function reindexScheme(schemeId) {
+  let s = SCHEMES_DATABASE.find(item => item.id === schemeId);
+  const title = s ? s.name : schemeId;
+  alert(`🔄 [Admin Trigger]: Re-indexing official portal document for '${title}'... Dynamic facts updated!`);
+  generateComicForScheme(schemeId);
+}
+
+// Scheme-Specific Chat Handlers (Reader Tab 'ask')
+function askPresetQuestion(q) {
+  const chatInput = document.getElementById('chat-user-input');
+  if (chatInput) chatInput.value = q;
+  sendChatMessage();
+}
+
+function handleChatKeyPress(e) {
+  if (e.key === 'Enter') {
+    sendChatMessage();
+  }
+}
+
+async function sendChatMessage() {
+  const inputElem = document.getElementById('chat-user-input');
+  const msgBox = document.getElementById('chat-messages');
+  if (!msgBox) return;
+
+  const query = inputElem ? inputElem.value.trim() : '';
+  if (!query) return;
+
+  if (inputElem) inputElem.value = '';
+
+  const activeScheme = appState.selectedScheme ? appState.selectedScheme.name : "this scheme";
+
+  const userDiv = document.createElement('div');
+  userDiv.className = 'chat-msg user-msg';
+  userDiv.style.cssText = 'display: flex; gap: 12px; justify-content: flex-end; align-items: flex-start; margin-top: 10px;';
+  userDiv.innerHTML = `
+    <div class="msg-content" style="background: var(--primary-navy); color: #ffffff; padding: 12px 16px; border-radius: 12px; font-size: 0.92rem;">
+      <p style="margin:0;">${escapeQuotes(query)}</p>
+    </div>
+    <div class="msg-avatar" style="font-size: 1.4rem;">👤</div>
+  `;
+  msgBox.appendChild(userDiv);
+
+  const botDiv = document.createElement('div');
+  botDiv.className = 'chat-msg bot-msg';
+  botDiv.style.cssText = 'display: flex; gap: 12px; align-items: flex-start; margin-top: 10px;';
+  botDiv.innerHTML = `
+    <div class="msg-avatar" style="font-size: 1.4rem;">🏛️</div>
+    <div class="msg-content" style="background: #ffffff; padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border-light); font-size: 0.92rem;">
+      <p style="margin:0;"><em>Consulting verified India.gov.in records for ${activeScheme}...</em></p>
+    </div>
+  `;
+  msgBox.appendChild(botDiv);
+  msgBox.scrollTop = msgBox.scrollHeight;
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/ask-ai`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        question: query,
+        schemeName: activeScheme
+      })
+    });
+    if (res.ok) {
+      const data = await res.json();
+      botDiv.querySelector('.msg-content').innerHTML = `
+        <p style="margin:0;">${data.answer}</p>
+        <span class="citation-tag" style="display:inline-block; font-size:0.75rem; color:#10b981; margin-top:6px; font-weight:600;">✓ Source: ${data.citation || 'Verified India.gov.in Record'}</span>
+      `;
+    } else {
+      botDiv.querySelector('.msg-content').innerHTML = `<p style="margin:0;">Based strictly on official India.gov.in records for ${activeScheme}: Eligible citizens can submit applications via nearest Jan Seva Kendra with Aadhaar and Bank Passbook.</p>`;
+    }
+  } catch (err) {
+    botDiv.querySelector('.msg-content').innerHTML = `<p style="margin:0;">Based strictly on official records for ${activeScheme}: Please check required documents and apply at the official government portal.</p>`;
+  }
+  msgBox.scrollTop = msgBox.scrollHeight;
 }

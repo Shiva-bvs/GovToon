@@ -64,6 +64,7 @@ SCHEMES_DB = [
         ],
         "officialUrl": "https://www.india.gov.in/my-government/schemes/pm-kisan-samman-nidhi",
         "sourceUrl": "https://pmkisan.gov.in",
+        "applyUrl": "https://pmkisan.gov.in",
         "lastVerified": "2026-08-24"
     },
     {
@@ -91,6 +92,7 @@ SCHEMES_DB = [
         ],
         "officialUrl": "https://www.india.gov.in/my-government/schemes/pm-shram-yogi-maandhan",
         "sourceUrl": "https://maandhan.in",
+        "applyUrl": "https://maandhan.in",
         "lastVerified": "2026-08-24"
     },
     {
@@ -117,6 +119,7 @@ SCHEMES_DB = [
         ],
         "officialUrl": "https://www.india.gov.in/my-government/schemes/ayushman-bharat",
         "sourceUrl": "https://pmjay.gov.in",
+        "applyUrl": "https://beneficiary.nha.gov.in",
         "lastVerified": "2026-08-24"
     },
     {
@@ -144,6 +147,7 @@ SCHEMES_DB = [
         ],
         "officialUrl": "https://www.india.gov.in/my-government/schemes/pm-surya-ghar",
         "sourceUrl": "https://pmsuryaghar.gov.in",
+        "applyUrl": "https://pmsuryaghar.gov.in",
         "lastVerified": "2026-08-24"
     },
     {
@@ -171,6 +175,7 @@ SCHEMES_DB = [
         ],
         "officialUrl": "https://www.india.gov.in/my-government/schemes/pm-svanidhi",
         "sourceUrl": "https://pmsvanidhi.mohua.gov.in",
+        "applyUrl": "https://pmsvanidhi.mohua.gov.in",
         "lastVerified": "2026-08-24"
     },
     {
@@ -251,11 +256,22 @@ SCHEMES_DB = [
             {"step": 3, "title": "Upload Marksheet & Income Proof", "desc": "Upload scanned certificates for institutional verification."},
             {"step": 4, "title": "Receive Scholarship DBT", "desc": "Funds transferred directly to student bank account upon verification."}
         ],
-        "officialUrl": "https://www.india.gov.in/my-government/schemes/national-scholarship-portal",
         "sourceUrl": "https://scholarships.gov.in",
         "lastVerified": "2026-08-24"
     }
 ]
+
+def save_schemes_cache():
+    try:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        cache_path = os.path.join(os.path.dirname(base_dir), "schemes_cache.json")
+        if not os.path.exists(os.path.dirname(cache_path)):
+            cache_path = os.path.join(base_dir, "schemes_cache.json")
+        with open(cache_path, "w", encoding="utf-8") as f:
+            json.dump(SCHEMES_DB, f, indent=2, ensure_ascii=False)
+        print(f"💾 [Cache Saved]: {len(SCHEMES_DB)} schemes persisted to schemes_cache.json")
+    except Exception as e:
+        print(f"Cache Save Warning: {e}")
 
 # Local Grounded LLM Engine Class
 class LocalGroundedLLM:
@@ -410,6 +426,12 @@ def search_portal():
     query = data.get("query", "").strip()
 
     if not query:
+        # Pre-generate unique comics for all schemes if missing
+        for s in SCHEMES_DB:
+            if "panels" not in s or not s["panels"]:
+                c_char, c_panels = LocalGroundedLLM.generate_story(s["name"])
+                s["panels"] = {"en": c_panels, "te": c_panels, "hi": c_panels}
+                s["character"] = {"en": c_char, "te": c_char, "hi": c_char}
         return jsonify({"success": True, "count": len(SCHEMES_DB), "schemes": SCHEMES_DB}), 200
 
     q_lower = query.lower()
@@ -428,8 +450,21 @@ def search_portal():
     # If no matches, dynamically extract & ingest verified scheme from portal using LLM
     if len(matches) == 0:
         dynamic_scheme = LocalGroundedLLM.extract_facts(query)
+        c_char, c_panels = LocalGroundedLLM.generate_story(dynamic_scheme["name"])
+        dynamic_scheme["panels"] = {"en": c_panels, "te": c_panels, "hi": c_panels}
+        dynamic_scheme["character"] = {"en": c_char, "te": c_char, "hi": c_char}
+        
         SCHEMES_DB.append(dynamic_scheme)
         matches.append(dynamic_scheme)
+        save_schemes_cache()
+    else:
+        # Ensure every matched scheme has a pre-generated unique comic attached
+        for m in matches:
+            if "panels" not in m or not m["panels"]:
+                c_char, c_panels = LocalGroundedLLM.generate_story(m["name"])
+                m["panels"] = {"en": c_panels, "te": c_panels, "hi": c_panels}
+                m["character"] = {"en": c_char, "te": c_char, "hi": c_char}
+        save_schemes_cache()
 
     return jsonify({
         "success": True,

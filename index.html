@@ -37,10 +37,9 @@
         <nav class="nav-menu">
           <button class="nav-link active" data-nav="home" data-i18n="nav_home">🏠 Home</button>
           <button class="nav-link" data-nav="explore" data-i18n="nav_explore">🔍 Explore Schemes</button>
-          <button class="nav-link" data-nav="create" data-i18n="nav_create">⚡ Create Comic</button>
           <button class="nav-link" data-nav="reader" data-i18n="nav_reader">📖 Comic Reader</button>
           <button class="nav-link" data-nav="library" data-i18n="nav_library">📚 My Library</button>
-          <button class="nav-link" data-nav="ask" data-i18n="nav_ask">💬 Ask GovToon</button>
+          <button class="nav-link" data-nav="ask" data-i18n="nav_ask">💬 AI Chatbot</button>
           <button class="nav-link" data-nav="admin" data-i18n="nav_admin">📊 Admin</button>
         </nav>
 
@@ -54,7 +53,7 @@
               <option value="hi">हिन्दी (Hindi)</option>
             </select>
           </div>
-          <button class="btn btn-primary" data-i18n="btn_create_nav" onclick="navigateTo('create')">+ Turn Scheme into Comic</button>
+          <button class="btn btn-primary" data-i18n="btn_create_nav" onclick="handleTopCreateButtonClick()">+ Turn Scheme into Comic</button>
         </div>
       </div>
     </header>
@@ -324,18 +323,23 @@
               <span class="source-verified-icon" data-i18n="source_verified">✓ Official Source Verified</span>
               <span class="source-date" id="reader-source-date">Last Verified: Aug 2026</span>
             </div>
-            <a id="reader-official-link" href="https://www.india.gov.in/my-government/schemes" target="_blank" class="btn btn-outline-sm" data-i18n="btn_verify_portal">🔗 Verify Official Portal</a>
+            <a id="reader-official-link" href="https://www.india.gov.in/my-government/schemes" target="_blank" rel="noopener noreferrer" class="btn btn-outline-sm" data-i18n="btn_verify_portal">🔗 Verify Official Portal</a>
           </div>
+        </div>
+
+        <!-- Scheme Key Summary & Highlights Card -->
+        <div id="reader-scheme-summary-card" class="scheme-summary-card">
+          <!-- Rendered dynamically -->
         </div>
 
         <!-- Reader Navigation Tabs -->
         <div class="reader-nav-tabs">
-          <button class="rtab-btn active" onclick="setReaderTab('comic')" data-i18n="rtab_comic">🎨 4-Panel Comic</button>
-          <button class="rtab-btn" onclick="setReaderTab('eligibility')" data-i18n="rtab_eligibility">🟢 Visual Eligibility</button>
-          <button class="rtab-btn" onclick="setReaderTab('documents')" data-i18n="rtab_documents">📄 Required Documents</button>
-          <button class="rtab-btn" onclick="setReaderTab('steps')" data-i18n="rtab_steps">🗺️ Application Steps</button>
-          <button class="rtab-btn" onclick="setReaderTab('ask')" data-i18n="rtab_ask">💬 Ask GovToon AI</button>
-          <button class="rtab-btn" onclick="setReaderTab('quiz')" data-i18n="rtab_quiz">✅ Comprehension Quiz</button>
+          <button class="rtab-btn active" onclick="setReaderTab('comic', this)" data-i18n="rtab_comic">🎨 4-Panel Comic</button>
+          <button class="rtab-btn" onclick="setReaderTab('eligibility', this)" data-i18n="rtab_eligibility">🟢 Visual Eligibility</button>
+          <button class="rtab-btn" onclick="setReaderTab('documents', this)" data-i18n="rtab_documents">📄 Required Documents</button>
+          <button class="rtab-btn" onclick="setReaderTab('steps', this)" data-i18n="rtab_steps">🗺️ Application Steps</button>
+          <button class="rtab-btn" onclick="setReaderTab('ask', this)" data-i18n="rtab_ask">💬 Ask GovToon AI</button>
+          <button class="rtab-btn" onclick="setReaderTab('quiz', this)" data-i18n="rtab_quiz">✅ Comprehension Quiz</button>
         </div>
 
         <!-- READER TAB 1: 4-Panel Visual Comic -->
@@ -459,7 +463,7 @@
             <div class="apply-cta-box">
               <h4 data-i18n="cta_ready">Ready to Apply?</h4>
               <p data-i18n="cta_desc">Submit your application directly on the official government portal.</p>
-              <a id="apply-official-btn" href="https://www.india.gov.in/my-government/schemes" target="_blank" class="btn btn-saffron btn-lg" data-i18n="btn_go_portal">🚀 Go to Official Government Application Portal</a>
+              <a id="apply-official-btn" href="https://www.india.gov.in/my-government/schemes" target="_blank" rel="noopener noreferrer" class="btn btn-saffron btn-lg" data-i18n="btn_go_portal">🚀 Go to Official Government Application Portal</a>
             </div>
           </div>
         </div>
@@ -511,18 +515,6 @@
 
             <div id="quiz-results-card" class="quiz-score-card" style="display:none;">
               <!-- Rendered dynamically -->
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ================= PAGE 5: MY LIBRARY ================= -->
-      <section id="view-library" class="page-view">
-        <div class="page-header">
-          <div class="header-text">
-            <h2 data-i18n="lib_h">📚 My Library</h2>
-            <p data-i18n="lib_sub">Your saved schemes, created comics, and completed comprehension test scores.</p>
-          </div>
         </div>
 
         <div class="library-grid">
@@ -566,6 +558,84 @@
           <div class="chat-input-bar">
             <input type="text" id="general-chat-input" placeholder="e.g. Which scheme provides solar rooftop subsidies?" data-i18n-ph="gchat_ph" onkeypress="handleGeneralChatKeyPress(event)" />
             <button class="btn btn-primary" data-i18n="btn_ask_govtoon" onclick="sendGeneralChatMessage()">Ask GovToon</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= PAGE 5: AI CHATBOT & ANALYTICS ================= -->
+      <section id="view-ask" class="page-view">
+        <div class="page-header">
+          <div class="header-text">
+            <span class="badge saffron-badge">Grounded AI Engine</span>
+            <h2>💬 GovToon AI Scheme Assistant & Analytics</h2>
+            <p>Ask questions about any Indian Government scheme, eligibility, required documents, or compare benefits.</p>
+          </div>
+          <div class="source-status-pill">
+            <span class="pulse-dot"></span> <span>Grounded on India.gov.in</span>
+          </div>
+        </div>
+
+        <div class="chat-workspace-grid" style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-top: 16px;">
+          <!-- Main Chat Panel -->
+          <div class="chat-main-card" style="background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-md);">
+            <div class="chat-header-bar" style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-light); padding-bottom: 16px; margin-bottom: 20px;">
+              <div class="chat-status-info" style="display: flex; align-items: center; gap: 12px;">
+                <span class="chat-bot-avatar" style="font-size: 2rem;">🤖</span>
+                <div>
+                  <h3 style="font-family: var(--font-heading); color: var(--primary-navy); margin: 0;">GovToon Grounded AI Chatbot</h3>
+                  <p class="chat-sub" style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">Answers strictly backed by official India.gov.in source documents.</p>
+                </div>
+              </div>
+            </div>
+
+            <div id="page-chat-messages" class="chat-messages-container" style="height: 340px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; padding: 12px; background: var(--bg-light); border-radius: var(--radius-md); margin-bottom: 16px;">
+              <div class="chat-msg bot-msg" style="display: flex; gap: 12px; align-items: flex-start;">
+                <div class="msg-avatar" style="font-size: 1.4rem;">🤖</div>
+                <div class="msg-content" style="background: #ffffff; padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border-light); font-size: 0.95rem;">
+                  <p style="margin: 0;">Namaste! I am your GovToon AI Scheme Assistant. How can I help you today? You can ask about eligibility, benefits, application processes, or required documents for any central or state scheme.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Question Chips -->
+            <div class="chat-prompts-bar" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
+              <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">Try asking:</span>
+              <button class="prompt-chip" onclick="sendPageChatMessage('Who is eligible for PM-Kisan?')">🌾 PM-Kisan Eligibility</button>
+              <button class="prompt-chip" onclick="sendPageChatMessage('How to apply for Ayushman Golden Card?')">🏥 Ayushman Card</button>
+              <button class="prompt-chip" onclick="sendPageChatMessage('What is PM Surya Ghar rooftop solar subsidy?')">☀️ Solar Subsidy</button>
+              <button class="prompt-chip" onclick="sendPageChatMessage('Tell me about student scholarships on NSP portal')">🎓 Student Scholarships</button>
+            </div>
+
+            <!-- Chat Input Box -->
+            <div class="chat-input-bar" style="display: flex; gap: 12px;">
+              <input type="text" id="page-chat-input" placeholder="Type your scheme question here..." onkeypress="handlePageChatKeyPress(event)" style="flex: 1; padding: 12px 16px; border: 1px solid var(--border-light); border-radius: var(--radius-md); font-family: var(--font-body); outline: none;">
+              <button class="btn btn-saffron" onclick="sendPageChatMessage()">Ask AI 🚀</button>
+            </div>
+          </div>
+
+          <!-- Scheme Analytics Sidebar -->
+          <div class="chat-sidebar-card" style="background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-md);">
+            <h3 style="font-family: var(--font-heading); color: var(--primary-navy); margin-bottom: 6px;">📊 Scheme Analytics Dashboard</h3>
+            <p class="sidebar-sub" style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">Live benefit and coverage comparison.</p>
+            
+            <div class="analytics-stat-box" style="display: flex; flex-direction: column; gap: 14px;">
+              <div class="astat-item" style="background: var(--bg-light); padding: 14px; border-radius: var(--radius-md); border-left: 4px solid #10b981;">
+                <span class="astat-val" style="display: block; font-size: 1.1rem; font-weight: 800; color: #10b981;">₹6,000 / yr</span>
+                <span class="astat-lbl" style="font-size: 0.85rem; color: var(--text-muted);">🌾 PM-Kisan Direct Bank Transfer</span>
+              </div>
+              <div class="astat-item" style="background: var(--bg-light); padding: 14px; border-radius: var(--radius-md); border-left: 4px solid #0284c7;">
+                <span class="astat-val" style="display: block; font-size: 1.1rem; font-weight: 800; color: #0284c7;">₹5,000,00 / yr</span>
+                <span class="astat-lbl" style="font-size: 0.85rem; color: var(--text-muted);">🏥 Ayushman Cashless Hospital Cover</span>
+              </div>
+              <div class="astat-item" style="background: var(--bg-light); padding: 14px; border-radius: var(--radius-md); border-left: 4px solid #f97316;">
+                <span class="astat-val" style="display: block; font-size: 1.1rem; font-weight: 800; color: #f97316;">300 Units / mo</span>
+                <span class="astat-lbl" style="font-size: 0.85rem; color: var(--text-muted);">☀️ PM Surya Ghar Free Electricity</span>
+              </div>
+              <div class="astat-item" style="background: var(--bg-light); padding: 14px; border-radius: var(--radius-md); border-left: 4px solid #8b5cf6;">
+                <span class="astat-val" style="display: block; font-size: 1.1rem; font-weight: 800; color: #8b5cf6;">₹3,000 / mo</span>
+                <span class="astat-lbl" style="font-size: 0.85rem; color: var(--text-muted);">👵 PM Shram Yogi Guaranteed Pension</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -688,7 +758,7 @@
           <div class="cite-meta">
             <p><strong data-i18n="cite_loc">Source Location:</strong> <span id="cite-location-text">Section 2: Eligibility Rules</span></p>
             <p><strong data-i18n="cite_date">Retrieved Date:</strong> <span id="cite-date-text">2026-08-24</span></p>
-            <p><strong data-i18n="cite_url">Official Source URL:</strong> <a id="cite-url-link" href="#" target="_blank" data-i18n="cite_view_link">View Official Document ↗</a></p>
+            <p><strong data-i18n="cite_url">Official Source URL:</strong> <a id="cite-url-link" href="https://www.india.gov.in/my-government/schemes" target="_blank" rel="noopener noreferrer" data-i18n="cite_view_link">View Official Document ↗</a></p>
           </div>
         </div>
       </div>
@@ -721,7 +791,58 @@
           <p class="footer-disclaimer" data-i18n="footer_disclaimer">GovToon simplifies publicly available government information for visual comprehension. It does not replace official government websites, departments, or application portals.</p>
         </div>
       </div>
-    </footer>
+  <!-- Floating AI Chatbot Widget (Exact Match to Screenshot) -->
+  <div id="floating-ai-widget" class="floating-ai-widget">
+    <!-- Chat Popup Window -->
+    <div id="floating-chat-popup" class="floating-chat-popup" style="display: none;">
+      <div class="fchat-header">
+        <div class="fchat-title">
+          <div class="fchat-logo-ring">
+            <div class="ring-cyan"></div>
+            <div class="ring-white"></div>
+          </div>
+          <div>
+            <h4>GovToon AI Assistant</h4>
+            <span class="fchat-status">🟢 Grounded on India.gov.in</span>
+          </div>
+        </div>
+        <button class="fchat-close-btn" onclick="toggleFloatingChat()">✕</button>
+      </div>
+      
+      <div id="fchat-messages" class="fchat-messages-box">
+        <div class="chat-msg bot-msg">
+          <div class="msg-avatar">
+            <div class="fchat-logo-ring-sm">
+              <div class="ring-cyan"></div>
+              <div class="ring-white"></div>
+            </div>
+          </div>
+          <div class="msg-content">
+            <p>Namaste! I am your official GovToon AI Assistant. Ask me anything about Indian Government schemes, eligibility, documents, or application portals!</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="fchat-suggested-chips">
+        <button class="fchip" onclick="sendFloatingQuickQuestion('Who is eligible for PM-Kisan?')">🌾 PM-Kisan Eligibility</button>
+        <button class="fchip" onclick="sendFloatingQuickQuestion('How to get Ayushman Card?')">🏥 Ayushman Card</button>
+        <button class="fchip" onclick="sendFloatingQuickQuestion('What is PM Surya Ghar solar subsidy?')">☀️ Solar Subsidy</button>
+      </div>
+
+      <div class="fchat-input-box">
+        <input type="text" id="fchat-input" placeholder="Ask about any government scheme..." onkeypress="handleFloatingChatKeyPress(event)">
+        <button class="btn btn-saffron" onclick="sendFloatingChatMessage()">Ask</button>
+      </div>
+    </div>
+
+    <!-- Floating Pill Trigger Button (Matches Screenshot) -->
+    <button id="floating-ai-chat-btn" class="floating-chat-pill-trigger" onclick="toggleFloatingChat()" title="Ask GovToon AI Assistant">
+      <div class="fchat-logo-ring">
+        <div class="ring-cyan"></div>
+        <div class="ring-white"></div>
+      </div>
+      <span class="fchat-pill-text">Ask GovToon AI</span>
+    </button>
   </div>
 
   <script src="app.js"></script>
