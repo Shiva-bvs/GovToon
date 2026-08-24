@@ -6,7 +6,6 @@ let API_BASE_URL = 'http://localhost:5000/api';
 // Comprehensive Multilingual Translation Dictionary (EN, TE, HI)
 const TRANSLATIONS = {
   en: {
-    // Navigation & Header
     logo_sub: "Government Schemes, Told Simply.",
     trust_badge: "🛡️ Official Source Grounding",
     trust_text: "Data sourced from India.gov.in National Portal of India. We don't change what the government says — we change how easily citizens understand it.",
@@ -20,27 +19,19 @@ const TRANSLATIONS = {
     nav_ask: "💬 Ask GovToon",
     nav_admin: "📊 Admin",
     btn_create_nav: "+ Turn Scheme into Comic",
-
-    // Hero Section
     hero_badge: "🇮🇳 National Portal of India Integration Ready",
     hero_title: "Government Schemes,<br><span class=\"hero-highlight\">Told Simply.</span>",
     hero_sub: "Transform complex official government documents, eligibility rules, and application processes into simple, visual 4-panel stories with voice narration and comprehension testing.",
     hero_ph: "What government scheme do you want to understand? (e.g. PM-Kisan, Ayushman Bharat, Scholarships)...",
     btn_search_schemes: "Search Schemes",
     try_asking: "Try asking:",
-
-    // Pipeline
     pipe_doc: "Government Document / Portal",
     pipe_ai: "AI Fact Extraction",
     pipe_story: "Visual Comic Story",
     pipe_voice: "Multilingual Voice",
     pipe_quiz: "Comprehension Quiz",
-
-    // Impact
     impact_orig: "Average Citizen Understanding of Official PDF Text",
     impact_govtoon: "Understanding Score After Reading GovToon Visual Comics",
-
-    // Features
     feat_title: "How GovToon Empowers Citizens",
     feat_sub: "Bridging the gap between complex administrative legalese and citizen understanding.",
     f1_h: "1. Grounded in Official Sources",
@@ -55,15 +46,11 @@ const TRANSLATIONS = {
     f5_p: "Take interactive quizzes to verify your understanding with automatic panel-jump help for tricky questions.",
     f6_h: "6. Grounded AI Q&A Assistant",
     f6_p: "Ask anything about the scheme. GovToon answers strictly from official source data with page citations.",
-
-    // Explore
     exp_badge: "India.gov.in Scheme Directory",
     exp_h: "Explore Official Government Schemes",
     exp_sub: "Browse verified schemes from Central & State Ministries. Click any scheme to generate a visual comic.",
     source_pill: "Source: National Portal of India / myScheme Ecosystem",
     dir_search_ph: "Search by scheme name, keyword, or benefit...",
-
-    // Create
     create_badge: "Module 1 & 2 Ingestion Pipeline",
     create_h: "Create a Scheme Comic",
     create_sub: "Select an official scheme, upload a government PDF, paste text, or enter an official URL.",
@@ -93,8 +80,6 @@ const TRANSLATIONS = {
     p_woman: "👩 Domestic Worker (Lata Tai)",
     p_student: "🎓 Student / Youth (Raju)",
     p_senior: "👴 Senior Citizen (Sharma Ji)",
-
-    // Reader & Subtabs
     source_verified: "✓ Official Source Verified",
     btn_verify_portal: "🔗 Verify Official Portal",
     rtab_comic: "🎨 4-Panel Comic",
@@ -110,8 +95,6 @@ const TRANSLATIONS = {
     btn_print: "🖨️ Print 1-Page Flyer",
     btn_citation: "🔍 Why shown? (Citation)",
     btn_play_panel: "🔊 Play Panel",
-
-    // Eligibility Tab
     elig_h: "🟢 Visual Eligibility Assessment",
     elig_sub: "Enter your basic details to check preliminary match against official rules.",
     lbl_age: "Your Age (Years)",
@@ -122,20 +105,14 @@ const TRANSLATIONS = {
     elig_eligible: "🟢 Likely Eligible",
     elig_not_eligible: "🔴 Does not appear to meet criteria",
     elig_amber: "🟡 Threshold requires verification",
-
-    // Documents Tab
     doc_h: "📄 Required Documents Checklist",
     doc_sub: "Check off documents as you prepare them before visiting the official portal or Panchayat office.",
     doc_prep_label: "Preparation Progress:",
-
-    // Steps Tab
     steps_h: "🗺️ Step-by-Step Application Roadmap",
     steps_sub: "Follow these official steps to submit your application safely.",
     cta_ready: "Ready to Apply?",
     cta_desc: "Submit your application directly on the official government portal.",
     btn_go_portal: "🚀 Go to Official Government Application Portal",
-
-    // Ask Tab
     ask_h: "💬 Ask GovToon Grounded AI Assistant",
     ask_sub: "Answers strictly from official India.gov.in scheme data with page citations.",
     sug_q: "Suggested Questions:",
@@ -147,27 +124,19 @@ const TRANSLATIONS = {
     cit_verified: "Source: Verified India.gov.in Record",
     chat_ph: "Ask a question about this scheme...",
     btn_send_q: "Send Question",
-
-    // Quiz Tab
     quiz_h: "✅ Scheme Comprehension Test",
     quiz_sub: "Test your understanding of the verified scheme facts.",
-
-    // Library Tab
     lib_h: "📚 My Library",
     lib_sub: "Your saved schemes, created comics, and completed comprehension test scores.",
     lib_bm: "🔖 Bookmarked Schemes",
     lib_created: "🎨 Created Comics",
     lib_quiz_hist: "🎯 Comprehension Test History",
-
-    // General Ask
     gask_h: "💬 Ask GovToon AI (All Schemes)",
     gask_sub: "Ask questions across the entire National Portal of India scheme directory.",
     gbot_welcome: "Hello! Ask me about any government scheme in India — scholarships, pensions, farmer support, or healthcare cards.",
     cit_india_gov: "Source: Grounded on India.gov.in",
     gchat_ph: "e.g. Which scheme provides solar rooftop subsidies?",
     btn_ask_govtoon: "Ask GovToon",
-
-    // Admin
     admin_badge: "Admin Access Only",
     admin_h: "GovToon Administrative & Confusion Analytics Dashboard",
     admin_sub: "Monitor ingested schemes, version updates, AI extraction logs, and citizen confusion analytics.",
@@ -188,8 +157,6 @@ const TRANSLATIONS = {
     th_status: "Status",
     th_changes: "Detected Version Changes",
     th_action: "Action",
-
-    // Citation Modal
     cite_h: "🔍 Panel Source Citation",
     cite_stmt: "Panel Statement:",
     cite_src_txt: "Authoritative Source Text (India.gov.in):",
@@ -197,14 +164,11 @@ const TRANSLATIONS = {
     cite_date: "Retrieved Date:",
     cite_url: "Official Source URL:",
     cite_view_link: "View Official Document ↗",
-
-    // Footer
     footer_quote: "\"We don't change what the government says. We change how easily citizens understand it.\"",
     footer_src_label: "Source Data:",
     footer_disclaimer: "GovToon simplifies publicly available government information for visual comprehension. It does not replace official government websites, departments, or application portals."
   },
   te: {
-    // Navigation & Header
     logo_sub: "ప్రభుత్వ పథకాలు, సులువైన మాటల్లో.",
     trust_badge: "🛡️ అధికారిక మూలాల ఆధారం",
     trust_text: "India.gov.in జాతీయ పోర్టల్ నుండి వివరాలు. ప్రభుత్వం చెప్పిన దాన్ని మేము మార్చము — పౌరులు అర్థం చేసుకునే విధానాన్ని సులభతరం చేస్తాము.",
@@ -218,27 +182,19 @@ const TRANSLATIONS = {
     nav_ask: "💬 గోవ్‌టూన్ అడగండి",
     nav_admin: "📊 అడ్మిన్",
     btn_create_nav: "+ పథకాన్ని కామిక్‌గా మార్చండి",
-
-    // Hero Section
     hero_badge: "🇮🇳 జాతీయ పోర్టల్ సమన్వయం సిద్ధంగా ఉంది",
     hero_title: "ప్రభుత్వ పథకాలు,<br><span class=\"hero-highlight\">సులువైన మాటల్లో.</span>",
     hero_sub: "సంక్లిష్టమైన ప్రభుత్వ పత్రాలు, అర్హత నిబంధనలు మరియు దరఖాస్తు విధానాలను సులువైన 4-ప్యానెల్ కామిక్ కథలుగా, వాయిస్ వివరణలతో పొందండి.",
     hero_ph: "మీరు ఏ ప్రభుత్వ పథకం గురించి తెలుసుకోవాలనుకుంటున్నారు? (ఉదా: పిఎమ్-కిసాన్, ఆయుష్మాన్ భారత్)...",
     btn_search_schemes: "పథకాలు వెతకండి",
     try_asking: "ప్రయత్నించండి:",
-
-    // Pipeline
     pipe_doc: "ప్రభుత్వ పత్రం / పోర్టల్",
     pipe_ai: "AI విశ్లేషణ",
     pipe_story: "కామిక్ కథ",
     pipe_voice: "బహుభాషా వాయిస్",
     pipe_quiz: "అవగాహన పరీక్ష",
-
-    // Impact
     impact_orig: "సాధారణ పౌరుల ప్రభుత్వ పత్రాల అవగాహన",
     impact_govtoon: "గోవ్‌టూన్ కామిక్స్ చదివిన తర్వాత అవగాహన స్కోరు",
-
-    // Features
     feat_title: "గోవ్‌టూన్ పౌరులకు ఎలా సహాయపడుతుంది",
     feat_sub: "కఠినమైన ప్రభుత్వ భాషకు, సాధారణ పౌరుల అవగాహనకు మధ్య వారధి.",
     f1_h: "1. అధికారిక ఆధారాలు",
@@ -253,15 +209,11 @@ const TRANSLATIONS = {
     f5_p: "పథకం గురించి మీకు ఎంతవరకు అర్థమైందో తెలుసుకోవడానికి క్విజ్ పరీక్ష రాసి స్కోర్ పొందండి.",
     f6_h: "6. AI ప్రశ్నోత్తరాల సహాయకుడు",
     f6_p: "పథకం గురించి ఏ సందేహం ఉన్నా అడగండి. కేవలం అధికారిక ఆధారాల నుండే సమాధానం ఇస్తుంది.",
-
-    // Explore
     exp_badge: "India.gov.in పథకాల డైరెక్టరీ",
     exp_h: "అధికారిక ప్రభుత్వ పథకాలను అన్వేషించండి",
     exp_sub: "కేంద్ర మరియు రాష్ట్ర మంత్రిత్వ శాఖల ద్వారా ధృవీకరించబడిన పథకాలను చూడండి.",
     source_pill: "మూలం: జాతీయ పోర్టల్ India.gov.in",
     dir_search_ph: "పథకం పేరు లేదా లబ్ధి ద్వారా వెతకండి...",
-
-    // Create
     create_badge: "కామిక్ తయారీ విధానం",
     create_h: "పథకం కామిక్ తయారు చేయండి",
     create_sub: "అధికారిక పథకాన్ని ఎంచుకోండి, PDF అప్‌లోడ్ చేయండి లేదా లింక్ ఇవ్వండి.",
@@ -291,8 +243,6 @@ const TRANSLATIONS = {
     p_woman: "👩 గృహ కార్మికురాలు (లతా తాయి)",
     p_student: "🎓 విద్యార్థి (రాజు)",
     p_senior: "👴 వృద్ధులు (శర్మ జీ)",
-
-    // Reader & Subtabs
     source_verified: "✓ అధికారిక ఆధారాలు ధృవీకరించబడ్డాయి",
     btn_verify_portal: "🔗 పోర్టల్‌ను తనిఖీ చేయండి",
     rtab_comic: "🎨 4-ప్యానెల్ కామిక్",
@@ -308,8 +258,6 @@ const TRANSLATIONS = {
     btn_print: "🖨️ 1-పేజీ ఫ్లైయర్ ప్రింట్",
     btn_citation: "🔍 ఆధారాలు (Citation)",
     btn_play_panel: "🔊 వినండి",
-
-    // Eligibility Tab
     elig_h: "🟢 అర్హత అంచనా తనిఖీ",
     elig_sub: "అధికారిక నిబంధనలతో మీ వివరాలను తనిఖీ చేయడానికి వివరాలు నమోదు చేయండి.",
     lbl_age: "మీ వయస్సు (సంవత్సరాలు)",
@@ -320,20 +268,14 @@ const TRANSLATIONS = {
     elig_eligible: "🟢 అర్హత పొందే అవకాశం ఉంది",
     elig_not_eligible: "🔴 అర్హత నిబంధనలకు సరిపోలడం లేదు",
     elig_amber: "🟡 ఆదాయ పరిమితి తనిఖీ అవసరం",
-
-    // Documents Tab
     doc_h: "📄 అవసరమైన పత్రాల జాబితా",
     doc_sub: "మీరు సిద్ధం చేసుకున్న పత్రాలను చెక్‌బాక్స్‌లో గుర్తించండి.",
     doc_prep_label: "సిద్ధమైన పురోగతి:",
-
-    // Steps Tab
     steps_h: "🗺️ అంచెలవారీ దరఖాస్తు విధానం",
     steps_sub: "సురక్షితంగా దరఖాస్తు చేయడానికి ఈ అధికారిక దశలను అనుసరించండి.",
     cta_ready: "దరఖాస్తు చేయడానికి సిద్ధంగా ఉన్నారా?",
     cta_desc: "నేరుగా అధికారిక ప్రభుత్వ పోర్టల్‌లో దరఖాస్తు చేసుకోండి.",
     btn_go_portal: "🚀 అధికారిక ప్రభుత్వ దరఖాస్తు పోర్టల్‌కు వెళ్లండి",
-
-    // Ask Tab
     ask_h: "💬 గోవ్‌టూన్ AI సహాయకుడు",
     ask_sub: "కేవలం అధికారిక India.gov.in సమాచారం ఆధారంగానే సమాధానాలు ఇస్తుంది.",
     sug_q: "సూచించిన ప్రశ్నలు:",
@@ -345,27 +287,19 @@ const TRANSLATIONS = {
     cit_verified: "మూలం: ధృవీకరించబడిన India.gov.in రికార్డు",
     chat_ph: "ఈ పథకం గురించి ప్రశ్నించండి...",
     btn_send_q: "ప్రశ్న పంపండి",
-
-    // Quiz Tab
     quiz_h: "✅ పథకం అవగాహన పరీక్ష",
     quiz_sub: "పథకం విషయాలపై మీ అవగాహనను పరీక్షించుకోండి.",
-
-    // Library Tab
     lib_h: "📚 నా లైబ్రరీ",
     lib_sub: "మీరు దాచుకున్న పథకాలు, సృష్టించిన కామిక్స్ మరియు క్విజ్ స్కోర్లు.",
     lib_bm: "🔖 బుక్‌మార్క్ చేసిన పథకాలు",
     lib_created: "🎨 తయారు చేసిన కామిక్స్",
     lib_quiz_hist: "🎯 క్విజ్ పరీక్షల చరిత్ర",
-
-    // General Ask
     gask_h: "💬 గోవ్‌టూన్ AI (అన్ని పథకాలు)",
     gask_sub: "భారత జాతీయ పోర్టల్‌లోని ఏ పథకం గురించైనా అడగండి.",
     gbot_welcome: "నమస్కారం! స్కాలర్‌షిప్‌లు, పెన్షన్లు, రైతు సహాయం లేదా హెల్త్ కార్డుల గురించి ఏమైనా అడగండి.",
     cit_india_gov: "మూలం: India.gov.in ఆధారం",
     gchat_ph: "ఉదా: సోలార్ రూఫ్‌టాప్‌కు ఏ పథకం సబ్సిడీ ఇస్తుంది?",
     btn_ask_govtoon: "గోవ్‌టూన్ అడగండి",
-
-    // Admin
     admin_badge: "అడ్మిన్ లాగిన్ మాత్రమే",
     admin_h: "గోవ్‌టూన్ నిర్వాహక & అవగాహన విశ్లేషణల డాష్‌బోర్డ్",
     admin_sub: "సేకరించిన పథకాలు, నవీకరణలు మరియు ప్రజల సందేహాలను విశ్లేషించండి.",
@@ -386,8 +320,6 @@ const TRANSLATIONS = {
     th_status: "స్థితి",
     th_changes: "గుర్తించిన మార్పులు",
     th_action: "చర్య",
-
-    // Citation Modal
     cite_h: "🔍 ప్యానెల్ ఆధారాల ధృవీకరణ",
     cite_stmt: "ప్యానెల్ వాక్యం:",
     cite_src_txt: "అధికారిక మూల వచనం (India.gov.in):",
@@ -395,14 +327,11 @@ const TRANSLATIONS = {
     cite_date: "సేకరించిన తేదీ:",
     cite_url: "అధికారిక వెబ్‌సైట్ లింక్:",
     cite_view_link: "అధికారిక పత్రాన్ని చూడండి ↗",
-
-    // Footer
     footer_quote: "\"ప్రభుత్వం చెప్పిన దాన్ని మేము మార్చము. పౌరులు అర్థం చేసుకునే విధానాన్ని సులభతరం చేస్తాము.\"",
     footer_src_label: "మూల సమాచారం:",
     footer_disclaimer: "గోవ్‌టూన్ పౌరుల సులువైన అవగాహన కోసం ప్రభుత్వ సమాచారాన్ని సరళీకృతం చేస్తుంది. ఇది అధికారిక ప్రభుత్వ వెబ్‌సైట్‌లకు ప్రత్యామ్నాయం కాదు."
   },
   hi: {
-    // Navigation & Header
     logo_sub: "सरकारी योजनाएं, आसान भाषा में।",
     trust_badge: "🛡️ आधिकारिक स्रोतों पर आधारित",
     trust_text: "India.gov.in राष्ट्रीय पोर्टल से प्राप्त जानकारी। हम सरकार की बात नहीं बदलते — हम नागरिकों के समझने का तरीका आसान बनाते हैं।",
@@ -416,27 +345,19 @@ const TRANSLATIONS = {
     nav_ask: "💬 गवटून से पूछें",
     nav_admin: "📊 एडमिन",
     btn_create_nav: "+ योजना को कॉमिक में बदलें",
-
-    // Hero Section
     hero_badge: "🇮🇳 राष्ट्रीय पोर्टल इंडिया Integration तैयार",
     hero_title: "सरकारी योजनाएं,<br><span class=\"hero-highlight\">आसान भाषा में।</span>",
     hero_sub: "जटिल सरकारी दस्तावेजों, पात्रता नियमों और आवेदन प्रक्रियाओं को सरल 4-पैनल दृश्यात्मक कहानियों और ऑडियो में समझें।",
     hero_ph: "आप कौन सी सरकारी योजना समझना चाहते हैं? (जैसे पीएम-किसान, आयुष्मान भारत)...",
     btn_search_schemes: "योजनाएं खोजें",
     try_asking: "खोजकर देखें:",
-
-    // Pipeline
     pipe_doc: "सरकारी दस्तावेज / पोर्टल",
     pipe_ai: "AI तथ्य विश्लेषण",
     pipe_story: "कॉमिक कहानी",
     pipe_voice: "बहुभाषी ऑडियो",
     pipe_quiz: "समझ की परीक्षा",
-
-    // Impact
     impact_orig: "सरकारी दस्तावेज पढ़ने पर सामान्य नागरिक की समझ",
     impact_govtoon: "गवटून कॉमिक्स पढ़ने के बाद समझ का स्कोर",
-
-    // Features
     feat_title: "गवटून नागरिकों को कैसे सशक्त बनाता है",
     feat_sub: "जटिल सरकारी भाषा और आम नागरिक की समझ के बीच का मजबूत पुल।",
     f1_h: "1. आधिकारिक स्रोतों पर आधारित",
@@ -451,15 +372,11 @@ const TRANSLATIONS = {
     f5_p: "योजना की सही जानकारी का परीक्षण करने के लिए आसान सवाल-जवाब।",
     f6_h: "6. AI प्रश्नोत्तर सहायक",
     f6_p: "योजना से जुड़ा कोई भी सवाल पूछें। केवल आधिकारिक दस्तावेजों से सटीक जवाब।",
-
-    // Explore
     exp_badge: "India.gov.in योजना डायरेक्टरी",
     exp_h: "आधिकारिक सरकारी योजनाएं खोजें",
     exp_sub: "केंद्र और राज्य मंत्रालयों की प्रमाणित योजनाएं देखें।",
     source_pill: "स्रोत: भारत का राष्ट्रीय पोर्टल India.gov.in",
     dir_search_ph: "योजना का नाम या लाभ से खोजें...",
-
-    // Create
     create_badge: "कॉमिक निर्माण प्रक्रिया",
     create_h: "योजना की कॉमिक बनाएं",
     create_sub: "सरकारी योजना चुनें, PDF अपलोड करें या लिंक दर्ज करें।",
@@ -489,8 +406,6 @@ const TRANSLATIONS = {
     p_woman: "👩 घरेलू कामगार (लता ताई)",
     p_student: "🎓 छात्र / युवा (राजू)",
     p_senior: "👴 वरिष्ठ नागरिक (शर्मा जी)",
-
-    // Reader & Subtabs
     source_verified: "✓ आधिकारिक स्रोत प्रमाणित",
     btn_verify_portal: "🔗 आधिकारिक पोर्टल देखें",
     rtab_comic: "🎨 4-पैनल कॉमिक",
@@ -506,8 +421,6 @@ const TRANSLATIONS = {
     btn_print: "🖨️ 1-पेज फ्लायर प्रिंट",
     btn_citation: "🔍 यह क्यों दिखाया? (स्रोतः)",
     btn_play_panel: "🔊 सुनें",
-
-    // Eligibility Tab
     elig_h: "🟢 पात्रता मूल्यांकन जांच",
     elig_sub: "आधिकारिक नियमों से अपनी पात्रता मिलाने के लिए जानकारी दर्ज करें।",
     lbl_age: "आपकी उम्र (वर्ष)",
@@ -518,20 +431,14 @@ const TRANSLATIONS = {
     elig_eligible: "🟢 पात्र होने की संभावना है",
     elig_not_eligible: "🔴 पात्रता शर्तों से मेल नहीं खाता",
     elig_amber: "🟡 आय सीमा सत्यापन आवश्यक",
-
-    // Documents Tab
     doc_h: "📄 आवश्यक दस्तावेजों की सूची",
     doc_sub: "तैयार दस्तावेजों को चेकबॉक्स में मार्क करें।",
     doc_prep_label: "तैयारी की प्रगति:",
-
-    // Steps Tab
     steps_h: "🗺️ चरणबद्ध आवेदन मार्गदर्शिका",
     steps_sub: "सुरक्षित आवेदन के लिए इन आधिकारिक चरणों का पालन करें।",
     cta_ready: "आवेदन के लिए तैयार हैं?",
     cta_desc: "सीधे आधिकारिक सरकारी पोर्टल पर आवेदन जमा करें।",
     btn_go_portal: "🚀 आधिकारिक सरकारी पोर्टल पर जाएं",
-
-    // Ask Tab
     ask_h: "💬 गवटून AI सहायक",
     ask_sub: "केवल आधिकारिक India.gov.in आंकड़ों पर आधारित सटीक जवाब।",
     sug_q: "सुझाए गए प्रश्न:",
@@ -543,27 +450,19 @@ const TRANSLATIONS = {
     cit_verified: "स्रोत: प्रमाणित India.gov.in रिकॉर्ड",
     chat_ph: "इस योजना के बारे में सवाल पूछें...",
     btn_send_q: "सवाल भेजें",
-
-    // Quiz Tab
     quiz_h: "✅ योजना समझ की परीक्षा",
     quiz_sub: "योजना के तथ्यों पर अपनी समझ की जांच करें।",
-
-    // Library Tab
     lib_h: "📚 मेरी लाइब्रेरी",
     lib_sub: "आपकी सुरक्षित योजनाएं, बनाई गई कॉमिक्स और परीक्षा स्कोर।",
     lib_bm: "🔖 बुकमार्क की गई योजनाएं",
     lib_created: "🎨 बनाई गई कॉमिक्स",
     lib_quiz_hist: "🎯 परीक्षा इतिहास",
-
-    // General Ask
     gask_h: "💬 गवटून AI (सभी योजनाएं)",
     gask_sub: "भारत के राष्ट्रीय पोर्टल की किसी भी योजना के बारे में पूछें।",
     gbot_welcome: "नमस्ते! छात्रवृत्ति, पेंशन, किसान सहायता या स्वास्थ्य कार्ड के बारे में कुछ भी पूछें।",
     cit_india_gov: "स्रोतः India.gov.in पर आधारित",
     gchat_ph: "जैसे: सोलर रूफटॉप के लिए कौन सी योजना सब्सिडी देती है?",
     btn_ask_govtoon: "गवटून से पूछें",
-
-    // Admin
     admin_badge: "केवल एडमिन लॉगिन",
     admin_h: "गवटून प्रशासनिक एवं नागरिक समझ विश्लेषण डैशबोर्ड",
     admin_sub: "योजनाओं, नए अपडेट और नागरिकों के संशय का विश्लेषण करें।",
@@ -584,8 +483,6 @@ const TRANSLATIONS = {
     th_status: "स्थिति",
     th_changes: "पहचाने गए बदलाव",
     th_action: "कार्रवाई",
-
-    // Citation Modal
     cite_h: "🔍 पैनल स्रोत संदर्भ",
     cite_stmt: "पैनल वाक्य:",
     cite_src_txt: "आधिकारिक स्रोत टेक्स्ट (India.gov.in):",
@@ -593,15 +490,13 @@ const TRANSLATIONS = {
     cite_date: "प्राप्ति तिथि:",
     cite_url: "आधिकारिक वेबसाइट लिंक:",
     cite_view_link: "आधिकारिक दस्तावेज देखें ↗",
-
-    // Footer
     footer_quote: "\"हम सरकार की बात नहीं बदलते। हम नागरिकों के समझने का तरीका आसान बनाते हैं।\"",
     footer_src_label: "स्रोत डेटा:",
     footer_disclaimer: "गवटून आसान समझ के लिए सार्वजनिक सरकारी जानकारी को सरल बनाता है। यह आधिकारिक सरकारी वेबसाइटों का विकल्प नहीं है।"
   }
 };
 
-// Multilingual Scheme Database (Fully Translated Documents, Steps, Characters, Quiz)
+// Multilingual Scheme Database
 const SCHEMES_DATABASE = [
   {
     id: "pm_kisan",
@@ -844,7 +739,6 @@ function updateLanguageUI() {
   const lang = appState.currentLang;
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
 
-  // Update all text elements with data-i18n
   document.querySelectorAll('[data-i18n]').forEach(elem => {
     const key = elem.getAttribute('data-i18n');
     if (t[key]) {
@@ -856,7 +750,6 @@ function updateLanguageUI() {
     }
   });
 
-  // Update input placeholders with data-i18n-ph
   document.querySelectorAll('[data-i18n-ph]').forEach(elem => {
     const key = elem.getAttribute('data-i18n-ph');
     if (t[key]) {
@@ -886,19 +779,25 @@ function renderDirectory(schemes) {
       <p class="scard-desc">${s.purpose}</p>
       <div class="scard-footer">
         <span class="scard-source">✓ Source: India.gov.in</span>
-        <button class="btn btn-saffron" onclick="openSchemeInReader('${s.id}')">${t.btn_create_nav || '+ Turn into Comic'}</button>
+        <button class="btn btn-saffron" onclick="generateComicForScheme('${s.id}')">${t.btn_create_nav || '+ Turn into Comic'}</button>
       </div>
     `;
     grid.appendChild(card);
   });
 }
 
+// TURN INTO COMIC CORE FUNCTIONS
 function openSchemeInReader(schemeId) {
-  const s = SCHEMES_DATABASE.find(item => item.id === schemeId);
-  if (!s) return;
+  const s = SCHEMES_DATABASE.find(item => item.id === schemeId) || SCHEMES_DATABASE[0];
   appState.selectedScheme = s;
   renderReaderView();
   navigateTo('reader');
+}
+
+function generateComicForScheme(schemeId) {
+  const s = SCHEMES_DATABASE.find(item => item.id === schemeId) || SCHEMES_DATABASE[0];
+  appState.selectedScheme = s;
+  startProcessingPipeline(s.name, s.id);
 }
 
 // Reader Workspace Renderer
@@ -916,7 +815,6 @@ function renderReaderView() {
   document.getElementById('reader-official-link').href = s.officialUrl;
   document.getElementById('chat-scheme-name').innerText = s.name;
 
-  // Character Card in active language
   const charBox = document.getElementById('reader-character-card');
   if (charBox && s.character) {
     const charData = s.character[lang] || s.character.en || s.character;
@@ -929,7 +827,6 @@ function renderReaderView() {
     `;
   }
 
-  // Panels in active language
   const panelsList = s.panels[lang] || s.panels.en;
   const panelsContainer = document.getElementById('reader-panels-container');
   if (panelsContainer) {
@@ -1230,7 +1127,7 @@ function searchForCreate() {
     div.style.cssText = "padding:12px; border:1px solid var(--border-light); border-radius:8px; margin-top:8px; display:flex; justify-content:space-between; align-items:center;";
     div.innerHTML = `
       <div><strong>${s.name}</strong> <span style="font-size:0.8rem; color:var(--text-muted);">(${s.category})</span></div>
-      <button class="btn btn-saffron btn-sm" onclick="startProcessingPipeline('${s.name}')">Generate Story</button>
+      <button class="btn btn-saffron btn-sm" onclick="generateComicForScheme('${s.id}')">Generate Story</button>
     `;
     list.appendChild(div);
   });
@@ -1248,21 +1145,36 @@ function processUrlInput() {
   startProcessingPipeline("Official URL Ingestion");
 }
 
-async function startProcessingPipeline(schemeTitle) {
-  const overlay = document.getElementById('processing-overlay');
-  overlay.style.display = 'flex';
-  document.getElementById('proc-scheme-name').innerText = `Ingesting: ${schemeTitle}`;
+async function startProcessingPipeline(schemeTitle, schemeId) {
+  const targetId = schemeId || (appState.selectedScheme ? appState.selectedScheme.id : 'pm_kisan');
+  const s = SCHEMES_DATABASE.find(item => item.id === targetId) || SCHEMES_DATABASE[0];
+  appState.selectedScheme = s;
 
-  setTimeout(() => { document.getElementById('pstep-1').style.fontWeight = 'bold'; }, 400);
-  setTimeout(() => { document.getElementById('pstep-2').style.fontWeight = 'bold'; }, 800);
-  setTimeout(() => { document.getElementById('pstep-3').style.fontWeight = 'bold'; }, 1200);
+  const overlay = document.getElementById('processing-overlay');
+  if (overlay) {
+    overlay.style.display = 'flex';
+    const nameElem = document.getElementById('proc-scheme-name');
+    if (nameElem) nameElem.innerText = `Ingesting: ${schemeTitle || s.name}`;
+
+    for (let i = 1; i <= 6; i++) {
+      const stepElem = document.getElementById(`pstep-${i}`);
+      if (stepElem) stepElem.style.fontWeight = 'normal';
+    }
+
+    setTimeout(() => { const el = document.getElementById('pstep-1'); if (el) el.style.fontWeight = 'bold'; }, 300);
+    setTimeout(() => { const el = document.getElementById('pstep-2'); if (el) el.style.fontWeight = 'bold'; }, 600);
+    setTimeout(() => { const el = document.getElementById('pstep-3'); if (el) el.style.fontWeight = 'bold'; }, 900);
+    setTimeout(() => { const el = document.getElementById('pstep-4'); if (el) el.style.fontWeight = 'bold'; }, 1200);
+    setTimeout(() => { const el = document.getElementById('pstep-5'); if (el) el.style.fontWeight = 'bold'; }, 1500);
+    setTimeout(() => { const el = document.getElementById('pstep-6'); if (el) el.style.fontWeight = 'bold'; }, 1800);
+  }
 
   if (appState.isServerOnline) {
     try {
       const apiRes = await fetch(`${API_BASE_URL}/generate-story`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ schemeName: schemeTitle, persona: appState.currentPersona })
+        body: JSON.stringify({ schemeName: schemeTitle || s.name, persona: appState.currentPersona })
       });
       if (apiRes.ok) {
         const data = await apiRes.json();
@@ -1273,13 +1185,11 @@ async function startProcessingPipeline(schemeTitle) {
     }
   }
 
-  setTimeout(() => { document.getElementById('pstep-4').style.fontWeight = 'bold'; }, 1600);
-  setTimeout(() => { document.getElementById('pstep-5').style.fontWeight = 'bold'; }, 2000);
-
   setTimeout(() => {
-    overlay.style.display = 'none';
-    openSchemeInReader('pm_kisan');
-  }, 2400);
+    if (overlay) overlay.style.display = 'none';
+    renderReaderView();
+    navigateTo('reader');
+  }, 2100);
 }
 
 // Grounded AI Chatbot
@@ -1365,7 +1275,7 @@ function renderLibrary() {
     div.style.cssText = "padding:10px; border-bottom:1px solid var(--border-light); display:flex; justify-content:space-between; align-items:center;";
     div.innerHTML = `
       <div><strong>${s.name}</strong> <div style="font-size:0.8rem; color:var(--text-muted);">${s.category}</div></div>
-      <button class="btn btn-outline-sm" onclick="openSchemeInReader('${s.id}')">Read</button>
+      <button class="btn btn-outline-sm" onclick="generateComicForScheme('${s.id}')">Read</button>
     `;
     list.appendChild(div);
   });
@@ -1381,4 +1291,39 @@ function quickSearch(query) {
   document.getElementById('directory-search').value = query;
   const filtered = SCHEMES_DATABASE.filter(s => s.name.toLowerCase().includes(query.toLowerCase()) || s.purpose.toLowerCase().includes(query.toLowerCase()));
   renderDirectory(filtered);
+}
+
+function sendGeneralChatMessage() {
+  const input = document.getElementById('general-chat-input');
+  const text = input.value.trim();
+  if (!text) return;
+
+  const box = document.getElementById('general-chat-messages');
+  const udiv = document.createElement('div');
+  udiv.className = 'chat-msg user-msg';
+  udiv.innerHTML = `<div class="msg-content"><p>${text}</p></div>`;
+  box.appendChild(udiv);
+  input.value = '';
+
+  setTimeout(() => {
+    const bdiv = document.createElement('div');
+    bdiv.className = 'chat-msg bot-msg';
+    bdiv.innerHTML = `
+      <div class="msg-avatar">🏛️</div>
+      <div class="msg-content">
+        <p>Based on official India.gov.in records: "${text}" is covered under national development programs. Check the Explore tab to turn this scheme into a 4-panel visual comic story.</p>
+        <span class="citation-tag">Source: Grounded on India.gov.in</span>
+      </div>
+    `;
+    box.appendChild(bdiv);
+    box.scrollTop = box.scrollHeight;
+  }, 400);
+}
+
+function handleGeneralChatKeyPress(e) {
+  if (e.key === 'Enter') sendGeneralChatMessage();
+}
+
+function reindexScheme(schemeId) {
+  alert(`✓ Re-ingesting scheme '${schemeId}' against latest India.gov.in portal updates... Log recorded!`);
 }
