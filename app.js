@@ -1729,7 +1729,7 @@ function escapeQuotes(str) {
   return (str || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
 }
 
-// Accessibility Menu & Theme Toggles
+// Accessibility Menu & Theme Toggles with Persistent Auto-Adjustment
 function toggleA11yMenu() {
   const dd = document.getElementById('a11y-dropdown');
   if (!dd) return;
@@ -1737,8 +1737,11 @@ function toggleA11yMenu() {
 }
 
 function adjustFontSize(delta) {
-  appState.fontSizeMultiplier = Math.max(0.85, Math.min(1.35, appState.fontSizeMultiplier + delta * 0.08));
+  appState.fontSizeMultiplier = Math.max(0.85, Math.min(1.4, appState.fontSizeMultiplier + delta * 0.08));
   document.documentElement.style.setProperty('--font-scale', `${appState.fontSizeMultiplier}rem`);
+  try {
+    localStorage.setItem('govtoon_font_scale', appState.fontSizeMultiplier);
+  } catch (e) {}
 }
 
 function toggleHighContrast(enabled) {
@@ -1746,9 +1749,20 @@ function toggleHighContrast(enabled) {
   if (enabled) {
     document.body.classList.add('theme-contrast');
     document.body.classList.remove('theme-dark');
+    appState.isDarkMode = false;
   } else {
     document.body.classList.remove('theme-contrast');
   }
+
+  const chk = document.getElementById('chk-high-contrast');
+  if (chk) chk.checked = enabled;
+
+  try {
+    localStorage.setItem('govtoon_contrast_mode', enabled ? 'true' : 'false');
+    localStorage.setItem('govtoon_dark_mode', 'false');
+  } catch (e) {}
+
+  renderDirectory();
 }
 
 function toggleReduceMotion(enabled) {
@@ -1758,22 +1772,61 @@ function toggleReduceMotion(enabled) {
   } else {
     document.body.classList.remove('reduce-motion');
   }
+
+  const chk = document.getElementById('chk-reduce-motion');
+  if (chk) chk.checked = enabled;
+
+  try {
+    localStorage.setItem('govtoon_reduce_motion', enabled ? 'true' : 'false');
+  } catch (e) {}
 }
 
 function setupThemeToggles() {
+  // Load saved preferences
+  try {
+    const savedScale = localStorage.getItem('govtoon_font_scale');
+    if (savedScale) {
+      appState.fontSizeMultiplier = parseFloat(savedScale);
+      document.documentElement.style.setProperty('--font-scale', `${appState.fontSizeMultiplier}rem`);
+    }
+
+    const savedContrast = localStorage.getItem('govtoon_contrast_mode');
+    if (savedContrast === 'true') {
+      toggleHighContrast(true);
+    }
+
+    const savedDark = localStorage.getItem('govtoon_dark_mode');
+    if (savedDark === 'true' && savedContrast !== 'true') {
+      document.body.classList.add('theme-dark');
+      appState.isDarkMode = true;
+    }
+
+    const savedMotion = localStorage.getItem('govtoon_reduce_motion');
+    if (savedMotion === 'true') {
+      toggleReduceMotion(true);
+    }
+  } catch (e) {}
+
   const contrastBtn = document.getElementById('btn-contrast-toggle');
   if (contrastBtn) {
     contrastBtn.addEventListener('click', () => {
-      const isCon = document.body.classList.toggle('theme-contrast');
-      const chk = document.getElementById('chk-high-contrast');
-      if (chk) chk.checked = isCon;
+      const isCurrentlyContrast = document.body.classList.contains('theme-contrast');
+      toggleHighContrast(!isCurrentlyContrast);
     });
   }
 
   const themeBtn = document.getElementById('btn-theme-toggle');
   if (themeBtn) {
     themeBtn.addEventListener('click', () => {
-      document.body.classList.toggle('theme-dark');
+      if (document.body.classList.contains('theme-contrast')) {
+        toggleHighContrast(false);
+      }
+      const isDark = document.body.classList.toggle('theme-dark');
+      appState.isDarkMode = isDark;
+      try {
+        localStorage.setItem('govtoon_dark_mode', isDark ? 'true' : 'false');
+      } catch (e) {}
+      renderDirectory();
     });
   }
 }
@@ -1786,3 +1839,4 @@ function setupLanguageSelector() {
     appState.currentLang = e.target.value;
   });
 }
+

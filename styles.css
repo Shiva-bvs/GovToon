@@ -1846,3 +1846,403 @@ body.theme-dark {
     grid-template-columns: 1fr;
   }
 }
+
+/* ================= AUTO-ADJUST TEXT & HIGH-VISIBILITY CONTRAST ENGINE ================= */
+
+/* HIGH CONTRAST MODE (WCAG AAA VISIBILITY) */
+body.theme-contrast {
+  --bg-light: #000000;
+  --bg-surface: #0a0a0a;
+  --bg-card: #121212;
+  --bg-card-hover: #1c1c1c;
+  --text-main: #ffffff;
+  --text-muted: #e2e8f0;
+  --border-light: #ffffff;
+  --border-subtle: #444444;
+  --primary-green: #22c55e;
+  --primary-green-subtle: #14532d;
+  --primary-navy: #ffffff;
+  --trust-blue: #38bdf8;
+  --saffron: #fb923c;
+  --shadow-sm: none;
+  --shadow-md: none;
+  --shadow-lg: 0 0 0 2px #ffffff;
+  --shadow-xl: 0 0 0 3px #ffffff;
+}
+
+body.theme-contrast * {
+  text-shadow: none !important;
+}
+
+body.theme-contrast h1,
+body.theme-contrast h2,
+body.theme-contrast h3,
+body.theme-contrast h4,
+body.theme-contrast h5,
+body.theme-contrast h6,
+body.theme-contrast strong,
+body.theme-contrast .scard-title,
+body.theme-contrast .explore-main-title,
+body.theme-contrast .hero-title {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.2px;
+}
+
+body.theme-contrast p,
+body.theme-contrast span,
+body.theme-contrast .scard-desc,
+body.theme-contrast .explore-sub-title,
+body.theme-contrast .hero-subtitle,
+body.theme-contrast .speaker-text {
+  color: #f1f5f9 !important;
+  font-weight: 500;
+}
+
+body.theme-contrast .scard-amount,
+body.theme-contrast .hero-highlight,
+body.theme-contrast .dstat-number,
+body.theme-contrast .logo-brand h1 {
+  color: #fde047 !important; /* High-visibility vivid yellow */
+  font-weight: 900 !important;
+}
+
+/* Card & Surface High Visibility Outlines */
+body.theme-contrast .scheme-card-box,
+body.theme-contrast .feature-card,
+body.theme-contrast .qfeat-card,
+body.theme-contrast .impact-metrics-banner,
+body.theme-contrast .hero-search-box,
+body.theme-contrast .elig-profile-card,
+body.theme-contrast .matched-scheme-item,
+body.theme-contrast .compare-selector-bar,
+body.theme-contrast .compare-table-container,
+body.theme-contrast .dash-card,
+body.theme-contrast .dstat-card,
+body.theme-contrast .panel-card,
+body.theme-contrast .character-bible-card,
+body.theme-contrast .reader-header-bar,
+body.theme-contrast .comic-toolbar,
+body.theme-contrast .admin-section-card,
+body.theme-contrast .astat-card,
+body.theme-contrast .modal-card,
+body.theme-contrast .floating-chat-popup {
+  background: #0d0d0d !important;
+  border: 2px solid #ffffff !important;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Navigation & Tabs High Contrast */
+body.theme-contrast .navbar {
+  background: #000000 !important;
+  border-bottom: 2px solid #ffffff !important;
+}
+
+body.theme-contrast .nav-link {
+  color: #ffffff !important;
+  border: 1px solid transparent;
+}
+
+body.theme-contrast .nav-link:hover,
+body.theme-contrast .nav-link.active {
+  background: #22c55e !important;
+  color: #000000 !important;
+  border-color: #22c55e !important;
+  font-weight: 800 !important;
+}
+
+body.theme-contrast .explore-tab-btn {
+  color: #e2e8f0 !important;
+}
+
+body.theme-contrast .explore-tab-btn.active {
+  color: #fde047 !important;
+  border-bottom: 3px solid #fde047 !important;
+  font-weight: 800 !important;
+}
+
+/* Input Elements High Contrast */
+body.theme-contrast input[type="text"],
+body.theme-contrast input[type="number"],
+body.theme-contrast select,
+body.theme-contrast textarea {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border: 2px solid #ffffff !important;
+  font-weight: 600 !important;
+}
+
+body.theme-contrast input:focus,
+body.theme-contrast select:focus,
+body.theme-contrast textarea:focus {
+  border-color: #fde047 !important;
+  outline: 2px solid #fde047 !important;
+}
+
+/* Badges & Status Pills High Contrast */
+body.theme-contrast .badge-pill.level-central,
+body.theme-contrast .badge.green-badge {
+  background: #14532d !important;
+  color: #86efac !important;
+  border: 1px solid #86efac !important;
+  font-weight: 800 !important;
+}
+
+body.theme-contrast .badge-pill.level-state,
+body.theme-contrast .badge.blue-badge {
+  background: #1e1b4b !important;
+  color: #a5b4fc !important;
+  border: 1px solid #a5b4fc !important;
+  font-weight: 800 !important;
+}
+
+body.theme-contrast .badge-pill.cat-tag {
+  background: #262626 !important;
+  color: #f5f5f5 !important;
+  border: 1px solid #a3a3a3 !important;
+  font-weight: 800 !important;
+}
+
+body.theme-contrast .match-score-badge {
+  background: #000000 !important;
+  color: #4ade80 !important;
+  border: 1.5px solid #4ade80 !important;
+  font-weight: 900 !important;
+}
+
+body.theme-contrast .timing-badge.timing-open {
+  background: #000000 !important;
+  color: #4ade80 !important;
+  border: 1.5px solid #4ade80 !important;
+}
+
+body.theme-contrast .timing-badge.timing-urgent {
+  background: #000000 !important;
+  color: #fde047 !important;
+  border: 1.5px solid #fde047 !important;
+}
+
+/* Action Buttons High Contrast */
+body.theme-contrast .btn-card-comic,
+body.theme-contrast .btn-primary,
+body.theme-contrast .btn-create-scheme {
+  background: #22c55e !important;
+  color: #000000 !important;
+  border: 2px solid #ffffff !important;
+  font-weight: 900 !important;
+}
+
+body.theme-contrast .btn-card-elig,
+body.theme-contrast .btn-outline,
+body.theme-contrast .btn-outline-sm,
+body.theme-contrast .prompt-chip,
+body.theme-contrast .fchip {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border: 1.5px solid #ffffff !important;
+  font-weight: 700 !important;
+}
+
+body.theme-contrast .btn-card-apply,
+body.theme-contrast a {
+  color: #38bdf8 !important;
+  text-decoration: underline !important;
+  font-weight: 700 !important;
+}
+
+body.theme-contrast .star-bookmark-btn {
+  color: #ffffff !important;
+}
+
+body.theme-contrast .star-bookmark-btn.bookmarked {
+  color: #fde047 !important;
+}
+
+/* Chat Assistant High Contrast */
+body.theme-contrast .fchat-header {
+  background: #000000 !important;
+  border-bottom: 2px solid #ffffff !important;
+}
+
+body.theme-contrast .fchat-messages-box {
+  background: #000000 !important;
+}
+
+body.theme-contrast .chat-msg.bot-msg .msg-content {
+  background: #171717 !important;
+  color: #ffffff !important;
+  border: 1.5px solid #ffffff !important;
+}
+
+body.theme-contrast .chat-msg.user-msg .msg-content {
+  background: #22c55e !important;
+  color: #000000 !important;
+  border: 1.5px solid #ffffff !important;
+  font-weight: 800 !important;
+}
+
+body.theme-contrast .fchat-input-box,
+body.theme-contrast .fchat-suggested-chips {
+  background: #000000 !important;
+  border-top: 1.5px solid #ffffff !important;
+}
+
+/* ================= DARK MODE VISIBILITY OVERRIDES ================= */
+body.theme-dark {
+  --bg-light: #0b1329;
+  --bg-surface: #131d36;
+  --bg-card: #182442;
+  --bg-card-hover: #223258;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --border-light: #28375c;
+  --border-subtle: #1e2c4c;
+  --primary-green: #34d399;
+  --primary-green-subtle: #064e3b;
+  --primary-navy: #f8fafc;
+}
+
+body.theme-dark .navbar {
+  background: #111a33;
+  border-bottom-color: #233152;
+}
+
+body.theme-dark .scheme-card-box,
+body.theme-dark .feature-card,
+body.theme-dark .qfeat-card,
+body.theme-dark .hero-search-box,
+body.theme-dark .elig-profile-card,
+body.theme-dark .matched-scheme-item,
+body.theme-dark .compare-selector-bar,
+body.theme-dark .compare-table-container,
+body.theme-dark .dash-card,
+body.theme-dark .dstat-card,
+body.theme-dark .panel-card,
+body.theme-dark .character-bible-card,
+body.theme-dark .reader-header-bar,
+body.theme-dark .comic-toolbar,
+body.theme-dark .modal-card {
+  background: #182442;
+  border-color: #28375c;
+}
+
+body.theme-dark .scard-title,
+body.theme-dark .explore-main-title,
+body.theme-dark .hero-title,
+body.theme-dark h1,
+body.theme-dark h2,
+body.theme-dark h3,
+body.theme-dark h4 {
+  color: #f8fafc;
+}
+
+body.theme-dark .scard-amount,
+body.theme-dark .dstat-number {
+  color: #34d399;
+}
+
+body.theme-dark .scard-desc,
+body.theme-dark .explore-sub-title,
+body.theme-dark .hero-subtitle,
+body.theme-dark p {
+  color: #cbd5e1;
+}
+
+body.theme-dark input[type="text"],
+body.theme-dark input[type="number"],
+body.theme-dark select,
+body.theme-dark textarea {
+  background: #0d162d;
+  color: #f8fafc;
+  border-color: #28375c;
+}
+
+body.theme-dark .search-input-wrapper {
+  background: #0d162d;
+  border-color: #28375c;
+}
+
+body.theme-dark .search-input-wrapper input {
+  color: #f8fafc;
+}
+
+body.theme-dark .badge-pill.cat-tag {
+  background: #0d162d;
+  color: #94a3b8;
+}
+
+body.theme-dark .badge-pill.level-central {
+  background: #064e3b;
+  color: #6ee7b7;
+}
+
+body.theme-dark .badge-pill.level-state {
+  background: #1e1b4b;
+  color: #a5b4fc;
+}
+
+body.theme-dark .btn-card-elig,
+body.theme-dark .btn-outline,
+body.theme-dark .btn-outline-sm,
+body.theme-dark .prompt-chip {
+  background: #0d162d;
+  color: #f8fafc;
+  border-color: #28375c;
+}
+
+body.theme-dark .btn-card-comic {
+  background: rgba(52, 211, 153, 0.15);
+  color: #34d399;
+  border-color: rgba(52, 211, 153, 0.3);
+}
+
+body.theme-dark .btn-card-comic:hover {
+  background: #34d399;
+  color: #0b1329;
+}
+
+body.theme-dark .compare-table th {
+  background: #0d162d;
+  color: #f8fafc;
+}
+
+body.theme-dark .doc-check-item {
+  background: #0d162d;
+  color: #f8fafc;
+}
+
+body.theme-dark .floating-chat-popup {
+  background: #182442;
+  border-color: #28375c;
+}
+
+body.theme-dark .fchat-header {
+  background: #0f172a;
+}
+
+body.theme-dark .fchat-messages-box {
+  background: #0d162d;
+}
+
+body.theme-dark .chat-msg.bot-msg .msg-content {
+  background: #182442;
+  color: #f8fafc;
+  border-color: #28375c;
+}
+
+body.theme-dark .chat-msg.user-msg .msg-content {
+  background: #059669;
+  color: #ffffff;
+}
+
+body.theme-dark .fchat-input-box,
+body.theme-dark .fchat-suggested-chips {
+  background: #182442;
+  border-color: #28375c;
+}
+
+body.theme-dark .fchip {
+  background: #0d162d;
+  color: #f8fafc;
+  border-color: #28375c;
+}
