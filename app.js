@@ -9,7 +9,7 @@ let API_BASE_URL = typeof window !== 'undefined' && window.location.origin && !w
 const TRANSLATIONS = {
   en: {
     trust_badge: "🛡️ Official Source Grounding",
-    trust_text: "Data sourced from <strong>India.gov.in National Portal of India</strong> / myScheme Ecosystem. We don't change what the government says — we change how easily citizens understand it.",
+    trust_text: "Data sourced from <a href=\"https://www.india.gov.in\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"color:#ffffff; text-decoration:underline; font-weight:700;\">India.gov.in National Portal of India</a> / <a href=\"https://www.myscheme.gov.in\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"color:#ffffff; text-decoration:underline; font-weight:700;\">myScheme.gov.in</a>. We don't change what the government says — we change how easily citizens understand it.",
     btn_contrast: "🌓 Contrast",
     logo_sub: "Government Schemes, Told Simply.",
     nav_home: "Home",
@@ -151,7 +151,7 @@ const TRANSLATIONS = {
   },
   te: {
     trust_badge: "🛡️ అధికారిక మూలాల ఆధారం",
-    trust_text: "<strong>India.gov.in జాతీయ పోర్టల్</strong> / myScheme నుండి సేకరించిన సమాచారం. ప్రభుత్వం చెప్పిన దాన్ని మేము మార్చము — పౌరులు అర్థం చేసుకునే విధానాన్ని సులభతరం చేస్తాము.",
+    trust_text: "<a href=\"https://www.india.gov.in\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"color:#ffffff; text-decoration:underline; font-weight:700;\">India.gov.in జాతీయ పోర్టల్</a> / <a href=\"https://www.myscheme.gov.in\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"color:#ffffff; text-decoration:underline; font-weight:700;\">myScheme.gov.in</a> నుండి సేకరించిన సమాచారం. ప్రభుత్వం చెప్పిన దాన్ని మేము మార్చము — పౌరులు అర్థం చేసుకునే విధానాన్ని సులభతరం చేస్తాము.",
     btn_contrast: "🌓 కాంట్రాస్ట్",
     logo_sub: "ప్రభుత్వ పథకాలు, సులువైన మాటల్లో.",
     nav_home: "హోమ్",
@@ -293,7 +293,7 @@ const TRANSLATIONS = {
   },
   hi: {
     trust_badge: "🛡️ आधिकारिक स्रोतों पर आधारित",
-    trust_text: "<strong>India.gov.in राष्ट्रीय पोर्टल</strong> / myScheme से प्राप्त जानकारी। हम सरकार की बात नहीं बदलते — हम नागरिकों के समझने का तरीका आसान बनाते हैं।",
+    trust_text: "<a href=\"https://www.india.gov.in\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"color:#ffffff; text-decoration:underline; font-weight:700;\">India.gov.in राष्ट्रीय पोर्टल</a> / <a href=\"https://www.myscheme.gov.in\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"color:#ffffff; text-decoration:underline; font-weight:700;\">myScheme.gov.in</a> से प्राप्त जानकारी। हम सरकार की बात नहीं बदलते — हम नागरिकों के समझने का तरीका आसान बनाते हैं।",
     btn_contrast: "🌓 कंट्रास्ट",
     logo_sub: "सरकारी योजनाएं, आसान भाषा में।",
     nav_home: "होम",
@@ -1610,6 +1610,9 @@ function updateMitraAssistantInitialMessage(lang) {
 
 // Initialize Application
 document.addEventListener("DOMContentLoaded", () => {
+  setupIntroSplash();
+  setupScrollReveals();
+
   if ('speechSynthesis' in window) {
     window.speechSynthesis.getVoices();
     window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.getVoices(); };
@@ -1629,6 +1632,82 @@ document.addEventListener("DOMContentLoaded", () => {
     appState.selectedScheme = SCHEMES_DATABASE[0];
   }
 });
+
+// Dynamic Continuous IntersectionObserver Scroll Reveal Engine
+let scrollObserver = null;
+const observedElements = new WeakSet();
+
+function setupScrollReveals() {
+  if (typeof IntersectionObserver === 'undefined') {
+    document.querySelectorAll('.reveal-on-scroll, .reveal-scale, .scheme-card-box, .panel-card, .matched-scheme-item').forEach(el => {
+      el.classList.add('is-revealed');
+    });
+    return;
+  }
+
+  if (scrollObserver) {
+    scrollObserver.disconnect();
+  }
+
+  scrollObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-revealed');
+      } else {
+        // Reset when scrolled out of view so it smoothly reveals every time you scroll down again!
+        entry.target.classList.remove('is-revealed');
+      }
+    });
+  }, {
+    root: null,
+    rootMargin: '0px 0px -20px 0px',
+    threshold: 0.1
+  });
+
+  observeUnrevealedElements();
+}
+
+function observeUnrevealedElements() {
+  if (!scrollObserver) return;
+  setTimeout(() => {
+    const elements = document.querySelectorAll('.reveal-on-scroll, .reveal-scale, .scheme-card-box, .matched-scheme-item, .panel-card');
+    elements.forEach(el => {
+      if (!observedElements.has(el)) {
+        observedElements.add(el);
+        scrollObserver.observe(el);
+      }
+    });
+  }, 40);
+}
+
+// Opening Intro Splash Animation Controller
+function setupIntroSplash() {
+  const splash = document.getElementById('govtoon-intro-splash');
+  if (!splash) return;
+
+  // Auto dismiss after animation finishes (1.8s)
+  const timer = setTimeout(() => {
+    dismissIntroSplash();
+  }, 1800);
+
+  // Dismiss immediately on background click
+  splash.addEventListener('click', (e) => {
+    if (e.target.tagName !== 'BUTTON') {
+      clearTimeout(timer);
+      dismissIntroSplash();
+    }
+  });
+}
+
+function dismissIntroSplash() {
+  const splash = document.getElementById('govtoon-intro-splash');
+  if (!splash) return;
+  splash.classList.add('splash-hide');
+  setTimeout(() => {
+    splash.style.display = 'none';
+    observeUnrevealedElements();
+  }, 800);
+}
 
 // Setup Navigation
 function setupNavigation() {
@@ -1662,6 +1741,7 @@ function navigateTo(viewId) {
   }
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
+  observeUnrevealedElements();
 }
 
 // Explore Tabs (All Schemes, Central, My State, Recommended For Me, Saved)
@@ -1756,7 +1836,7 @@ function renderDirectory() {
   }
 
   grid.innerHTML = '';
-  list.forEach(s => {
+  list.forEach((s, idx) => {
     const ls = getLocalizedScheme(s, lang);
     const isBookmarked = appState.bookmarkedIds.has(s.id);
     const matchScore = s.calculatedMatch !== undefined ? s.calculatedMatch : computeSchemeMatchScore(s, userProfile);
@@ -1765,7 +1845,7 @@ function renderDirectory() {
     const timingIcon = s.timingType === 'urgent' ? '🟡' : '🟢';
 
     const card = document.createElement('div');
-    card.className = 'scheme-card-box';
+    card.className = `scheme-card-box reveal-on-scroll reveal-delay-${(idx % 4) + 1}`;
     card.innerHTML = `
       <div>
         <div class="scard-top-row">
@@ -1783,12 +1863,15 @@ function renderDirectory() {
         <h3 class="scard-title">${ls.name}</h3>
         <div class="scard-amount">${s.amount || ls.benefits.split(' ')[0]}</div>
         <p class="scard-desc">${ls.purpose}</p>
+        <div style="margin-top:6px;">
+          <a href="${s.officialUrl}" target="_blank" rel="noopener noreferrer" style="font-size:0.75rem; color:var(--trust-blue); font-weight:600; text-decoration:underline;">🔗 ${s.dept} (${s.officialUrl.replace('https://', '')}) ↗</a>
+        </div>
       </div>
 
       <div>
         <div class="scard-bottom-meta">
           <div class="meta-status-tags">
-            <span class="match-score-badge">${matchScore}% ${lang === 'te' ? 'సరిపోలింది' : lang === 'hi' ? 'मैच' : 'MATCH'}</span>
+            <span class="match-score-badge">${matchScore}% ${lang === 'te' ? 'సరిపోలింది' : lang === 'hi' ? 'मैచ' : 'MATCH'}</span>
             <span class="timing-badge ${timingClass}">${timingIcon} ${timingLabel}</span>
           </div>
         </div>
@@ -1802,6 +1885,7 @@ function renderDirectory() {
     `;
     grid.appendChild(card);
   });
+  observeUnrevealedElements();
 }
 
 function resetExploreFilters() {
@@ -1814,9 +1898,17 @@ function resetExploreFilters() {
   setExploreTab('all', document.querySelector('.explore-tab-btn[data-tab="all"]'));
 }
 
-// Bookmark Toggle
+// Bookmark Toggle with Star Pop Animation
 function toggleSchemeBookmark(schemeId, event) {
-  if (event) event.stopPropagation();
+  if (event) {
+    event.stopPropagation();
+    const btn = event.currentTarget || event.target;
+    if (btn) {
+      btn.classList.add('star-anim');
+      setTimeout(() => btn.classList.remove('star-anim'), 500);
+    }
+  }
+
   if (appState.bookmarkedIds.has(schemeId)) {
     appState.bookmarkedIds.delete(schemeId);
   } else {
@@ -1827,8 +1919,10 @@ function toggleSchemeBookmark(schemeId, event) {
     localStorage.setItem('govtoon_saved_schemes', JSON.stringify(Array.from(appState.bookmarkedIds)));
   } catch (e) {}
 
-  renderDirectory();
-  renderDashboard();
+  setTimeout(() => {
+    renderDirectory();
+    renderDashboard();
+  }, 180);
 }
 
 // User Profile Update & Modal
@@ -1909,7 +2003,7 @@ function calculateEligibilityMatches() {
     const scoreBadgeClass = isHigh ? 'green-badge' : isModerate ? 'saffron-badge' : 'red-badge';
 
     const card = document.createElement('div');
-    card.className = 'matched-scheme-item';
+    card.className = `matched-scheme-item reveal-on-scroll reveal-delay-${(matches.indexOf(m) % 3) + 1}`;
     card.innerHTML = `
       <div class="matched-top-bar">
         <div>
@@ -1929,6 +2023,7 @@ function calculateEligibilityMatches() {
     `;
     container.appendChild(card);
   });
+  observeUnrevealedElements();
 }
 
 function applyWizardProfileToExplore() {
@@ -2097,7 +2192,9 @@ function renderReaderView() {
   if (badgeElem) badgeElem.innerText = `${s.category} • ${s.level}`;
 
   const deptElem = document.getElementById('reader-scheme-dept');
-  if (deptElem) deptElem.innerText = `${s.dept} | Source: India.gov.in`;
+  if (deptElem) {
+    deptElem.innerHTML = `🔗 <a href="${s.officialUrl}" target="_blank" rel="noopener noreferrer" style="color:var(--primary-green); text-decoration:underline; font-weight:700;">${s.dept} (${s.officialUrl.replace('https://', '')}) ↗</a> | Source: <a href="https://www.india.gov.in" target="_blank" rel="noopener noreferrer" style="color:var(--primary-green); text-decoration:underline; font-weight:700;">India.gov.in ↗</a>`;
+  }
 
   const linkElem = document.getElementById('reader-official-link');
   if (linkElem) linkElem.href = s.applyUrl || s.officialUrl;
@@ -2147,7 +2244,7 @@ function renderReaderView() {
     const panelsList = (ls.panels && ls.panels[lang]) || (s.panels && s.panels[lang]) || (s.panels && s.panels.en) || s.panels || [];
     panelsList.forEach((p, idx) => {
       const pcard = document.createElement('div');
-      pcard.className = 'panel-card';
+      pcard.className = `panel-card reveal-on-scroll reveal-delay-${(idx % 4) + 1}`;
       pcard.innerHTML = `
         <div class="panel-tag-header">
           <span>${p.tag || `Panel ${idx+1}`}</span>
@@ -2173,6 +2270,7 @@ function renderReaderView() {
   renderReaderSteps(s);
   renderReaderQuiz(s);
   runEligibilityCheck();
+  observeUnrevealedElements();
 }
 
 function setReaderTab(tabId, btnElem) {
@@ -2322,7 +2420,7 @@ function getNaturalVoice(langCode) {
   return voices.find(v => v.lang.toLowerCase().startsWith(targetLang)) || voices[0];
 }
 
-function speakText(text, langCode) {
+function speakText(text, langCode, onEndCallback) {
   if (!('speechSynthesis' in window)) return;
   window.speechSynthesis.cancel();
 
@@ -2345,6 +2443,16 @@ function speakText(text, langCode) {
 
   utt.rate = 0.95;
   utt.pitch = 1.0;
+
+  utt.onend = () => {
+    pauseAudio();
+    if (typeof onEndCallback === 'function') onEndCallback();
+  };
+
+  utt.onerror = () => {
+    pauseAudio();
+  };
+
   window.speechSynthesis.speak(utt);
 }
 
@@ -2359,15 +2467,27 @@ function togglePlayFullComic() {
   panels.forEach(p => {
     script += `${p.speaker}: ${p.dialogue}. `;
   });
-  speakText(script, lang);
-  document.getElementById('btn-play-comic').style.display = 'none';
-  document.getElementById('btn-pause-comic').style.display = 'inline-flex';
+
+  const playBtn = document.getElementById('btn-play-comic');
+  const pauseBtn = document.getElementById('btn-pause-comic');
+
+  if (pauseBtn) {
+    pauseBtn.innerHTML = `⏸ ${lang === 'te' ? 'ఆపండి' : lang === 'hi' ? 'रोकें' : 'Pause'} <div class="audio-playing-indicator"><span></span><span></span><span></span></div>`;
+    pauseBtn.style.display = 'inline-flex';
+  }
+  if (playBtn) playBtn.style.display = 'none';
+
+  speakText(script, lang, () => {
+    pauseAudio();
+  });
 }
 
 function pauseAudio() {
   if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-  document.getElementById('btn-play-comic').style.display = 'inline-flex';
-  document.getElementById('btn-pause-comic').style.display = 'none';
+  const playBtn = document.getElementById('btn-play-comic');
+  const pauseBtn = document.getElementById('btn-pause-comic');
+  if (playBtn) playBtn.style.display = 'inline-flex';
+  if (pauseBtn) pauseBtn.style.display = 'none';
 }
 
 function setAudioSpeed(val) {

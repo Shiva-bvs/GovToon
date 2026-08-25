@@ -16,13 +16,42 @@
 </head>
 
 <body class="theme-default">
+  <!-- Full-Screen Opening Intro Animation -->
+  <div id="govtoon-intro-splash" class="intro-splash-screen">
+    <div class="splash-particles-canvas">
+      <div class="splash-orb orb-1"></div>
+      <div class="splash-orb orb-2"></div>
+    </div>
+    <div class="splash-center-content">
+      <div class="splash-emblem-ring">
+        <div class="splash-emblem-inner">
+          <span class="splash-icon">🏛️</span>
+        </div>
+        <div class="splash-pulse-ring"></div>
+      </div>
+      
+      <h1 class="splash-logo-text">Gov<span class="splash-highlight">Toon</span></h1>
+      <p class="splash-tagline">Government Schemes, Told Simply.</p>
+      
+      <div class="splash-loading-box">
+        <div class="splash-progress-track">
+          <div class="splash-progress-fill"></div>
+        </div>
+        <div class="splash-status-row">
+          <span class="splash-badge">🇮🇳 Grounded on India.gov.in</span>
+          <span class="splash-loading-lbl">Loading Citizen Portal...</span>
+        </div>
+      </div>
+    </div>
+    <button class="splash-skip-btn" onclick="dismissIntroSplash()" title="Skip into app">Skip ⏭</button>
+  </div>
+
   <div class="app-wrapper">
     <!-- Top Trust Bar -->
     <div class="trust-banner">
       <div class="trust-content">
         <span class="trust-badge" data-i18n="trust_badge">🛡️ Official Source Grounding</span>
-        <span class="trust-text" data-i18n="trust_text">Data sourced from <strong>India.gov.in National Portal of
-            India</strong> / myScheme Ecosystem. We don't change what the government says — we change how easily citizens understand it.</span>
+        <span class="trust-text" data-i18n="trust_text">Data sourced from <a href="https://www.india.gov.in" target="_blank" rel="noopener noreferrer" style="color:#ffffff; text-decoration:underline; font-weight:700;">India.gov.in National Portal of India</a> / <a href="https://www.myscheme.gov.in" target="_blank" rel="noopener noreferrer" style="color:#ffffff; text-decoration:underline; font-weight:700;">myScheme.gov.in</a>. We don't change what the government says — we change how easily citizens understand it.</span>
       </div>
       <div class="accessibility-controls">
         <button id="btn-contrast-toggle" class="icon-btn" title="Toggle High Contrast" data-i18n="btn_contrast">🌓 Contrast</button>
@@ -131,22 +160,22 @@
 
           <!-- Quick Access Cards -->
           <div class="hero-quick-features">
-            <div class="qfeat-card" onclick="navigateTo('explore')">
+            <div class="qfeat-card reveal-on-scroll reveal-delay-1" onclick="navigateTo('explore')">
               <div class="qfeat-icon">🔍</div>
               <h3 data-i18n="qf1_h">Explore All Schemes</h3>
               <p data-i18n="qf1_p">Filter Central, State, and Personalized schemes</p>
             </div>
-            <div class="qfeat-card highlighted" onclick="navigateTo('eligibility')">
+            <div class="qfeat-card highlighted reveal-on-scroll reveal-delay-2" onclick="navigateTo('eligibility')">
               <div class="qfeat-icon">🎯</div>
               <h3 data-i18n="qf2_h">Check My Eligibility</h3>
               <p data-i18n="qf2_p">Instant rule match for Age, Income & State</p>
             </div>
-            <div class="qfeat-card" onclick="navigateTo('compare')">
+            <div class="qfeat-card reveal-on-scroll reveal-delay-3" onclick="navigateTo('compare')">
               <div class="qfeat-icon">⚖️</div>
               <h3 data-i18n="qf3_h">Compare Schemes</h3>
               <p data-i18n="qf3_p">Side-by-side comparison of benefits & docs</p>
             </div>
-            <div class="qfeat-card" onclick="toggleFloatingChat()">
+            <div class="qfeat-card reveal-on-scroll reveal-delay-4" onclick="toggleFloatingChat()">
               <div class="qfeat-icon">💬</div>
               <h3 data-i18n="qf4_h">Mitra AI Assistant</h3>
               <p data-i18n="qf4_p">Personalized voice assistant in 3 languages</p>
@@ -155,7 +184,7 @@
         </div>
 
         <!-- Before/After Comprehension Impact Banner -->
-        <div class="impact-metrics-banner">
+        <div class="impact-metrics-banner reveal-scale">
           <div class="impact-card">
             <div class="impact-number red-text">62%</div>
             <div class="impact-label" data-i18n="impact_orig">Average Citizen Understanding of Official PDF Text</div>
@@ -168,27 +197,27 @@
         </div>
 
         <!-- How GovToon Works -->
-        <div class="features-grid-section">
+        <div class="features-grid-section reveal-on-scroll">
           <h2 class="section-title" data-i18n="feat_title">How GovToon Empowers Citizens</h2>
           <p class="section-subtitle" data-i18n="feat_sub">Bridging the gap between complex administrative legalese and citizen understanding.</p>
 
           <div class="features-cards-grid">
-            <div class="feature-card">
+            <div class="feature-card reveal-on-scroll reveal-delay-1">
               <div class="feature-icon">🛡️</div>
               <h3 data-i18n="f1_h">1. Grounded in Official Sources</h3>
               <p data-i18n="f1_p">Directly linked to India.gov.in / myScheme. Every fact, date, benefit, and requirement maintains an exact source citation.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card reveal-on-scroll reveal-delay-2">
               <div class="feature-icon">🎨</div>
               <h3 data-i18n="f2_h">2. Relatable Character Stories</h3>
               <p data-i18n="f2_p">Character-bible technology ensures consistent visual storytelling featuring farmers, students, women, and street vendors.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card reveal-on-scroll reveal-delay-3">
               <div class="feature-icon">🗣️</div>
               <h3 data-i18n="f3_h">3. Desi Basti-Speak & Voice</h3>
               <p data-i18n="f3_p">Translates 'Babu-speak' into everyday language with instant English, Telugu, and Hindi audio narration.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card reveal-on-scroll reveal-delay-4">
               <div class="feature-icon">🎯</div>
               <h3 data-i18n="f4_h">4. Personalized Recommendations</h3>
               <p data-i18n="f4_p">Personal profile matching automatically identifies schemes tailored to your specific age, income, state, and occupation.</p>
@@ -874,7 +903,7 @@
           <p data-i18n="footer_quote">"We don't change what the government says. We change how easily citizens understand it."</p>
         </div>
         <div class="footer-attribution">
-          <p><span data-i18n="footer_src_label">Source Data:</span> <strong>National Portal of India (India.gov.in) / myScheme Ecosystem</strong></p>
+          <p><span data-i18n="footer_src_label">Source Data:</span> <a href="https://www.india.gov.in" target="_blank" rel="noopener noreferrer" style="color:var(--primary-green); text-decoration:underline; font-weight:700;">National Portal of India (India.gov.in)</a> · <a href="https://www.myscheme.gov.in" target="_blank" rel="noopener noreferrer" style="color:var(--primary-green); text-decoration:underline; font-weight:700;">myScheme.gov.in</a></p>
           <p class="footer-disclaimer" data-i18n="footer_disclaimer">GovToon simplifies publicly available government information for visual comprehension. It does not replace official government websites or application portals.</p>
         </div>
       </div>
