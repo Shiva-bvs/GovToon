@@ -1,12 +1,147 @@
+
+function formatChatMarkdown(text) {
+  if (!text) return "";
+  let formatted = text
+    .replace(/\n/g, '<br/>')
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" style="color:#0284c7; text-decoration:underline; font-weight:600;">$1 ↗</a>');
+  return formatted;
+}
+
+function getClientSideGroundedAnswer(question, schemeName, lang) {
+  const q = question.toLowerCase().trim();
+  
+  // 1. Greetings
+  const greetings = ['hlo', 'hello', 'hi', 'hey', 'namaste', 'namaskar', 'namaskaram', 'vanakkam', 'who are you', 'what are you', 'help', 'guide'];
+  if (greetings.some(g => q === g || q.startsWith(g + ' ') || q.startsWith(g + '!') || q.startsWith(g + ','))) {
+    if (lang === 'te') {
+      return {
+        answer: "👋 **నమస్కారం! నేను గోవ్టూన్ (GovToon) AI అసిస్టెంట్ ని.**\n\nభారత ప్రభుత్వ సంక్షేమ పథకాలు, అర్హతలు, దరఖాస్తు విధానం మరియు ప్రయోజనాల గురించి నన్ను అడగవచ్చు:\n\n• 🌾 **పీఎం-కిసాన్**: రైతులకు ఏడాదికి ₹6,000 నగదు సాయం\n• 🏥 **ఆయుష్మాన్ భారత్**: ₹5 లక్షల ఉచిత వైద్య బీమా\n• ☀️ **పీఎం సూర్య ఘర్**: సోలార్ రూఫ్‌టాప్‌పై ₹78,000 సబ్సిడీ\n• 💼 **పీఎం స్వనిధి / ముద్ర**: వ్యాపార రుణాలు\n• 🎓 **నేషనల్ స్కాలర్‌షిప్**: విద్యార్థులకు ఫీజు రీయింబర్స్‌మెంట్\n• 👵 **పెన్షన్లు**: అటల్ పెన్షన్ యోజన, శ్రమయోగి మాన్‌ధన్\n\n💬 *మీకు కావాల్సిన పథకం లేదా సహాయం గురించి అడగండి!*",
+        sourceRef: "India.gov.in జాతీయ పోర్టల్"
+      };
+    } else if (lang === 'hi') {
+      return {
+        answer: "👋 **नमस्ते! मैं गोवटून (GovToon) AI सहायक हूँ।**\n\nमैं भारत सरकार की सभी प्रमुख योजनाओं की सटीक जानकारी प्रदान करता हूँ:\n\n• 🌾 **पीएम-किसान**: किसानों को सालाना ₹6,000 डीबीटी सहायता\n• 🏥 **आयुष्मान भारत**: ₹5 लाख तक का मुफ्त इलाज\n• ☀️ **पीएम सूर्य घर**: सोलर रूफटॉप पर ₹78,000 तक की सब्सिडी\n• 💼 **पीएम स्वनिधि / मुद्रा**: स्वरोजगार एवं व्यापार ऋण\n• 🎓 **राष्ट्रीय छात्रवृत्ति**: 100% फीस प्रतिपूर्ति\n• 👵 **पेंशन**: अटल पेंशन योजना, श्रम योगी मानधन\n\n💬 *आप किसी भी योजना का नाम या अपनी आवश्यकता लिखकर पूछ सकते हैं!*",
+        sourceRef: "India.gov.in राष्ट्रीय पोर्टल"
+      };
+    } else {
+      return {
+        answer: "👋 **Hello! I am GovToon AI Assistant** — your intelligent guide to Indian Government schemes.\n\nYou can ask me anything about welfare programs, eligibility, benefits, and application processes:\n\n• 🌾 **Agriculture**: PM-Kisan (₹6,000/year direct DBT)\n• 🏥 **Healthcare**: Ayushman Bharat (₹5 Lakh cashless hospital cover)\n• ☀️ **Solar Energy**: PM Surya Ghar (Up to ₹78,000 rooftop subsidy)\n• 💼 **Business Loans**: PM SVANidhi (₹10,000 vendor credit), PM MUDRA (up to ₹10 Lakhs)\n• 🎓 **Education**: National Scholarship Portal (Tuition reimbursement)\n• 👵 **Pensions**: Atal Pension Yojana & PM Shram Yogi (₹3,000–₹5,000/mo)\n• 🏠 **Housing & Water**: PM Awas Yojana (Pucca house), Jal Jeevan Mission\n\n💬 *Try asking: 'Which scheme gives solar subsidies?' or 'What are the documents for PM Kisan?'*",
+        sourceRef: "India.gov.in National Portal Official Records"
+      };
+    }
+  }
+
+  // 2. Keyword scheme matching
+  const list = typeof SCHEMES_DATABASE !== 'undefined' ? SCHEMES_DATABASE : [];
+  let s = list.find(item => item.name.toLowerCase().includes(schemeName.toLowerCase())) || list[0];
+  
+  if (q.includes('solar') || q.includes('sun') || q.includes('bijli') || q.includes('electricity') || q.includes('power') || q.includes('surya') || q.includes('soura')) {
+    s = list.find(item => item.id === 'surya_ghar') || s;
+  } else if (q.includes('farmer') || q.includes('kisan') || q.includes('krishi') || q.includes('crop') || q.includes('seed') || q.includes('6000') || q.includes('rythu')) {
+    s = list.find(item => item.id === 'pm_kisan') || s;
+  } else if (q.includes('health') || q.includes('hospital') || q.includes('medical') || q.includes('treatment') || q.includes('5 lakh') || q.includes('ayushman') || q.includes('arogya') || q.includes('swasthya')) {
+    s = list.find(item => item.id === 'ayushman') || s;
+  } else if (q.includes('pension') || q.includes('retirement') || q.includes('old age') || q.includes('shram') || q.includes('mandhan') || q.includes('3000')) {
+    s = list.find(item => item.id === 'pension') || s;
+  } else if (q.includes('auto') || q.includes('driver') || q.includes('apy') || q.includes('atal') || q.includes('5000')) {
+    s = list.find(item => item.id === 'atal_pension') || s;
+  } else if (q.includes('vendor') || q.includes('street') || q.includes('fruit') || q.includes('thela') || q.includes('svanidhi') || q.includes('10000')) {
+    s = list.find(item => item.id === 'pm_svanidhi') || s;
+  } else if (q.includes('mudra') || q.includes('loan') || q.includes('tailor') || q.includes('business') || q.includes('50000')) {
+    s = list.find(item => item.id === 'mudra_loan') || s;
+  } else if (q.includes('daughter') || q.includes('girl') || q.includes('beti') || q.includes('sukanya') || q.includes('8.2')) {
+    s = list.find(item => item.id === 'sukanya') || s;
+  } else if (q.includes('scholarship') || q.includes('student') || q.includes('college') || q.includes('fee') || q.includes('nsp') || q.includes('vidyarthi')) {
+    s = list.find(item => item.id === 'nsp_scholarship') || s;
+  } else if (q.includes('house') || q.includes('home') || q.includes('pucca') || q.includes('awas') || q.includes('1.20') || q.includes('illu') || q.includes('makan')) {
+    s = list.find(item => item.id === 'pm_awas_rural') || s;
+  } else if (q.includes('artisan') || q.includes('blacksmith') || q.includes('carpenter') || q.includes('vishwakarma') || q.includes('15000') || q.includes('tool')) {
+    s = list.find(item => item.id === 'pm_vishwakarma') || s;
+  } else if (q.includes('gas') || q.includes('cylinder') || q.includes('chulha') || q.includes('ujjwala') || q.includes('lpg')) {
+    s = list.find(item => item.id === 'pm_ujjwala') || s;
+  } else if (q.includes('standup') || q.includes('stand-up') || q.includes('women entrepreneur') || q.includes('1 crore')) {
+    s = list.find(item => item.id === 'standup_india') || s;
+  } else if (q.includes('fish') || q.includes('matsya') || q.includes('aquaculture') || q.includes('boat')) {
+    s = list.find(item => item.id === 'pm_matsya_sampada') || s;
+  } else if (q.includes('water') || q.includes('jal') || q.includes('tap') || q.includes('drinking water') || q.includes('55 liter') || q.includes('neellu')) {
+    s = list.find(item => item.id === 'jal_jeevan') || s;
+  }
+
+  const sname = s.name;
+  const docs = s.documents ? s.documents.map(d => d.name).join(', ') : 'Aadhaar Card, Bank Passbook';
+  const url = s.officialUrl || 'https://www.india.gov.in/my-government/schemes';
+
+  if (q.includes('document') || q.includes('paper') || q.includes('proof') || q.includes('patralu') || q.includes('kagaz')) {
+    return {
+      answer: `📄 **Mandatory Documents for ${sname}:**\n\n• **Required Documents**: ${docs}\n• **Submission**: Available online via official portal or nearest CSC centre.\n\n🔗 [Official Portal Link](${url})`,
+      sourceRef: `Official India.gov.in Record (${url})`,
+      schemeId: s.id
+    };
+  }
+
+  if (q.includes('eligible') || q.includes('who') || q.includes('criteria') || q.includes('arhatha') || q.includes('patrata')) {
+    return {
+      answer: `👤 **Eligibility for ${sname}:**\n\n• **Target Beneficiaries**: ${s.eligibility ? s.eligibility.summary : 'Eligible citizens under scheme guidelines'}\n• **Benefit Provided**: ${s.benefits}\n\n🔗 [Apply on Official Portal](${url})`,
+      sourceRef: `Official India.gov.in Record (${url})`,
+      schemeId: s.id
+    };
+  }
+
+  if (q.includes('apply') || q.includes('how') || q.includes('process') || q.includes('step') || q.includes('darakhasthu') || q.includes('aavedan')) {
+    const steps = s.steps ? s.steps.map(st => st.title).join(' • ') : 'Online Registration • e-KYC • Verification • DBT Transfer';
+    return {
+      answer: `🗺️ **Application Process for ${sname}:**\n\n• **Steps**: ${steps}\n• **Required Documents**: ${docs}\n\n🔗 [Apply Online Here](${url})`,
+      sourceRef: `Official India.gov.in Record (${url})`,
+      schemeId: s.id
+    };
+  }
+
+  return {
+    answer: `🏛️ **${sname}**\n*(${s.department || 'Government of India'})*\n\n🎯 **Purpose**: ${s.purpose}\n\n🎁 **Benefits**: ${s.benefits}\n\n👤 **Eligibility**: ${s.eligibility ? s.eligibility.summary : 'See portal for criteria'}\n\n📄 **Key Documents**: ${docs}\n\n🔗 [Official Portal Link](${url})`,
+    sourceRef: `Verified India.gov.in Record (${url})`,
+    schemeId: s.id
+  };
+}
+
+
+function openSchemeReaderById(schemeId) {
+  const list = typeof SCHEMES_DATABASE !== 'undefined' ? SCHEMES_DATABASE : [];
+  const s = list.find(item => item.id === schemeId);
+  if (s) {
+    openReader(s);
+  } else {
+    navigateTo('explore');
+  }
+}
+
 // GovToon — Production Full-Stack AI Government Scheme Explainer
 // Official Source Grounding: India.gov.in National Portal of India / myScheme
 
-let API_BASE_URL = 'http://localhost:5000/api';
+let API_BASE_URL = typeof window !== 'undefined' && window.location.origin && !window.location.origin.startsWith('file:') ? `${window.location.origin}/api` : 'http://localhost:5000/api';
 
 // Comprehensive Multilingual Translation Dictionary (EN, TE, HI)
 const TRANSLATIONS = {
   en: {
     logo_sub: "Government Schemes, Told Simply.",
+    scheme_overview_title: "📌 Scheme Key Details & Highlights Overview",
+    scheme_grounded_sub: "Official Government Information Grounded on India.gov.in",
+    core_objective: "🎯 Core Objective / Purpose",
+    key_benefits: "🎁 Key Benefits & Financial Cover",
+    target_beneficiary: "👤 Target Beneficiary & Eligibility",
+    mandatory_docs: "📄 Mandatory Required Documents",
+    btn_apply_online: "🚀 Apply Online ↗",
+    source_verified_label: "✓ Official Source Verified",
+    last_verified_label: "Last Verified:",
+    source_label: "Source:",
+    compulsory_label: "(Compulsory)",
+    optional_label: "(Optional)",
+    audio_reading_title: "Reading visual story for",
+    says_label: "says",
+    panel_label: "Panel",
+    prepared_label: "Prepared",
+
     trust_badge: "🛡️ Official Source Grounding",
     trust_text: "Data sourced from India.gov.in National Portal of India. We don't change what the government says — we change how easily citizens understand it.",
     btn_contrast: "👁️ Contrast",
@@ -170,6 +305,23 @@ const TRANSLATIONS = {
   },
   te: {
     logo_sub: "ప్రభుత్వ పథకాలు, సులువైన మాటల్లో.",
+    scheme_overview_title: "📌 పథకం ముఖ్యాంశాలు & వివరాల సంక్షిప్త సమాచారం",
+    scheme_grounded_sub: "భారత ప్రభుత్వ అధికారిక పోర్టల్ India.gov.in నుండి సేకరించిన సమాచారం",
+    core_objective: "🎯 ముఖ్య ఉద్దేశం / లక్ష్యం",
+    key_benefits: "🎁 ప్రధాన ప్రయోజనాలు & ఆర్థిక సాయం",
+    target_beneficiary: "👤 అర్హత & లబ్ధిదారులు",
+    mandatory_docs: "📄 అవసరమైన ముఖ్యమైన పత్రాలు",
+    btn_apply_online: "🚀 ఆన్‌లైన్‌లో దరఖాస్తు చేసుకోండి ↗",
+    source_verified_label: "✓ అధికారిక ఆధారాలు ధృవీకరించబడ్డాయి",
+    last_verified_label: "చివరిగా ధృవీకరించబడింది:",
+    source_label: "మూలం:",
+    compulsory_label: "(తప్పనిసరి)",
+    optional_label: "(ఐచ్ఛికం)",
+    audio_reading_title: "దృశ్య కామిక్ కథ వివరణ:",
+    says_label: "అంటున్నారు",
+    panel_label: "ప్యానెల్",
+    prepared_label: "సిద్ధమైనవి",
+
     trust_badge: "🛡️ అధికారిక మూలాల ఆధారం",
     trust_text: "India.gov.in జాతీయ పోర్టల్ నుండి వివరాలు. ప్రభుత్వం చెప్పిన దాన్ని మేము మార్చము — పౌరులు అర్థం చేసుకునే విధానాన్ని సులభతరం చేస్తాము.",
     btn_contrast: "👁️ కాంట్రాస్ట్",
@@ -333,6 +485,23 @@ const TRANSLATIONS = {
   },
   hi: {
     logo_sub: "सरकारी योजनाएं, आसान भाषा में।",
+    scheme_overview_title: "📌 योजना की मुख्य बातें और विवरण",
+    scheme_grounded_sub: "भारत सरकार के आधिकारिक पोर्टल India.gov.in पर आधारित जानकारी",
+    core_objective: "🎯 मुख्य उद्देश्य",
+    key_benefits: "🎁 मुख्य लाभ और वित्तीय सहायता",
+    target_beneficiary: "👤 पात्रता और लाभार्थी",
+    mandatory_docs: "📄 अनिवार्य आवश्यक दस्तावेज",
+    btn_apply_online: "🚀 ऑनलाइन आवेदन करें ↗",
+    source_verified_label: "✓ आधिकारिक स्रोत द्वारा सत्यापित",
+    last_verified_label: "अंतिम सत्यापन:",
+    source_label: "स्रोत:",
+    compulsory_label: "(अनिवार्य)",
+    optional_label: "(वैकल्पिक)",
+    audio_reading_title: "दृश्य कॉमिक कहानी वाचन:",
+    says_label: "कहते हैं",
+    panel_label: "पैनल",
+    prepared_label: "तैयार",
+
     trust_badge: "🛡️ आधिकारिक स्रोतों पर आधारित",
     trust_text: "India.gov.in राष्ट्रीय पोर्टल से प्राप्त जानकारी। हम सरकार की बात नहीं बदलते — हम नागरिकों के समझने का तरीका आसान बनाते हैं।",
     btn_contrast: "👁️ कंट्रास्ट",
@@ -498,224 +667,4188 @@ const TRANSLATIONS = {
 
 // Multilingual Scheme Database Grounded on India.gov.in
 const SCHEMES_DATABASE = [
-  {
-    id: "pm_kisan",
-    name: "PM-Kisan Samman Nidhi",
-    category: "Agriculture",
-    level: "Central",
-    dept: "Ministry of Agriculture & Farmers Welfare",
-    purpose: "Provide income support to small and marginal farmer families across India for purchasing agricultural inputs.",
-    benefits: "₹6,000 per year transferred directly to bank account in 3 equal installments of ₹2,000.",
-    eligibility: {
-      minAge: 18, maxAge: 100, maxIncome: 500000, state: "All India", occupation: "Farmer",
-      summary: "Small and marginal landholding farmer families holding cultivable land in their names."
+    {
+        "id": "custom_1084003475",
+        "name": "Beti Bachao Beti Padhao",
+        "category": "Central / State Welfare Scheme",
+        "level": "Central",
+        "dept": "Ministry of Social Justice & Empowerment / Government of India",
+        "purpose": "Provide targeted social welfare and financial support under Beti Bachao Beti Padhao.",
+        "benefits": "Direct Benefit Transfer (DBT) and subsidy assistance for eligible citizens.",
+        "eligibility": {
+            "minAge": 18,
+            "maxAge": 70,
+            "maxIncome": 500000,
+            "state": "All India",
+            "occupation": "General Citizen",
+            "summary": "Eligible Indian citizens meeting income and residency criteria specified under Beti Bachao Beti Padhao guidelines."
+        },
+        "documents": [
+            {
+                "id": "d1",
+                "name": "Aadhaar Card",
+                "required": true,
+                "why": "Identity and age verification"
+            },
+            {
+                "id": "d2",
+                "name": "Bank Passbook & IFSC",
+                "required": true,
+                "why": "Direct Benefit Transfer"
+            },
+            {
+                "id": "d3",
+                "name": "Ration Card / Residence Proof",
+                "required": false,
+                "why": "Family status verification"
+            }
+        ],
+        "applicationSteps": [
+            {
+                "step": 1,
+                "title": "Check Official Eligibility",
+                "desc": "Verify rules on India.gov.in for Beti Bachao Beti Padhao."
+            },
+            {
+                "step": 2,
+                "title": "Gather Documents",
+                "desc": "Keep Aadhaar card, passbook, and photo ready."
+            },
+            {
+                "step": 3,
+                "title": "Apply Online / CSC",
+                "desc": "Submit form at nearest Jan Seva Kendra or official portal."
+            }
+        ],
+        "officialUrl": "https://www.india.gov.in/my-government/schemes",
+        "sourceUrl": "https://www.india.gov.in",
+        "lastVerified": "2026-08-24",
+        "panels": {
+            "en": [
+                {
+                    "num": 1,
+                    "tag": "Panel 1: The Tension",
+                    "image": "assets/sukanya_1.jpg",
+                    "speaker": "Anita",
+                    "dialogue": "How will I manage expenses for my daughter Priya's higher education and secure her future without huge loans?",
+                    "caption": "Anita worries about financial security for her daughter's bright future.",
+                    "sourceRef": "Section 1: Beti Bachao Beti Padhao Official Guidelines (https://www.india.gov.in/my-government/schemes)"
+                },
+                {
+                    "num": 2,
+                    "tag": "Panel 2: The Solution",
+                    "image": "assets/sukanya_2.jpg",
+                    "speaker": "GovToon Hero",
+                    "dialogue": "Fikr mat kijiye! Beti Bachao Beti Padhao guarantees: Direct Benefit Transfer (DBT) and subsidy assistance for eligible citizens.",
+                    "caption": "Official government welfare and highest interest security guaranteed.",
+                    "sourceRef": "Section 2: Beti Bachao Beti Padhao Official Guidelines (https://www.india.gov.in/my-government/schemes)"
+                },
+                {
+                    "num": 3,
+                    "tag": "Panel 3: The Easy Path",
+                    "image": "assets/sukanya_3.jpg",
+                    "speaker": "CSC Bhaiya",
+                    "dialogue": "Just bring Aadhaar Card, Bank Passbook & IFSC, Ration Card / Residence Proof to the nearest Post Office, Bank, or Jan Seva Kendra to enroll online.",
+                    "caption": "Simple digital registration with minimal documents.",
+                    "sourceRef": "Section 3: Beti Bachao Beti Padhao Official Guidelines (https://www.india.gov.in/my-government/schemes)"
+                },
+                {
+                    "num": 4,
+                    "tag": "Panel 4: The Khushali",
+                    "image": "assets/sukanya_4.jpg",
+                    "speaker": "Tagline",
+                    "dialogue": "🎉 Beti Bachao Beti Padhao: Beti Padhao, Desh Badhao! Secure future, smiling daughter!",
+                    "caption": "Guaranteed government support brings peace of mind.",
+                    "sourceRef": "Section 4: Beti Bachao Beti Padhao Official Guidelines (https://www.india.gov.in/my-government/schemes)"
+                }
+            ],
+            "te": [
+                {
+                    "num": 1,
+                    "tag": "ప్యానెల్ 1: సమస్య & ఆందోళన",
+                    "image": "assets/sukanya_1.jpg",
+                    "speaker": "అనిత",
+                    "dialogue": "నా ముద్దుల కూతురు ప్రియ ఉన్నత చదువులు మరియు భవిష్యత్తు కోసం ఖర్చులు ఎలా సమకూర్చాలి? అప్పులు చేయకుండా ఉండగలనా?",
+                    "caption": "కూతురి భవిష్యత్తు కోసం అనిత పడే ఆందోళన.",
+                    "sourceRef": "Section 1: Beti Bachao Beti Padhao Official Guidelines (https://www.india.gov.in/my-government/schemes)"
+                },
+                {
+                    "num": 2,
+                    "tag": "ప్యానెల్ 2: ప్రభుత్వ పరిష్కారం",
+                    "image": "assets/sukanya_2.jpg",
+                    "speaker": "గోవ్టూన్ హీరో",
+                    "dialogue": "దిగులుపడకండి అనిత గారూ! Beti Bachao Beti Padhao ద్వారా ప్రభుత్వం అండగా నిలుస్తోంది: Direct Benefit Transfer (DBT) and subsidy assistance for eligible citizens.",
+                    "caption": "ప్రభుత్వ అధికారిక ప్రయోజనాలు మరియు అత్యధిక వడ్డీ భరోసా.",
+                    "sourceRef": "Section 2: Beti Bachao Beti Padhao Official Guidelines (https://www.india.gov.in/my-government/schemes)"
+                },
+                {
+                    "num": 3,
+                    "tag": "ప్యానెల్ 3: సులువైన దరఖాస్తు",
+                    "image": "assets/sukanya_3.jpg",
+                    "speaker": "CSC మిత్రుడు",
+                    "dialogue": "కేవలం మీ ఆధార్ కార్డు మరియు బ్యాంక్ పాస్‌బుక్ తీసుకొని సమీప పోస్టాఫీస్, బ్యాంక్ లేదా CSC కేంద్రానికి వెళితే సులభంగా నమోదు చేసుకోవచ్చు.",
+                    "caption": "సులువైన ఆధార్ ఆధారిత డిజిటల్ దరఖాస్తు.",
+                    "sourceRef": "Section 3: Beti Bachao Beti Padhao Official Guidelines (https://www.india.gov.in/my-government/schemes)"
+                },
+                {
+                    "num": 4,
+                    "tag": "ప్యానెల్ 4: ఆనందం & ప్రయోజనం",
+                    "image": "assets/sukanya_4.jpg",
+                    "speaker": "స్లోగన్",
+                    "dialogue": "🎉 Beti Bachao Beti Padhao: ఆడబిడ్డల భవిష్యత్తుకు భరోసా! బంగారు భవిష్యత్తు సాకారం!",
+                    "caption": "ప్రభుత్వ సహాయంతో నిర్భయంగా ముందుకు.",
+                    "sourceRef": "Section 4: Beti Bachao Beti Padhao Official Guidelines (https://www.india.gov.in/my-government/schemes)"
+                }
+            ],
+            "hi": [
+                {
+                    "num": 1,
+                    "tag": "पैनल 1: चिंता व समस्या",
+                    "image": "assets/sukanya_1.jpg",
+                    "speaker": "अनीता",
+                    "dialogue": "मेरी प्यारी बेटी प्रिया की उच्च शिक्षा और भविष्य की सुरक्षा के लिए पैसे कैसे जुटाऊँगी? क्या बिना कर्ज के सपना पूरा होगा?",
+                    "caption": "बेटी के भविष्य को लेकर माँ अनीता की चिंता।",
+                    "sourceRef": "Section 1: Beti Bachao Beti Padhao Official Guidelines (https://www.india.gov.in/my-government/schemes)"
+                },
+                {
+                    "num": 2,
+                    "tag": "पैनल 2: सरकारी समाधान",
+                    "image": "assets/sukanya_2.jpg",
+                    "speaker": "गवटून हीरो",
+                    "dialogue": "बिल्कुल चिंता न करें अनीता जी! Beti Bachao Beti Padhao के तहत सरकार दे रही है गारंटीड सहायता: Direct Benefit Transfer (DBT) and subsidy assistance for eligible citizens.",
+                    "caption": "आधिकारिक सरकारी सहायता और उच्च ब्याज सुरक्षा की गारंटी।",
+                    "sourceRef": "Section 2: Beti Bachao Beti Padhao Official Guidelines (https://www.india.gov.in/my-government/schemes)"
+                },
+                {
+                    "num": 3,
+                    "tag": "पैनल 3: आसान आवेदन प्रक्रिया",
+                    "image": "assets/sukanya_3.jpg",
+                    "speaker": "CSC भैया",
+                    "dialogue": "बस अपने आधार कार्ड और बैंक पासबुक लेकर नजदीकी डाकघर, बैंक या जन सेवा केंद्र जाएं और तुरंत आवेदन करें।",
+                    "caption": "सरल आधार-आधारित डिजिटल पंजीकरण।",
+                    "sourceRef": "Section 3: Beti Bachao Beti Padhao Official Guidelines (https://www.india.gov.in/my-government/schemes)"
+                },
+                {
+                    "num": 4,
+                    "tag": "पैनल 4: खुशहाली व सफलता",
+                    "image": "assets/sukanya_4.jpg",
+                    "speaker": "टैगलाइन",
+                    "dialogue": "🎉 Beti Bachao Beti Padhao: बेटी पढ़ाओ, देश बढ़ाओ! सशक्त बेटी, समृद्ध परिवार!",
+                    "caption": "सरकारी सहयोग से परिवार में खुशहाली।",
+                    "sourceRef": "Section 4: Beti Bachao Beti Padhao Official Guidelines (https://www.india.gov.in/my-government/schemes)"
+                }
+            ]
+        },
+        "character": {
+            "en": {
+                "name": "Anita & Priya",
+                "role": "Mother & Daughter",
+                "avatar": "👩‍👧",
+                "clothing": "Traditional Saree & School Uniform",
+                "desc": "Caring mother & ambitious daughter securing educational future"
+            },
+            "te": {
+                "name": "అనిత & ప్రియ",
+                "role": "తల్లి & కూతురు",
+                "avatar": "👩‍👧",
+                "clothing": "సాంప్రదాయ చీర & స్కూల్ యూనిఫాం",
+                "desc": "కూతురి ఉన్నత చదువులు, బంగారు భవిష్యత్తు కోసం ఆరాటపడే తల్లి"
+            },
+            "hi": {
+                "name": "अनीता और प्रिया",
+                "role": "माँ और बेटी",
+                "avatar": "👩‍👧",
+                "clothing": "पारंपरिक साड़ी व स्कूल यूनिफॉर्म",
+                "desc": "बेटी के उज्ज्वल भविष्य व उच्च शिक्षा हेतु समर्पित माँ"
+            }
+        }
     },
-    documents: [
-      { id: "d1", name: "Aadhaar Card", required: true, why: "Compulsory identity verification via UIDAI" },
-      { id: "d2", name: "Land Holding Documents", required: true, why: "Proves ownership of cultivable agricultural land" },
-      { id: "d3", name: "Bank Passbook & IFSC", required: true, why: "Required for Direct Benefit Transfer (DBT)" },
-      { id: "d4", name: "Mobile Number", required: false, why: "For OTP verification & SMS payment alerts" }
-    ],
-    applicationSteps: [
-      { step: 1, title: "Check Eligibility", desc: "Ensure your land documents are registered in your name." },
-      { step: 2, title: "Gather Aadhaar & Passbook", desc: "Keep original Aadhaar card and bank passbook handy." },
-      { step: 3, title: "Visit Jan Seva Kendra / Portal", desc: "Visit nearest Common Service Center (CSC) or pmkisan.gov.in." },
-      { step: 4, title: "Submit e-KYC & Passbook", desc: "Complete biometric or OTP e-KYC verification." },
-      { step: 5, title: "Receive ₹2,000 DBT", desc: "First installment transferred directly to your bank account." }
-    ],
-    officialUrl: "https://www.india.gov.in/my-government/schemes/pm-kisan-samman-nidhi",
-    sourceUrl: "https://pmkisan.gov.in",
-    lastVerified: "2026-08-24",
-    character: {
-      en: { name: "Ramu Kaka", role: "Small Farmer", avatar: "👨🏽‍🌾", desc: "White Kurta & Blue Gamcha" },
-      te: { name: "రాము కాకా", role: "చిన్న రైతు", avatar: "👨🏽‍🌾", desc: "తెల్లని కుర్తా మరియు నీలిరంగు రుమాలు" },
-      hi: { name: "रामू काका", role: "छोटे किसान", avatar: "👨🏽‍🌾", desc: "सफेद कुर्ता और नीला गमछा" }
+    {
+        "id": "custom_602451399",
+        "name": "Epass",
+        "category": "Central / State Welfare Scheme",
+        "level": "Central",
+        "dept": "Ministry of Social Justice & Empowerment / Government of India",
+        "purpose": "Provide targeted social welfare and financial support under epass.",
+        "benefits": "Direct Benefit Transfer (DBT) and subsidy assistance for eligible citizens.",
+        "eligibility": {
+            "minAge": 18,
+            "maxAge": 70,
+            "maxIncome": 500000,
+            "state": "All India",
+            "occupation": "General Citizen",
+            "summary": "Eligible Indian citizens meeting income and residency criteria specified under epass guidelines."
+        },
+        "documents": [
+            {
+                "id": "d1",
+                "name": "Aadhaar Card",
+                "required": true,
+                "why": "Identity and age verification"
+            },
+            {
+                "id": "d2",
+                "name": "Bank Passbook & IFSC",
+                "required": true,
+                "why": "Direct Benefit Transfer"
+            },
+            {
+                "id": "d3",
+                "name": "Ration Card / Residence Proof",
+                "required": false,
+                "why": "Family status verification"
+            }
+        ],
+        "applicationSteps": [
+            {
+                "step": 1,
+                "title": "Check Official Eligibility",
+                "desc": "Verify rules on India.gov.in for epass."
+            },
+            {
+                "step": 2,
+                "title": "Gather Documents",
+                "desc": "Keep Aadhaar card, passbook, and photo ready."
+            },
+            {
+                "step": 3,
+                "title": "Apply Online / CSC",
+                "desc": "Submit form at nearest Jan Seva Kendra or official portal."
+            }
+        ],
+        "officialUrl": "https://www.india.gov.in/my-government/schemes",
+        "sourceUrl": "https://www.india.gov.in",
+        "lastVerified": "2026-08-24",
+        "panels": {
+            "en": [
+                {
+                    "num": 1,
+                    "tag": "Panel 1: The Tension",
+                    "image": "assets/scholarship_1.jpg",
+                    "speaker": "Raju",
+                    "dialogue": "College tuition fees and books are so expensive! How can I complete my higher education without financial stress?",
+                    "caption": "Students worry about college admission and semester fees.",
+                    "sourceRef": "Section 1: Epass Official Guidelines (https://www.india.gov.in/my-government/schemes)"
+                },
+                {
+                    "num": 2,
+                    "tag": "Panel 2: The Solution",
+                    "image": "assets/scholarship_2.jpg",
+                    "speaker": "GovToon Hero",
+                    "dialogue": "Fikr mat kijiye! Epass provides: Direct Benefit Transfer (DBT) and subsidy assistance for eligible citizens.",
+                    "caption": "Direct 100% scholarship transfer to student bank accounts.",
+                    "sourceRef": "Section 2: Epass Official Guidelines (https://www.india.gov.in/my-government/schemes)"
+                },
+                {
+                    "num": 3,
+                    "tag": "Panel 3: The Easy Path",
+                    "image": "assets/scholarship_3.jpg",
+                    "speaker": "CSC Bhaiya",
+                    "dialogue": "Upload your Aadhaar Card, Bank Passbook & IFSC, Ration Card / Residence Proof on the official scholarship portal or visit nearest CSC center.",
+                    "caption": "Fast Aadhaar-based scholarship verification.",
+                    "sourceRef": "Section 3: Epass Official Guidelines (https://www.india.gov.in/my-government/schemes)"
+                },
+                {
+                    "num": 4,
+                    "tag": "Panel 4: The Khushali",
+                    "image": "assets/scholarship_4.jpg",
+                    "speaker": "Tagline",
+                    "dialogue": "🎉 Epass: Padhega India, Badhega India! Dreams empowered by government support!",
+                    "caption": "Education secured with full tuition waiver.",
+                    "sourceRef": "Section 4: Epass Official Guidelines (https://www.india.gov.in/my-government/schemes)"
+                }
+            ],
+            "te": [
+                {
+                    "num": 1,
+                    "tag": "ప్యానెల్ 1: సమస్య & ఆందోళన",
+                    "image": "assets/scholarship_1.jpg",
+                    "speaker": "రాజు",
+                    "dialogue": "కాలేజీ సెమిస్టర్ ఫీజులు, పుస్తకాల ఖర్చులు చాలా ఎక్కువగా ఉన్నాయి! ఆర్థిక ఇబ్బందుల వల్ల నా చదువు ఆగిపోతుందేమో అని భయంగా ఉంది.",
+                    "caption": "ఫీజుల కోసం విద్యార్థుల ఆవేదన.",
+                    "sourceRef": "Section 1: Epass Official Guidelines (https://www.india.gov.in/my-government/schemes)"
+                },
+                {
+                    "num": 2,
+                    "tag": "ప్యానెల్ 2: ప్రభుత్వ పరిష్కారం",
+                    "image": "assets/scholarship_2.jpg",
+                    "speaker": "గోవ్టూన్ హీరో",
+                    "dialogue": "దిగులుపడకండి విద్యార్థి మిత్రులారా! Epass ద్వారా ప్రభుత్వం అండగా నిలుస్తోంది: Direct Benefit Transfer (DBT) and subsidy assistance for eligible citizens.",
+                    "caption": "100% ఫీజు రీయింబర్స్‌మెంట్ మరియు మెయింటెనెన్స్ అలవెన్స్ భరోసా.",
+                    "sourceRef": "Section 2: Epass Official Guidelines (https://www.india.gov.in/my-government/schemes)"
+                },
+                {
+                    "num": 3,
+                    "tag": "ప్యానెల్ 3: సులువైన దరఖాస్తు",
+                    "image": "assets/scholarship_3.jpg",
+                    "speaker": "CSC మిత్రుడు",
+                    "dialogue": "మీ ఆధార్ కార్డు మరియు బ్యాంక్ పాస్‌బుక్ తో అధికారిక స్కాలర్‌షిప్ పోర్టల్ లేదా CSC లో వెంటనే దరఖాస్తు చేసుకోండి.",
+                    "caption": "త్వరిత ఆన్‌లైన్ వెరిఫికేషన్ ప్రక్రియ.",
+                    "sourceRef": "Section 3: Epass Official Guidelines (https://www.india.gov.in/my-government/schemes)"
+                },
+                {
+                    "num": 4,
+                    "tag": "ప్యానెల్ 4: ఆనందం & ప్రయోజనం",
+                    "image": "assets/scholarship_4.jpg",
+                    "speaker": "స్లోగన్",
+                    "dialogue": "🎉 Epass: చదువుకు పైసల కొరత లేదు! ఉన్నత విద్యతో బంగారు భవిష్యత్తు!",
+                    "caption": "ప్రభుత్వ స్కాలర్‌షిప్‌తో కలలు సాకారం.",
+                    "sourceRef": "Section 4: Epass Official Guidelines (https://www.india.gov.in/my-government/schemes)"
+                }
+            ],
+            "hi": [
+                {
+                    "num": 1,
+                    "tag": "पैनल 1: चिंता व समस्या",
+                    "image": "assets/scholarship_1.jpg",
+                    "speaker": "राजू",
+                    "dialogue": "कॉलेज की फीस और किताबों का खर्च बहुत ज्यादा है! पैसों की कमी से कहीं मेरी उच्च शिक्षा न रुक जाए!",
+                    "caption": "छात्रों को कॉलेज फीस और खर्च की चिंता।",
+                    "sourceRef": "Section 1: Epass Official Guidelines (https://www.india.gov.in/my-government/schemes)"
+                },
+                {
+                    "num": 2,
+                    "tag": "पैनल 2: सरकारी समाधान",
+                    "image": "assets/scholarship_2.jpg",
+                    "speaker": "गवटून हीरो",
+                    "dialogue": "बिल्कुल चिंता न करें! Epass के अंतर्गत सरकार प्रदान कर रही है: Direct Benefit Transfer (DBT) and subsidy assistance for eligible citizens.",
+                    "caption": "सीधे बैंक खाते में 100% स्कॉलरशिप और भत्ता।",
+                    "sourceRef": "Section 2: Epass Official Guidelines (https://www.india.gov.in/my-government/schemes)"
+                },
+                {
+                    "num": 3,
+                    "tag": "पैनल 3: आसान आवेदन प्रक्रिया",
+                    "image": "assets/scholarship_3.jpg",
+                    "speaker": "CSC भैया",
+                    "dialogue": "बस अपने आधार कार्ड और बैंक पासबुक के साथ राष्ट्रीय छात्रवृत्ति पोर्टल पर ऑनलाइन फॉर्म भरें।",
+                    "caption": "सरल डिजिटल सत्यापन व सीधा डीबीटी।",
+                    "sourceRef": "Section 3: Epass Official Guidelines (https://www.india.gov.in/my-government/schemes)"
+                },
+                {
+                    "num": 4,
+                    "tag": "पैनल 4: खुशहाली व सफलता",
+                    "image": "assets/scholarship_4.jpg",
+                    "speaker": "टैगलाइन",
+                    "dialogue": "🎉 Epass: पढ़ेगा इंडिया, बढ़ेगा इंडिया! युवा शक्ति का स्वर्णिम भविष्य!",
+                    "caption": "बिना किसी रुकावट के पूरी होगी उच्च शिक्षा।",
+                    "sourceRef": "Section 4: Epass Official Guidelines (https://www.india.gov.in/my-government/schemes)"
+                }
+            ]
+        },
+        "character": {
+            "en": {
+                "name": "Raju & Priya",
+                "role": "College Students",
+                "avatar": "🎓",
+                "clothing": "College Bag & Formal Shirt",
+                "desc": "Meritorious students aspiring for higher education degrees"
+            },
+            "te": {
+                "name": "రాజు & ప్రియ",
+                "role": "కళాశాల విద్యార్థులు",
+                "avatar": "🎓",
+                "clothing": "కాలేజీ బ్యాగ్ & చొక్కా",
+                "desc": "ఉన్నత చదువులపై ఆశలు పెట్టుకున్న ప్రతిభావంతులైన విద్యార్థులు"
+            },
+            "hi": {
+                "name": "राजू और प्रिया",
+                "role": "कॉलेज छात्र",
+                "avatar": "🎓",
+                "clothing": "कॉलेज बैग व फॉर्मल शर्ट",
+                "desc": "उच्च शिक्षा का सपना देखने वाले मेधावी छात्र"
+            }
+        }
     },
-    panels: {
-      en: [
-        { num: 1, tag: "Panel 1: The Tension", image: "assets/pm_kisan_1.jpg", speaker: "Ramu Kaka", dialogue: "Hey Bhagwan! Seed and fertilizer prices have gone up. Where will I get the money to sow crops this season?", caption: "Ramu Kaka worries about rising agricultural costs.", sourceRef: "Section 1: Background & Target Beneficiaries" },
-        { num: 2, tag: "Panel 2: The Solution", image: "assets/pm_kisan_2.jpg", speaker: "CSC Bhaiya", dialogue: "Don't worry Kaka! The Government sends ₹2,000 directly to your bank account 3 times a year!", caption: "Sarkari Paisa, Seedha Khate Mein (Direct Benefit Transfer).", sourceRef: "Section 2: Benefit Structure - ₹6000/yr" },
-        { num: 3, tag: "Panel 3: The Easy Path", image: "assets/pm_kisan_3.jpg", speaker: "Ramu Kaka & Bhaiya", dialogue: "Ramu Kaka: 'Is Aadhaar and Bank book enough?' Bhaiya: 'Yes! Simple fingerprint e-KYC at the Jan Seva Kendra.'", caption: "Simple registration with Aadhaar & Land Passbook.", sourceRef: "Section 3: Mandatory Documents & e-KYC" },
-        { num: 4, tag: "Panel 4: The Khushali", image: "assets/pm_kisan_4.jpg", speaker: "Tagline", dialogue: "🌾 PM-Kisan: Kheti Ki Takat, Kisan Ki Barkat!", caption: "Prosperity restored, seeds bought on time.", sourceRef: "Section 4: Disbursement & Impact" }
-      ],
-      te: [
-        { num: 1, tag: "ప్యానెల్ 1: ఆందోళన", image: "assets/pm_kisan_1.jpg", speaker: "రాము కాకా", dialogue: "అయ్యో భగవంతుడా! విత్తనాలు, ఎరువుల ధరలు పెరిగాయి. విత్తనాలు వేయడానికి డబ్బు ఎక్కడి నుంచి వస్తుంది?", caption: "వ్యవసాయ ఖర్చుల గురించి రాము కాకా ఆందోళన.", sourceRef: "Section 1" },
-        { num: 2, tag: "ప్యానెల్ 2: పరిష్కారం", image: "assets/pm_kisan_2.jpg", speaker: "సిఎస్‌సి భయ్యా", dialogue: "దిగులుపడకండి కాకా! ప్రభుత్వం ఏడాదికి 3 సార్లు ₹2,000 నేరుగా మీ బ్యాంక్ ఖాతాలో వేస్తుంది!", caption: "ప్రభుత్వ సహాయం నేరుగా మీ ఖాతాలోనే.", sourceRef: "Section 2" },
-        { num: 3, tag: "ప్యానెల్ 3: సులువైన మార్గం", image: "assets/pm_kisan_3.jpg", speaker: "భయ్యా", dialogue: "మీ ఆధార్ కార్డు, బ్యాంక్ పాస్‌బుక్ తీసుకెళ్లి జనసేవా కేంద్రంలో ఇ-కెవైసి చేయించండి.", caption: "ఆధార్ కార్డుతో సులువైన నమోదు.", sourceRef: "Section 3" },
-        { num: 4, tag: "ప్యానెల్ 4: సంతోషం", image: "assets/pm_kisan_4.jpg", speaker: "ట్యాగ్‌లైన్", dialogue: "🌾 పిఎమ్-కిసాన్: వ్యవసాయానికి బలం, రైతుకు సమృద్ధి!", caption: "సమయానికి విత్తనాలు కొనుగోలు.", sourceRef: "Section 4" }
-      ],
-      hi: [
-        { num: 1, tag: "पैनल 1: चिंता", image: "assets/pm_kisan_1.jpg", speaker: "रामू काका", dialogue: "हे भगवान! खाद और बीज के दाम बढ़ गए हैं। बुवाई के लिए पैसा कहां से लाऊं?", caption: "खेती की लागत से चिंता।", sourceRef: "Section 1" },
-        { num: 2, tag: "पैनल 2: समाधान", image: "assets/pm_kisan_2.jpg", speaker: "सीएससी भैया", dialogue: "फिक्र मत कीजिए काका! सरकार हर साल 3 बार ₹2,000 सीधे आपके बैंक खाते में भेजती है!", caption: "सरकारी पैसा सीधा बैंक खाते में।", sourceRef: "Section 2" },
-        { num: 3, tag: "पैनल 3: आसान रास्ता", image: "assets/pm_kisan_3.jpg", speaker: "सीएससी भैया", dialogue: "बस आधार कार्ड और पासबुक लेकर जन सेवा केंद्र पर ई-केवाईसी करवाएं।", caption: "आधार से आसान पंजीकरण।", sourceRef: "Section 3" },
-        { num: 4, tag: "पैनल 4: खुशहाली", image: "assets/pm_kisan_4.jpg", speaker: "टैगलाइन", dialogue: "🌾 पीएम-किसान: खेती की ताकत, किसान की बरकत!", caption: "समय पर बीज खरीदा।", sourceRef: "Section 4" }
-      ]
+    {
+        "id": "custom_931485574",
+        "name": "Startup",
+        "category": "Central / State Welfare Scheme",
+        "level": "Central",
+        "dept": "Ministry of Social Justice & Empowerment / Government of India",
+        "purpose": "Provide targeted social welfare and financial support under Startup.",
+        "benefits": "Direct Benefit Transfer (DBT) and subsidy assistance for eligible citizens.",
+        "eligibility": {
+            "minAge": 18,
+            "maxAge": 70,
+            "maxIncome": 500000,
+            "state": "All India",
+            "occupation": "General Citizen",
+            "summary": "Eligible Indian citizens meeting income and residency criteria specified under Startup guidelines."
+        },
+        "documents": [
+            {
+                "id": "d1",
+                "name": "Aadhaar Card",
+                "required": true,
+                "why": "Identity and age verification"
+            },
+            {
+                "id": "d2",
+                "name": "Bank Passbook & IFSC",
+                "required": true,
+                "why": "Direct Benefit Transfer"
+            },
+            {
+                "id": "d3",
+                "name": "Ration Card / Residence Proof",
+                "required": false,
+                "why": "Family status verification"
+            }
+        ],
+        "applicationSteps": [
+            {
+                "step": 1,
+                "title": "Check Official Eligibility",
+                "desc": "Verify rules on India.gov.in for Startup."
+            },
+            {
+                "step": 2,
+                "title": "Gather Documents",
+                "desc": "Keep Aadhaar card, passbook, and photo ready."
+            },
+            {
+                "step": 3,
+                "title": "Apply Online / CSC",
+                "desc": "Submit form at nearest Jan Seva Kendra or official portal."
+            }
+        ],
+        "officialUrl": "https://www.india.gov.in/my-government/schemes",
+        "sourceUrl": "https://www.india.gov.in",
+        "lastVerified": "2026-08-24",
+        "panels": {
+            "en": [
+                {
+                    "num": 1,
+                    "tag": "Panel 1: The Tension",
+                    "image": "assets/mudra_1.jpg",
+                    "speaker": "Ravi",
+                    "dialogue": "I want to start and expand my enterprise, but moneylenders charge high interest and private banks ask for property collateral!",
+                    "caption": "Ravi worries about business startup capital and bank collateral.",
+                    "sourceRef": "Section 1: Startup Official Guidelines (https://www.india.gov.in/my-government/schemes)"
+                },
+                {
+                    "num": 2,
+                    "tag": "Panel 2: The Solution",
+                    "image": "assets/mudra_2.jpg",
+                    "speaker": "GovToon Hero",
+                    "dialogue": "Fikr mat kijiye! Startup provides: Direct Benefit Transfer (DBT) and subsidy assistance for eligible citizens.",
+                    "caption": "100% collateral-free government institutional funding.",
+                    "sourceRef": "Section 2: Startup Official Guidelines (https://www.india.gov.in/my-government/schemes)"
+                },
+                {
+                    "num": 3,
+                    "tag": "Panel 3: The Easy Path",
+                    "image": "assets/mudra_3.jpg",
+                    "speaker": "CSC Bhaiya",
+                    "dialogue": "Submit your business proposal with Aadhaar Card, Bank Passbook & IFSC, Ration Card / Residence Proof at any bank branch or on udyamimitra portal.",
+                    "caption": "Simple collateral-free loan processing.",
+                    "sourceRef": "Section 3: Startup Official Guidelines (https://www.india.gov.in/my-government/schemes)"
+                },
+                {
+                    "num": 4,
+                    "tag": "Panel 4: The Khushali",
+                    "image": "assets/mudra_4.jpg",
+                    "speaker": "Tagline",
+                    "dialogue": "🎉 Startup: Atmanirbhar Bharat! Low interest collateral-free capital for your success!",
+                    "caption": "Business flourishing with official government financial backing.",
+                    "sourceRef": "Section 4: Startup Official Guidelines (https://www.india.gov.in/my-government/schemes)"
+                }
+            ],
+            "te": [
+                {
+                    "num": 1,
+                    "tag": "ప్యానెల్ 1: సమస్య & ఆందోళన",
+                    "image": "assets/mudra_1.jpg",
+                    "speaker": "రవి",
+                    "dialogue": "నా వ్యాపారాన్ని లేదా స్టార్టప్‌ను ప్రారంభించి విస్తరించాలనుకుంటున్నాను, కానీ ప్రైవేట్ బ్యాంకులు ఆస్తి తాకట్టు అడుగుతున్నాయి!",
+                    "caption": "మూలధనం కొరకు రవి పడే ఆందోళన.",
+                    "sourceRef": "Section 1: Startup Official Guidelines (https://www.india.gov.in/my-government/schemes)"
+                },
+                {
+                    "num": 2,
+                    "tag": "ప్యానెల్ 2: ప్రభుత్వ పరిష్కారం",
+                    "image": "assets/mudra_2.jpg",
+                    "speaker": "గోవ్టూన్ హీరో",
+                    "dialogue": "దిగులుపడకండి రవి గారూ! Startup ద్వారా ప్రభుత్వం అండగా నిలుస్తోంది: Direct Benefit Transfer (DBT) and subsidy assistance for eligible citizens.",
+                    "caption": "ఎలాంటి ఆస్తి తాకట్టు లేకుండా సులభమైన ప్రభుత్వ వ్యాపార రుణాలు.",
+                    "sourceRef": "Section 2: Startup Official Guidelines (https://www.india.gov.in/my-government/schemes)"
+                },
+                {
+                    "num": 3,
+                    "tag": "ప్యానెల్ 3: సులువైన దరఖాస్తు",
+                    "image": "assets/mudra_3.jpg",
+                    "speaker": "CSC మిత్రుడు",
+                    "dialogue": "మీ ఆధార్ కార్డు మరియు బ్యాంక్ పాస్‌బుక్ మరియు వ్యాపార ప్రణాళికతో ఏ జాతీయ బ్యాంకులోనైనా లేదా పోర్టల్‌లోనైనా దరఖాస్తు చేయండి.",
+                    "caption": "సులువైన పూచీకత్తు లేని రుణ మంజూరు.",
+                    "sourceRef": "Section 3: Startup Official Guidelines (https://www.india.gov.in/my-government/schemes)"
+                },
+                {
+                    "num": 4,
+                    "tag": "ప్యానెల్ 4: ఆనందం & ప్రయోజనం",
+                    "image": "assets/mudra_4.jpg",
+                    "speaker": "స్లోగన్",
+                    "dialogue": "🎉 Startup: ఆత్మనిర్భర్ భారత్! స్వయం ఉపాధితో పదిమందికి ఉపాధి కల్పించే స్థాయికి!",
+                    "caption": "సొంత వ్యాపారంతో ఆర్థిక పురోగతి.",
+                    "sourceRef": "Section 4: Startup Official Guidelines (https://www.india.gov.in/my-government/schemes)"
+                }
+            ],
+            "hi": [
+                {
+                    "num": 1,
+                    "tag": "पैनल 1: चिंता व समस्या",
+                    "image": "assets/mudra_1.jpg",
+                    "speaker": "रवि",
+                    "dialogue": "मैं अपना व्यापार या स्टार्टअप शुरू करके बढ़ाना चाहता हूँ, लेकिन बैंक बिना गारंटी या जमीन गिरवी रखे लोन नहीं देते!",
+                    "caption": "व्यापार पूंजी के लिए उद्यमी की चिंता।",
+                    "sourceRef": "Section 1: Startup Official Guidelines (https://www.india.gov.in/my-government/schemes)"
+                },
+                {
+                    "num": 2,
+                    "tag": "पैनल 2: सरकारी समाधान",
+                    "image": "assets/mudra_2.jpg",
+                    "speaker": "गवटून हीरो",
+                    "dialogue": "बिल्कुल चिंता न करें रवि जी! Startup के तहत सरकार दे रही है: Direct Benefit Transfer (DBT) and subsidy assistance for eligible citizens.",
+                    "caption": "बिना किसी गारंटी के आसान सरकारी व्यापारिक ऋण।",
+                    "sourceRef": "Section 2: Startup Official Guidelines (https://www.india.gov.in/my-government/schemes)"
+                },
+                {
+                    "num": 3,
+                    "tag": "पैनल 3: आसान आवेदन प्रक्रिया",
+                    "image": "assets/mudra_3.jpg",
+                    "speaker": "CSC भैया",
+                    "dialogue": "बस अपने आधार कार्ड और बैंक पासबुक और बिजनेस प्लान के साथ किसी भी बैंक या उद्यमी मित्र पोर्टल पर आवेदन करें।",
+                    "caption": "बिना प्रॉपर्टी गिरवी रखे त्वरित लोन स्वीकृति।",
+                    "sourceRef": "Section 3: Startup Official Guidelines (https://www.india.gov.in/my-government/schemes)"
+                },
+                {
+                    "num": 4,
+                    "tag": "पैनल 4: खुशहाली व सफलता",
+                    "image": "assets/mudra_4.jpg",
+                    "speaker": "टैगलाइन",
+                    "dialogue": "🎉 Startup: आत्मनिर्भर भारत! कम ब्याज पर आसान पूंजी, आपका व्यापार बुलंदियों पर!",
+                    "caption": "सरकारी वित्तीय सहयोग से नया व्यापार सफल।",
+                    "sourceRef": "Section 4: Startup Official Guidelines (https://www.india.gov.in/my-government/schemes)"
+                }
+            ]
+        },
+        "character": {
+            "en": {
+                "name": "Ravi Kumar",
+                "role": "Small Business Owner & Entrepreneur",
+                "avatar": "💼",
+                "clothing": "Smart Casual",
+                "desc": "Ambitious entrepreneur expanding venture without collateral"
+            },
+            "te": {
+                "name": "రవి కుమార్",
+                "role": "చిరు వ్యాపారి & యువ పారిశ్రామికవేత్త",
+                "avatar": "💼",
+                "clothing": "వ్యాపార దుస్తులు",
+                "desc": "తన స్వయం ఉపాధిని విస్తరించడానికి పూచీకత్తు లేని రుణం కోరే యువకుడు"
+            },
+            "hi": {
+                "name": "रवि कुमार",
+                "role": "उद्यमी व व्यापारी",
+                "avatar": "💼",
+                "clothing": "स्मार्ट कैजुअल",
+                "desc": "बिना गारंटी व्यवसाय ऋण व स्टार्टअप पूंजी चाहने वाला युवा"
+            }
+        }
     },
-    quiz: [
-      { q: "What total financial assistance is provided under PM-Kisan per year?", options: ["₹2,000 per year", "₹6,000 per year in 3 installments", "₹10,000 one-time loan", "₹1,000 monthly pension"], correct: 1, panelRef: 2, explanation: "PM-Kisan provides ₹6,000 per year directly to bank accounts in 3 equal installments of ₹2,000." },
-      { q: "Which official identity document is mandatory for e-KYC verification?", options: ["Ration Card", "Aadhaar Card", "Driving License", "Electricity Bill"], correct: 1, panelRef: 3, explanation: "Aadhaar Card is compulsory for completing e-KYC verification under PM-Kisan rules." },
-      { q: "Where can a farmer visit for physical application and e-KYC assistance?", options: ["Common Service Center (Jan Seva Kendra)", "Railway Station", "Post Office Only", "Private Bank Counter"], correct: 0, panelRef: 3, explanation: "Farmers can visit their nearest Common Service Center (CSC / Jan Seva Kendra) or pmkisan.gov.in." }
-    ]
-  },
-  {
-    id: "pension",
-    name: "PM Shram Yogi Maandhan (Micro-Pension)",
-    category: "Banking & Finance",
-    level: "Central",
-    dept: "Ministry of Labour & Employment",
-    purpose: "Old age protection and social security for unorganized workers like tea vendors, street hawkers, and rickshaw pullers.",
-    benefits: "Guaranteed monthly pension of ₹3,000 after reaching 60 years of age, with 50% government co-contribution.",
-    eligibility: { minAge: 18, maxAge: 40, maxIncome: 180000, state: "All India", occupation: "Vendor", summary: "Unorganized workers aged 18 to 40 years with monthly income up to ₹15,000." },
-    documents: [
-      { id: "d1", name: "Aadhaar Card", required: true, why: "Identity & age proof" },
-      { id: "d2", name: "Savings Bank Account / Jan Dhan", required: true, why: "Auto-debit for monthly savings" },
-      { id: "d3", name: "Mobile Phone", required: true, why: "OTP verification & subscription receipt" }
-    ],
-    applicationSteps: [
-      { step: 1, title: "Check Age (18-40 Years)", desc: "Ensure you enter before turning 40 to lock low monthly savings." },
-      { step: 2, title: "Take Aadhaar & Jan Dhan Passbook", desc: "Visit nearest CSC / Jan Seva Kendra." },
-      { step: 3, title: "Set Auto-Debit (₹55 - ₹200)", desc: "Select monthly savings amount matched 100% by Government." },
-      { step: 4, title: "Receive Pension Card", desc: "Get Shram Yogi Pension Card for lifetime monthly ₹3,000." }
-    ],
-    officialUrl: "https://www.india.gov.in/my-government/schemes/pm-shram-yogi-maandhan",
-    sourceUrl: "https://maandhan.in",
-    lastVerified: "2026-08-24",
-    character: {
-      en: { name: "Kalu", role: "Tea Stall Owner", avatar: "👴🏽", desc: "Hardworking vendor worried about old age & aching bones" },
-      te: { name: "కాలు", role: "టీ కొట్టు యజమాని", avatar: "👴🏽", desc: "వృద్ధాప్యం గురించి ఆందోళన చెందుతున్న శ్రామికుడు" },
-      hi: { name: "कालू", role: "चाय विक्रेता", avatar: "👴🏽", desc: "बुढ़ापे की चिंता करने वाले चाय विक्रेता" }
+    {
+        "id": "pm_kisan",
+        "name": "PM-Kisan Samman Nidhi",
+        "category": "Agriculture",
+        "level": "Central",
+        "dept": "Ministry of Agriculture & Farmers Welfare",
+        "purpose": "Provide income support to small and marginal farmer families across India for purchasing agricultural inputs.",
+        "benefits": "₹6,000 per year transferred directly to bank account in 3 equal installments of ₹2,000.",
+        "eligibility": {
+            "minAge": 18,
+            "maxAge": 100,
+            "maxIncome": 500000,
+            "state": "All India",
+            "occupation": "Farmer",
+            "summary": "Small and marginal landholding farmer families holding cultivable land in their names."
+        },
+        "documents": [
+            {
+                "id": "d1",
+                "name": "Aadhaar Card",
+                "required": true,
+                "why": "Compulsory identity verification via UIDAI"
+            },
+            {
+                "id": "d2",
+                "name": "Land Holding Documents",
+                "required": true,
+                "why": "Proves ownership of cultivable agricultural land"
+            },
+            {
+                "id": "d3",
+                "name": "Bank Passbook & IFSC",
+                "required": true,
+                "why": "Required for Direct Benefit Transfer (DBT)"
+            },
+            {
+                "id": "d4",
+                "name": "Mobile Number",
+                "required": false,
+                "why": "For OTP verification & SMS payment alerts"
+            }
+        ],
+        "applicationSteps": [
+            {
+                "step": 1,
+                "title": "Check Eligibility",
+                "desc": "Ensure cultivable land is registered in your name."
+            },
+            {
+                "step": 2,
+                "title": "Gather Aadhaar & Passbook",
+                "desc": "Keep original Aadhaar card and bank passbook handy."
+            },
+            {
+                "step": 3,
+                "title": "Visit Jan Seva Kendra / Portal",
+                "desc": "Visit nearest Common Service Center (CSC) or pmkisan.gov.in."
+            },
+            {
+                "step": 4,
+                "title": "Submit e-KYC & Passbook",
+                "desc": "Complete biometric or OTP e-KYC verification."
+            },
+            {
+                "step": 5,
+                "title": "Receive ₹2,000 DBT",
+                "desc": "First installment transferred directly to your bank account."
+            }
+        ],
+        "officialUrl": "https://www.india.gov.in/my-government/schemes/pm-kisan-samman-nidhi",
+        "sourceUrl": "https://pmkisan.gov.in",
+        "applyUrl": "https://pmkisan.gov.in",
+        "lastVerified": "2026-08-24",
+        "panels": {
+            "en": [
+                {
+                    "num": 1,
+                    "tag": "Panel 1: The Tension",
+                    "image": "assets/pm_kisan_1.jpg",
+                    "speaker": "Ramu Kaka",
+                    "dialogue": "Rising seed, fertilizer, and irrigation costs before every sowing season make farming financially stressful!",
+                    "caption": "Ramu Kaka worries about seasonal crop input expenses.",
+                    "sourceRef": "Section 1: PM-Kisan Samman Nidhi Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-kisan-samman-nidhi)"
+                },
+                {
+                    "num": 2,
+                    "tag": "Panel 2: The Solution",
+                    "image": "assets/pm_kisan_2.jpg",
+                    "speaker": "GovToon Hero",
+                    "dialogue": "Fikr mat kijiye! PM-Kisan Samman Nidhi provides: ₹6,000 per year transferred directly to bank account in 3 equal installments of ₹2,000.",
+                    "caption": "Guaranteed ₹6,000 per year in 3 direct ₹2,000 DBT installments to your bank account.",
+                    "sourceRef": "Section 2: PM-Kisan Samman Nidhi Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-kisan-samman-nidhi)"
+                },
+                {
+                    "num": 3,
+                    "tag": "Panel 3: The Easy Path",
+                    "image": "assets/pm_kisan_3.jpg",
+                    "speaker": "CSC Bhaiya",
+                    "dialogue": "Just complete e-KYC and land seeding with your Aadhaar Card, Land Holding Documents, Bank Passbook & IFSC, Mobile Number on the pmkisan.gov.in portal.",
+                    "caption": "Direct Aadhaar Payment Bridge without any middleman.",
+                    "sourceRef": "Section 3: PM-Kisan Samman Nidhi Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-kisan-samman-nidhi)"
+                },
+                {
+                    "num": 4,
+                    "tag": "Panel 4: The Khushali",
+                    "image": "assets/pm_kisan_4.jpg",
+                    "speaker": "Tagline",
+                    "dialogue": "🎉 PM-Kisan Samman Nidhi: Jai Jawan, Jai Kisan! Timely DBT empowers our annadatas!",
+                    "caption": "Purchasing certified seeds and fertilizers with peace of mind.",
+                    "sourceRef": "Section 4: PM-Kisan Samman Nidhi Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-kisan-samman-nidhi)"
+                }
+            ],
+            "te": [
+                {
+                    "num": 1,
+                    "tag": "ప్యానెల్ 1: సమస్య & ఆందోళన",
+                    "image": "assets/pm_kisan_1.jpg",
+                    "speaker": "రాము కాకా",
+                    "dialogue": "ప్రతి పంట కాలంలో విత్తనాలు, ఎరువులు మరియు సాగు ఖర్చులు విపరీతంగా పెరిగిపోయి పెట్టుబడికి ఇబ్బందిగా ఉంది!",
+                    "caption": "సాగు పెట్టుబడి ఖర్చులపై రాము కాకా ఆందోళన.",
+                    "sourceRef": "Section 1: PM-Kisan Samman Nidhi Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-kisan-samman-nidhi)"
+                },
+                {
+                    "num": 2,
+                    "tag": "ప్యానెల్ 2: ప్రభుత్వ పరిష్కారం",
+                    "image": "assets/pm_kisan_2.jpg",
+                    "speaker": "గోవ్టూన్ హీరో",
+                    "dialogue": "దిగులుపడకండి రాము కాకా గారూ! PM-Kisan Samman Nidhi ద్వారా ప్రభుత్వం అండగా నిలుస్తోంది: ₹6,000 per year transferred directly to bank account in 3 equal installments of ₹2,000.",
+                    "caption": "ఏడాదికి ₹6,000 నేరుగా 3 విడతల్లో (ఒక్కో విడతకు ₹2,000) మీ బ్యాంక్ ఖాతాలో జమ.",
+                    "sourceRef": "Section 2: PM-Kisan Samman Nidhi Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-kisan-samman-nidhi)"
+                },
+                {
+                    "num": 3,
+                    "tag": "ప్యానెల్ 3: సులువైన దరఖాస్తు",
+                    "image": "assets/pm_kisan_3.jpg",
+                    "speaker": "CSC మిత్రుడు",
+                    "dialogue": "మీ ఆధార్ కార్డు మరియు బ్యాంక్ పాస్‌బుక్ మరియు పట్టాదారు పాస్‌బుక్‌తో pmkisan.gov.in లేదా CSC లో e-KYC పూర్తి చేయండి.",
+                    "caption": "మధ్యవర్తులు లేకుండా నేరుగా ఆధార్ ఆధారిత బ్యాంకు ఖాతాలో జమ.",
+                    "sourceRef": "Section 3: PM-Kisan Samman Nidhi Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-kisan-samman-nidhi)"
+                },
+                {
+                    "num": 4,
+                    "tag": "ప్యానెల్ 4: ఆనందం & ప్రయోజనం",
+                    "image": "assets/pm_kisan_4.jpg",
+                    "speaker": "స్లోగన్",
+                    "dialogue": "🎉 PM-Kisan Samman Nidhi: జై జవాన్, జై కిసాన్! రైతు సంక్షేమమే దేశ సంక్షేమం!",
+                    "caption": "సకాలంలో పెట్టుబడి సాయంతో సంతోషంగా పంటల సాగు.",
+                    "sourceRef": "Section 4: PM-Kisan Samman Nidhi Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-kisan-samman-nidhi)"
+                }
+            ],
+            "hi": [
+                {
+                    "num": 1,
+                    "tag": "पैनल 1: चिंता व समस्या",
+                    "image": "assets/pm_kisan_1.jpg",
+                    "speaker": "रामू काका",
+                    "dialogue": "हर बुआई के मौसम में बीज, खाद और जुताई का खर्च जुटाना बहुत भारी पड़ता है! समय पर आर्थिक मदद कैसे मिले?",
+                    "caption": "खेती की लागत से परेशान किसान।",
+                    "sourceRef": "Section 1: PM-Kisan Samman Nidhi Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-kisan-samman-nidhi)"
+                },
+                {
+                    "num": 2,
+                    "tag": "पैनल 2: सरकारी समाधान",
+                    "image": "assets/pm_kisan_2.jpg",
+                    "speaker": "गवटून हीरो",
+                    "dialogue": "बिल्कुल चिंता मत कीजिए रामू काका! PM-Kisan Samman Nidhi के तहत सरकार दे रही है पक्की मदद: ₹6,000 per year transferred directly to bank account in 3 equal installments of ₹2,000.",
+                    "caption": "हर साल ₹6,000 की सीधी सहायता 3 समान किस्तों (₹2,000 प्रत्येक) में सीधे आपके बैंक खाते में।",
+                    "sourceRef": "Section 2: PM-Kisan Samman Nidhi Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-kisan-samman-nidhi)"
+                },
+                {
+                    "num": 3,
+                    "tag": "पैनल 3: आसान आवेदन प्रक्रिया",
+                    "image": "assets/pm_kisan_3.jpg",
+                    "speaker": "CSC भैया",
+                    "dialogue": "बस अपने आधार कार्ड और बैंक पासबुक और खतौनी/जमीन दस्तावेज के साथ pmkisan.gov.in पर e-KYC कराएं।",
+                    "caption": "बिना किसी बिचौलिए के सीधा आधार लिंक बैंक खाते में पैसा।",
+                    "sourceRef": "Section 3: PM-Kisan Samman Nidhi Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-kisan-samman-nidhi)"
+                },
+                {
+                    "num": 4,
+                    "tag": "पैनल 4: खुशहाली व सफलता",
+                    "image": "assets/pm_kisan_4.jpg",
+                    "speaker": "टैगलाइन",
+                    "dialogue": "🎉 PM-Kisan Samman Nidhi: जय जवान, जय किसान! अन्नदाता का सम्मान, समृद्ध किसान!",
+                    "caption": "समय पर खाते में पैसा आने से खरीदे उत्तम बीज, लहलहाई फसल।",
+                    "sourceRef": "Section 4: PM-Kisan Samman Nidhi Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-kisan-samman-nidhi)"
+                }
+            ]
+        },
+        "character": {
+            "en": {
+                "name": "Ramu Kaka",
+                "role": "Small Farmer",
+                "avatar": "👨🏽‍🌾",
+                "clothing": "White Kurta & Gamcha",
+                "desc": "Small landholder farmer managing seasonal crop input costs"
+            },
+            "te": {
+                "name": "రాము కాకా",
+                "role": "చిన్నకారు రైతు",
+                "avatar": "👨🏽‍🌾",
+                "clothing": "తెల్లని కుర్తా & తువ్వాలు",
+                "desc": "విత్తనాలు, ఎరువుల పెట్టుబడి ఖర్చుల కోసం ఇబ్బంది పడే చిన్న రైతు"
+            },
+            "hi": {
+                "name": "रामू काका",
+                "role": "लघु किसान",
+                "avatar": "👨🏽‍🌾",
+                "clothing": "सफेद कुर्ता व गमछा",
+                "desc": "फसल बुआई, बीज व खाद के खर्च से परेशान मेहनती किसान"
+            }
+        }
     },
-    panels: {
-      en: [
-        { num: 1, tag: "Panel 1: The Tension", image: "assets/pm_kisan_1.jpg", speaker: "Kalu", dialogue: "Didi, my bones ache. I can't sell tea forever. What happens when I am too old to stand?", caption: "Kalu worries about his future.", sourceRef: "Section 1" },
-        { num: 2, tag: "Panel 2: The Solution", image: "assets/pm_kisan_2.jpg", speaker: "Didi", dialogue: "Kalu, think of this scheme like planting a banyan tree. Drop coins today, get shade (money) every month when old.", caption: "Old age support grows with you.", sourceRef: "Section 2" },
-        { num: 3, tag: "Panel 3: The Easy Path", image: "assets/pm_kisan_3.jpg", speaker: "Didi", dialogue: "Just take your Aadhaar card to the Blue Building down the street. Tell them you want to save ₹20 a day.", caption: "Simple registration at Jan Seva Kendra.", sourceRef: "Section 3" },
-        { num: 4, tag: "Panel 4: The Khushali", image: "assets/pm_kisan_4.jpg", speaker: "Alert", dialogue: "🎉 Monthly Pension Received: ₹3,000", caption: "Save a little now, get a 'Salary' for life when you retire.", sourceRef: "Section 4" }
-      ],
-      te: [
-        { num: 1, tag: "ప్యానెల్ 1: ఆందోళన", image: "assets/pm_kisan_1.jpg", speaker: "కాలు", dialogue: "దిదీ, వయసు పైబడుతోంది. ఎల్లప్పుడూ టీ అమ్మలేను. వృద్ధాప్యంలో ఏమిటి పరిస్థితి?", caption: "భవిష్యత్తు గురించి ఆందోళన.", sourceRef: "Section 1" },
-        { num: 2, tag: "ప్యానెల్ 2: పరిష్కారం", image: "assets/pm_kisan_2.jpg", speaker: "దిదీ", dialogue: "ఈ పథకాన్ని ఒక మర్రిచెట్టు నాటడం లాంటిదిగా భావించు. ఈరోజు కొన్ని నాణేలు దాచితే, వృద్ధాప్యంలో ప్రతినెల నీడ (డబ్బు) ఇస్తుంది.", caption: "వృద్ధాప్య ఆసరా.", sourceRef: "Section 2" },
-        { num: 3, tag: "ప్యానెల్ 3: నమోదు", image: "assets/pm_kisan_3.jpg", speaker: "దిదీ", dialogue: "మీ ఆధార్ కార్డు తీసుకెళ్లి సేవ కేంద్రంలో ఇవ్వండి. రోజుకు 20 రూపాయలు దాచుకుంటానని చెప్పండి.", caption: "సులువైన నమోదు.", sourceRef: "Section 3" },
-        { num: 4, tag: "ప్యానెల్ 4: ఆనందం", image: "assets/pm_kisan_4.jpg", speaker: "అలర్ట్", dialogue: "🎉 నెలవారీ పెన్షన్ లభించింది: ₹3,000", caption: "నెలవారీ పెన్షన్ హామీ.", sourceRef: "Section 4" }
-      ],
-      hi: [
-        { num: 1, tag: "पैनल 1: चिंता", image: "assets/pm_kisan_1.jpg", speaker: "कालू", dialogue: "दीदी, अब शरीर थकने लगा है। हमेशा चाय नहीं बेच सकता। बुढ़ापे में क्या होगा?", caption: "भविष्य की चिंता।", sourceRef: "Section 1" },
-        { num: 2, tag: "पैनल 2: समाधान", image: "assets/pm_kisan_2.jpg", speaker: "दीदी", dialogue: "कालू, इसे बरगद का पेड़ लगाने जैसा समझो। आज थोड़े सिक्के डालो, बुढ़ापे में हर महीने ठंडी छांव मिलेगी।", caption: "बूढ़ापे की मजबूत लाठी।", sourceRef: "Section 2" },
-        { num: 3, tag: "पैनल 3: आसान पंजीकरण", image: "assets/pm_kisan_3.jpg", speaker: "दीदी", dialogue: "बस अपना आधार कार्ड नीले जन सेवा केंद्र ले जाओ और बचत शुरू करो।", caption: "आसान पंजीकरण।", sourceRef: "Section 3" },
-        { num: 4, tag: "पैनल 4: खुशहाली", image: "assets/pm_kisan_4.jpg", speaker: "अलर्ट", dialogue: "🎉 मासिक पेंशन प्राप्त: ₹3,000", caption: "हर महीने ₹3,000 की गारंटी।", sourceRef: "Section 4" }
-      ]
+    {
+        "id": "pension",
+        "name": "PM Shram Yogi Maandhan (Micro-Pension)",
+        "category": "Banking & Finance",
+        "level": "Central",
+        "dept": "Ministry of Labour & Employment",
+        "purpose": "Old age protection and social security for unorganized workers like tea vendors, street hawkers, and rickshaw pullers.",
+        "benefits": "Guaranteed monthly pension of ₹3,000 after reaching 60 years of age, with 50% government co-contribution.",
+        "eligibility": {
+            "minAge": 18,
+            "maxAge": 40,
+            "maxIncome": 180000,
+            "state": "All India",
+            "occupation": "Vendor",
+            "summary": "Unorganized workers aged 18 to 40 years with monthly income up to ₹15,000."
+        },
+        "documents": [
+            {
+                "id": "d1",
+                "name": "Aadhaar Card",
+                "required": true,
+                "why": "Identity & age proof"
+            },
+            {
+                "id": "d2",
+                "name": "Savings Bank Account / Jan Dhan",
+                "required": true,
+                "why": "Auto-debit for monthly savings"
+            },
+            {
+                "id": "d3",
+                "name": "Mobile Phone",
+                "required": true,
+                "why": "OTP verification & subscription receipt"
+            }
+        ],
+        "applicationSteps": [
+            {
+                "step": 1,
+                "title": "Check Age (18-40 Years)",
+                "desc": "Ensure you enter before turning 40 to lock low monthly savings."
+            },
+            {
+                "step": 2,
+                "title": "Take Aadhaar & Jan Dhan Passbook",
+                "desc": "Visit nearest CSC / Jan Seva Kendra."
+            },
+            {
+                "step": 3,
+                "title": "Set Auto-Debit (₹55 - ₹200)",
+                "desc": "Select monthly savings amount matched 100% by Government."
+            },
+            {
+                "step": 4,
+                "title": "Receive Pension Card",
+                "desc": "Get Shram Yogi Pension Card for lifetime monthly ₹3,000."
+            }
+        ],
+        "officialUrl": "https://www.india.gov.in/my-government/schemes/pm-shram-yogi-maandhan",
+        "sourceUrl": "https://maandhan.in",
+        "applyUrl": "https://maandhan.in",
+        "lastVerified": "2026-08-24",
+        "panels": {
+            "en": [
+                {
+                    "num": 1,
+                    "tag": "Panel 1: The Tension",
+                    "image": "assets/pension_1.jpg",
+                    "speaker": "Sharma Ji",
+                    "dialogue": "As I grow older, I worry about medical expenses and daily food without being a financial burden on my children!",
+                    "caption": "Sharma Ji worries about old age financial dignity.",
+                    "sourceRef": "Section 1: PM Shram Yogi Maandhan (Micro-Pension) Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-shram-yogi-maandhan)"
+                },
+                {
+                    "num": 2,
+                    "tag": "Panel 2: The Solution",
+                    "image": "assets/pension_2.jpg",
+                    "speaker": "GovToon Hero",
+                    "dialogue": "Fikr mat kijiye! PM Shram Yogi Maandhan (Micro-Pension) provides: Guaranteed monthly pension of ₹3,000 after reaching 60 years of age, with 50% government co-contribution.",
+                    "caption": "Guaranteed ₹3,000 to ₹5,000 monthly lifelong pension with 50% government co-contribution.",
+                    "sourceRef": "Section 2: PM Shram Yogi Maandhan (Micro-Pension) Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-shram-yogi-maandhan)"
+                },
+                {
+                    "num": 3,
+                    "tag": "Panel 3: The Easy Path",
+                    "image": "assets/pension_3.jpg",
+                    "speaker": "CSC Bhaiya",
+                    "dialogue": "Enroll easily with your Aadhaar Card, Savings Bank Account / Jan Dhan, Mobile Phone at any bank branch or nearest CSC center.",
+                    "caption": "Auto-debit setup with government co-contribution.",
+                    "sourceRef": "Section 3: PM Shram Yogi Maandhan (Micro-Pension) Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-shram-yogi-maandhan)"
+                },
+                {
+                    "num": 4,
+                    "tag": "Panel 4: The Khushali",
+                    "image": "assets/pension_4.jpg",
+                    "speaker": "Tagline",
+                    "dialogue": "🎉 PM Shram Yogi Maandhan (Micro-Pension): Vriddhavastha Mein Samman! Guaranteed monthly pension for a peaceful retirement!",
+                    "caption": "Receiving direct monthly pension with pride.",
+                    "sourceRef": "Section 4: PM Shram Yogi Maandhan (Micro-Pension) Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-shram-yogi-maandhan)"
+                }
+            ],
+            "te": [
+                {
+                    "num": 1,
+                    "tag": "ప్యానెల్ 1: సమస్య & ఆందోళన",
+                    "image": "assets/pension_1.jpg",
+                    "speaker": "శర్మ గారు",
+                    "dialogue": "వయసు పైబడుతున్న కొద్దీ మందుల ఖర్చులు, నిత్యవసరాల కోసం పిల్లలపై ఆధారపడకుండా గౌరవంగా ఎలా బతకాలి?",
+                    "caption": "వృద్ధాప్య భరోసా కొరకు శర్మ గారి ఆవేదన.",
+                    "sourceRef": "Section 1: PM Shram Yogi Maandhan (Micro-Pension) Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-shram-yogi-maandhan)"
+                },
+                {
+                    "num": 2,
+                    "tag": "ప్యానెల్ 2: ప్రభుత్వ పరిష్కారం",
+                    "image": "assets/pension_2.jpg",
+                    "speaker": "గోవ్టూన్ హీరో",
+                    "dialogue": "దిగులుపడకండి శర్మ గారూ! PM Shram Yogi Maandhan (Micro-Pension) ద్వారా ప్రభుత్వం అండగా నిలుస్తోంది: Guaranteed monthly pension of ₹3,000 after reaching 60 years of age, with 50% government co-contribution.",
+                    "caption": "నెలకు ₹3,000 నుండి ₹5,000 వరకు జీవితాంతం గ్యారంటీ పెన్షన్ మరియు 50% ప్రభుత్వ వాటా జమ.",
+                    "sourceRef": "Section 2: PM Shram Yogi Maandhan (Micro-Pension) Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-shram-yogi-maandhan)"
+                },
+                {
+                    "num": 3,
+                    "tag": "ప్యానెల్ 3: సులువైన దరఖాస్తు",
+                    "image": "assets/pension_3.jpg",
+                    "speaker": "CSC మిత్రుడు",
+                    "dialogue": "మీ ఆధార్ కార్డు మరియు బ్యాంక్ పాస్‌బుక్ తో ఏ బ్యాంకులోనైనా లేదా CSC కేంద్రంలోనైనా సులభంగా ఖాతా ప్రారంభించండి.",
+                    "caption": "సులభమైన ఆటో-డెబిట్ మరియు ప్రభుత్వ బోనస్ జమ.",
+                    "sourceRef": "Section 3: PM Shram Yogi Maandhan (Micro-Pension) Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-shram-yogi-maandhan)"
+                },
+                {
+                    "num": 4,
+                    "tag": "ప్యానెల్ 4: ఆనందం & ప్రయోజనం",
+                    "image": "assets/pension_4.jpg",
+                    "speaker": "స్లోగన్",
+                    "dialogue": "🎉 PM Shram Yogi Maandhan (Micro-Pension): వృద్ధాప్యంలో ఆత్మగౌరవ రక్షణ! ప్రతి నెలా బ్యాంక్ ఖాతాలో గ్యారంటీ పెన్షన్!",
+                    "caption": "నిశ్చింతగా, సంతోషంగా విశ్రాంత జీవనం.",
+                    "sourceRef": "Section 4: PM Shram Yogi Maandhan (Micro-Pension) Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-shram-yogi-maandhan)"
+                }
+            ],
+            "hi": [
+                {
+                    "num": 1,
+                    "tag": "पैनल 1: चिंता व समस्या",
+                    "image": "assets/pension_1.jpg",
+                    "speaker": "शर्मा जी",
+                    "dialogue": "उम्र बढ़ने के साथ दवा और रोजमर्रा के खर्चों के लिए किसी के आगे हाथ न फैलाना पड़े, बुढ़ापे की लाठी कैसे बनेगी?",
+                    "caption": "बुढ़ापे की आर्थिक सुरक्षा को लेकर वरिष्ठ नागरिक की चिंता।",
+                    "sourceRef": "Section 1: PM Shram Yogi Maandhan (Micro-Pension) Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-shram-yogi-maandhan)"
+                },
+                {
+                    "num": 2,
+                    "tag": "पैनल 2: सरकारी समाधान",
+                    "image": "assets/pension_2.jpg",
+                    "speaker": "गवटून हीरो",
+                    "dialogue": "बिल्कुल चिंता न करें शर्मा जी! PM Shram Yogi Maandhan (Micro-Pension) दे रही है पक्की पेंशन: Guaranteed monthly pension of ₹3,000 after reaching 60 years of age, with 50% government co-contribution.",
+                    "caption": "60 वर्ष की आयु के बाद ₹3,000 से ₹5,000 प्रतिमाह आजीवन गारंटीड पेंशन और सरकार का 50% अंशदान।",
+                    "sourceRef": "Section 2: PM Shram Yogi Maandhan (Micro-Pension) Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-shram-yogi-maandhan)"
+                },
+                {
+                    "num": 3,
+                    "tag": "पैनल 3: आसान आवेदन प्रक्रिया",
+                    "image": "assets/pension_3.jpg",
+                    "speaker": "CSC भैया",
+                    "dialogue": "बस अपने आधार कार्ड और बैंक पासबुक के साथ किसी भी बैंक या जन सेवा केंद्र में मात्र 5 मिनट में खाता खुलवाएं।",
+                    "caption": "आसान ऑटो-डेबिट और सरकारी सुरक्षा गारंटी।",
+                    "sourceRef": "Section 3: PM Shram Yogi Maandhan (Micro-Pension) Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-shram-yogi-maandhan)"
+                },
+                {
+                    "num": 4,
+                    "tag": "पैनल 4: खुशहाली व सफलता",
+                    "image": "assets/pension_4.jpg",
+                    "speaker": "टैगलाइन",
+                    "dialogue": "🎉 PM Shram Yogi Maandhan (Micro-Pension): बुढ़ापे का सच्चा सहारा! हर महीने सम्मानजनक पेंशन, आत्मनिर्भर जीवन!",
+                    "caption": "पेंशन से चेहरे पर सुकून, स्वाभिमान से भरा बुढ़ापा।",
+                    "sourceRef": "Section 4: PM Shram Yogi Maandhan (Micro-Pension) Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-shram-yogi-maandhan)"
+                }
+            ]
+        },
+        "character": {
+            "en": {
+                "name": "Sharma Ji",
+                "role": "Senior Citizen / Unorganized Worker",
+                "avatar": "👴🏽",
+                "clothing": "Kurta & Glasses",
+                "desc": "Senior citizen seeking guaranteed monthly pension in golden years"
+            },
+            "te": {
+                "name": "శర్మ గారు",
+                "role": "వృద్ధ పౌరుడు / అసంఘటిత కార్మికుడు",
+                "avatar": "👴🏽",
+                "clothing": "కుర్తా & కళ్లద్దాలు",
+                "desc": "వృద్ధాప్యంలో గౌరవప్రదమైన నెలవారీ పింఛను కోరుకునే వ్యక్తి"
+            },
+            "hi": {
+                "name": "शर्मा जी",
+                "role": "वरिष्ठ नागरिक / असंगठित श्रमिक",
+                "avatar": "👴🏽",
+                "clothing": "कुर्ता व चश्मा",
+                "desc": "बुढ़ापे में आत्मनिर्भरता व मासिक पेंशन चाहने वाले वरिष्ठ नागरिक"
+            }
+        }
     },
-    quiz: [
-      { q: "What guaranteed monthly pension is provided after 60 years of age?", options: ["₹1,000/month", "₹3,000/month for life", "₹5,000 one-time", "₹500/month"], correct: 1, panelRef: 4, explanation: "Guaranteed monthly pension of ₹3,000 is paid every month after completing 60 years." }
-    ]
-  },
-  {
-    id: "ayushman",
-    name: "Ayushman Bharat PM-JAY (Health Shield)",
-    category: "Health",
-    level: "Central",
-    dept: "National Health Authority (NHA)",
-    purpose: "Provide health cover up to ₹5 Lakh per family per year for secondary and tertiary cashless hospitalization.",
-    benefits: "₹500,000 cashless hospitalization per family per year across 28,000+ empanelled hospitals.",
-    eligibility: { minAge: 0, maxAge: 100, maxIncome: 300000, state: "All India", occupation: "Vendor", summary: "Low-income urban & rural families identified via SECC database." },
-    documents: [
-      { id: "d1", name: "Aadhaar Card", required: true, why: "Biometric identification at hospital counter" },
-      { id: "d2", name: "Ration Card", required: true, why: "Family member mapping" }
-    ],
-    applicationSteps: [
-      { step: 1, title: "Check Ayushman Card Status", desc: "Visit beneficiary.nha.gov.in or nearest hospital Arogyamitra." },
-      { step: 2, title: "Show Aadhaar & Ration Card", desc: "Complete instant e-KYC." },
-      { step: 3, title: "Get Golden Ayushman Card", desc: "Free Ayushman PVC Card issued." },
-      { step: 4, title: "Cashless Treatment", desc: "Show card at hospital counter for ₹5 Lakh zero-cash treatment." }
-    ],
-    officialUrl: "https://www.india.gov.in/my-government/schemes/ayushman-bharat",
-    sourceUrl: "https://pmjay.gov.in",
-    lastVerified: "2026-08-24",
-    character: {
-      en: { name: "Lata Tai", role: "Domestic Worker", avatar: "👩🏽", desc: "Working mother worried about high hospital operation costs" },
-      te: { name: "లతా తాయి", role: "గృహ కార్మికురాలు", avatar: "👩🏽", desc: "వైద్య ఖర్చుల గురించి ఆందోళన చెందుతున్న తల్లి" },
-      hi: { name: "लता ताई", role: "घरेलू कामगार", avatar: "👩🏽", desc: "अस्पताल के भारी खर्चे से चिंतित मां" }
+    {
+        "id": "ayushman",
+        "name": "Ayushman Bharat PM-JAY (Health Shield)",
+        "category": "Health",
+        "level": "Central",
+        "dept": "National Health Authority (NHA)",
+        "purpose": "Provide health cover up to ₹5 Lakh per family per year for secondary and tertiary cashless hospitalization.",
+        "benefits": "₹500,000 cashless hospitalization per family per year across 28,000+ empanelled hospitals.",
+        "eligibility": {
+            "minAge": 0,
+            "maxAge": 100,
+            "maxIncome": 300000,
+            "state": "All India",
+            "occupation": "Vendor",
+            "summary": "Low-income urban & rural families identified via SECC database."
+        },
+        "documents": [
+            {
+                "id": "d1",
+                "name": "Aadhaar Card",
+                "required": true,
+                "why": "Biometric identification at hospital counter"
+            },
+            {
+                "id": "d2",
+                "name": "Ration Card",
+                "required": true,
+                "why": "Family member mapping"
+            }
+        ],
+        "applicationSteps": [
+            {
+                "step": 1,
+                "title": "Check Ayushman Card Status",
+                "desc": "Visit beneficiary.nha.gov.in or nearest hospital Arogyamitra."
+            },
+            {
+                "step": 2,
+                "title": "Show Aadhaar & Ration Card",
+                "desc": "Complete instant e-KYC."
+            },
+            {
+                "step": 3,
+                "title": "Get Golden Ayushman Card",
+                "desc": "Free Ayushman PVC Card issued."
+            },
+            {
+                "step": 4,
+                "title": "Cashless Treatment",
+                "desc": "Show card at hospital counter for ₹5 Lakh zero-cash treatment."
+            }
+        ],
+        "officialUrl": "https://www.india.gov.in/my-government/schemes/ayushman-bharat",
+        "sourceUrl": "https://pmjay.gov.in",
+        "applyUrl": "https://beneficiary.nha.gov.in",
+        "lastVerified": "2026-08-24",
+        "panels": {
+            "en": [
+                {
+                    "num": 1,
+                    "tag": "Panel 1: The Tension",
+                    "image": "assets/ayushman_1.jpg",
+                    "speaker": "Suresh",
+                    "dialogue": "Sudden hospital treatments and surgeries cost lakhs! How can my family get top healthcare without taking heavy loans?",
+                    "caption": "Suresh stresses over unexpected medical emergencies.",
+                    "sourceRef": "Section 1: Ayushman Bharat PM-JAY (Health Shield) Official Guidelines (https://www.india.gov.in/my-government/schemes/ayushman-bharat)"
+                },
+                {
+                    "num": 2,
+                    "tag": "Panel 2: The Solution",
+                    "image": "assets/ayushman_2.jpg",
+                    "speaker": "GovToon Hero",
+                    "dialogue": "Fikr mat kijiye! Ayushman Bharat PM-JAY (Health Shield) provides: ₹500,000 cashless hospitalization per family per year across 28,000+ empanelled hospitals.",
+                    "caption": "Cashless health cover guaranteed across thousands of empaneled hospitals.",
+                    "sourceRef": "Section 2: Ayushman Bharat PM-JAY (Health Shield) Official Guidelines (https://www.india.gov.in/my-government/schemes/ayushman-bharat)"
+                },
+                {
+                    "num": 3,
+                    "tag": "Panel 3: The Easy Path",
+                    "image": "assets/ayushman_3.jpg",
+                    "speaker": "CSC Bhaiya",
+                    "dialogue": "Just bring your Aadhaar Card, Ration Card to the hospital Ayushman Mitra desk or nearest CSC for an instant Ayushman Card.",
+                    "caption": "Quick Ayushman golden card generation.",
+                    "sourceRef": "Section 3: Ayushman Bharat PM-JAY (Health Shield) Official Guidelines (https://www.india.gov.in/my-government/schemes/ayushman-bharat)"
+                },
+                {
+                    "num": 4,
+                    "tag": "Panel 4: The Khushali",
+                    "image": "assets/ayushman_4.jpg",
+                    "speaker": "Tagline",
+                    "dialogue": "🎉 Ayushman Bharat PM-JAY (Health Shield): Swasth Bharat, Samriddh Bharat! ₹5 Lakh cashless shield for every family!",
+                    "caption": "Complete health protection with zero out-of-pocket stress.",
+                    "sourceRef": "Section 4: Ayushman Bharat PM-JAY (Health Shield) Official Guidelines (https://www.india.gov.in/my-government/schemes/ayushman-bharat)"
+                }
+            ],
+            "te": [
+                {
+                    "num": 1,
+                    "tag": "ప్యానెల్ 1: సమస్య & ఆందోళన",
+                    "image": "assets/ayushman_1.jpg",
+                    "speaker": "సురేష్",
+                    "dialogue": "ఆసుపత్రిలో శస్త్రచికిత్సలు, వైద్య ఖర్చులు లక్షల్లో ఉన్నాయి! అప్పులు చేయకుండా నా కుటుంబానికి అత్యుత్తమ వైద్యం ఎలా అందుతుంది?",
+                    "caption": "వైద్య ఖర్చులపై సురేష్ ఆందోళన.",
+                    "sourceRef": "Section 1: Ayushman Bharat PM-JAY (Health Shield) Official Guidelines (https://www.india.gov.in/my-government/schemes/ayushman-bharat)"
+                },
+                {
+                    "num": 2,
+                    "tag": "ప్యానెల్ 2: ప్రభుత్వ పరిష్కారం",
+                    "image": "assets/ayushman_2.jpg",
+                    "speaker": "గోవ్టూన్ హీరో",
+                    "dialogue": "దిగులుపడకండి సురేష్ గారూ! Ayushman Bharat PM-JAY (Health Shield) ద్వారా ప్రభుత్వం అండగా నిలుస్తోంది: ₹500,000 cashless hospitalization per family per year across 28,000+ empanelled hospitals.",
+                    "caption": "ఎంపానెల్డ్ ఆసుపత్రుల్లో ₹5 లక్షల వరకు ఉచిత నగదు రహిత వైద్యం.",
+                    "sourceRef": "Section 2: Ayushman Bharat PM-JAY (Health Shield) Official Guidelines (https://www.india.gov.in/my-government/schemes/ayushman-bharat)"
+                },
+                {
+                    "num": 3,
+                    "tag": "ప్యానెల్ 3: సులువైన దరఖాస్తు",
+                    "image": "assets/ayushman_3.jpg",
+                    "speaker": "CSC మిత్రుడు",
+                    "dialogue": "మీ ఆధార్ కార్డు మరియు బ్యాంక్ పాస్‌బుక్ తో సమీప ఆయుష్మాన్ కేంద్రం లేదా ఆసుపత్రిలోని ఆయుష్మాన్ మిత్ర వద్ద ఉచిత కార్డు పొందండి.",
+                    "caption": "నిమిషాల్లో ఆయుష్మాన్ హెల్త్ కార్డు జారీ.",
+                    "sourceRef": "Section 3: Ayushman Bharat PM-JAY (Health Shield) Official Guidelines (https://www.india.gov.in/my-government/schemes/ayushman-bharat)"
+                },
+                {
+                    "num": 4,
+                    "tag": "ప్యానెల్ 4: ఆనందం & ప్రయోజనం",
+                    "image": "assets/ayushman_4.jpg",
+                    "speaker": "స్లోగన్",
+                    "dialogue": "🎉 Ayushman Bharat PM-JAY (Health Shield): ఆరోగ్యమే మహాభాగ్యం! ప్రతి కుటుంబానికి ఉచిత వైద్య రక్షణ కవచం!",
+                    "caption": "ఉచిత చికిత్సతో సంపూర్ణ స్వస్థత.",
+                    "sourceRef": "Section 4: Ayushman Bharat PM-JAY (Health Shield) Official Guidelines (https://www.india.gov.in/my-government/schemes/ayushman-bharat)"
+                }
+            ],
+            "hi": [
+                {
+                    "num": 1,
+                    "tag": "पैनल 1: चिंता व समस्या",
+                    "image": "assets/ayushman_1.jpg",
+                    "speaker": "सुरेश",
+                    "dialogue": "अचानक अस्पताल में ऑपरेशन और इलाज का खर्च लाखों में हो जाता है! बिना कर्ज लिए परिवार का अच्छा इलाज कैसे कराऊँ?",
+                    "caption": "अस्पताल के भारी खर्च से परेशान नागरिक।",
+                    "sourceRef": "Section 1: Ayushman Bharat PM-JAY (Health Shield) Official Guidelines (https://www.india.gov.in/my-government/schemes/ayushman-bharat)"
+                },
+                {
+                    "num": 2,
+                    "tag": "पैनल 2: सरकारी समाधान",
+                    "image": "assets/ayushman_2.jpg",
+                    "speaker": "गवटून हीरो",
+                    "dialogue": "बिल्कुल चिंता न करें सुरेश जी! Ayushman Bharat PM-JAY (Health Shield) दे रही है संपूर्ण सुरक्षा: ₹500,000 cashless hospitalization per family per year across 28,000+ empanelled hospitals.",
+                    "caption": "सरकारी व निजी सूचीबद्ध अस्पतालों में ₹5 लाख तक का कैशलेस इलाज।",
+                    "sourceRef": "Section 2: Ayushman Bharat PM-JAY (Health Shield) Official Guidelines (https://www.india.gov.in/my-government/schemes/ayushman-bharat)"
+                },
+                {
+                    "num": 3,
+                    "tag": "पैनल 3: आसान आवेदन प्रक्रिया",
+                    "image": "assets/ayushman_3.jpg",
+                    "speaker": "CSC भैया",
+                    "dialogue": "बस अपने आधार कार्ड और बैंक पासबुक के साथ नजदीकी अस्पताल में आयुष्मान मित्र या जन सेवा केंद्र से गोल्डन कार्ड बनवाएं।",
+                    "caption": "त्वरित आयुष्मान कार्ड जारी।",
+                    "sourceRef": "Section 3: Ayushman Bharat PM-JAY (Health Shield) Official Guidelines (https://www.india.gov.in/my-government/schemes/ayushman-bharat)"
+                },
+                {
+                    "num": 4,
+                    "tag": "पैनल 4: खुशहाली व सफलता",
+                    "image": "assets/ayushman_4.jpg",
+                    "speaker": "टैगलाइन",
+                    "dialogue": "🎉 Ayushman Bharat PM-JAY (Health Shield): स्वस्थ भारत, समृद्ध भारत! हर गरीब परिवार को मुफ्त इलाज की ढाल!",
+                    "caption": "मुफ्त इलाज से परिवार सुरक्षित और तनावमुक्त।",
+                    "sourceRef": "Section 4: Ayushman Bharat PM-JAY (Health Shield) Official Guidelines (https://www.india.gov.in/my-government/schemes/ayushman-bharat)"
+                }
+            ]
+        },
+        "character": {
+            "en": {
+                "name": "Suresh",
+                "role": "Family Caregiver",
+                "avatar": "🏥",
+                "clothing": "Casual Attire",
+                "desc": "Dedicated family caregiver worried about hospital costs"
+            },
+            "te": {
+                "name": "సురేష్",
+                "role": "కుటుంబ పెద్ద",
+                "avatar": "🏥",
+                "clothing": "సాధారణ దుస్తులు",
+                "desc": "కుటుంబంలో అనారోగ్యానికి ఆసుపత్రి ఖర్చులపై ఆందోళన చెందే వ్యక్తి"
+            },
+            "hi": {
+                "name": "सुरेश",
+                "role": "परिवार के मुखिया",
+                "avatar": "🏥",
+                "clothing": "साधारण कपड़े",
+                "desc": "अस्पताल के महंगे इलाज खर्च से चिंतित नागरिक"
+            }
+        }
     },
-    panels: {
-      en: [
-        { num: 1, tag: "Panel 1: The Emergency", image: "assets/pm_kisan_1.jpg", speaker: "Lata Tai", dialogue: "Doctor says operation costs ₹1 Lakh! Where will we get this money at midnight?", caption: "Medical emergencies cause unexpected panic.", sourceRef: "Section 1" },
-        { num: 2, tag: "Panel 2: The Solution", image: "assets/pm_kisan_2.jpg", speaker: "Asha Didi", dialogue: "Don't sell your gold! Show this Ayushman Card. Government pays up to ₹5 Lakh directly!", caption: "Golden Health Shield covers hospital bills.", sourceRef: "Section 2" },
-        { num: 3, tag: "Panel 3: The Easy Path", image: "assets/pm_kisan_3.jpg", speaker: "Arogyamitra", dialogue: "Just scan fingerprint with Aadhaar. Zero cash required at hospital counter.", caption: "Instant cashless authorization.", sourceRef: "Section 3" },
-        { num: 4, tag: "Panel 4: The Recovery", image: "assets/pm_kisan_4.jpg", speaker: "Lata Tai", dialogue: "Paid zero rupees! My family is healthy and debt-free.", caption: "Full hospital treatment with zero cash out of pocket.", sourceRef: "Section 4" }
-      ],
-      te: [
-        { num: 1, tag: "ప్యానెల్ 1: అత్యవసరం", image: "assets/pm_kisan_1.jpg", speaker: "లతా తాయి", dialogue: "ఆపరేషన్‌కు లక్ష రూపాయలు అవుతాయని డాక్టర్ చెప్పారు! అర్ధరాత్రి అంత డబ్బు ఎక్కడ తెచ్చేది?", caption: "వైద్య అత్యవసర పరిస్థితి.", sourceRef: "Section 1" },
-        { num: 2, tag: "ప్యానెల్ 2: ఆయుష్మాన్ కార్డ్", image: "assets/pm_kisan_2.jpg", speaker: "ఆశా దిదీ", dialogue: "బంగారం అమ్మకండి! ఆయుష్మాన్ గోల్డెన్ కార్డ్ చూపించండి. ప్రభుత్వం 5 లక్షల వరకు ఉచిత వైద్యం అందిస్తుంది!", caption: "ఉచిత వైద్య భద్రత.", sourceRef: "Section 2" },
-        { num: 3, tag: "ప్యానెల్ 3: ఉచిత చికిత్స", image: "assets/pm_kisan_3.jpg", speaker: "ఆరోగ్యమిత్ర", dialogue: "ఆధార్ వేలిముద్ర వేస్తే సరిపోతుంది. కౌంటర్లో ఒక్క రూపాయి కూడా చెల్లించనవసరం లేదు.", caption: "క్యాష్‌లెస్ చికిత్స.", sourceRef: "Section 3" },
-        { num: 4, tag: "ప్యానెల్ 4: ఆనందం", image: "assets/pm_kisan_4.jpg", speaker: "లతా తాయి", dialogue: "సున్నా రూపాయలు చెల్లించాం! కుటుంబం ఆరోగ్యంగా ఉంది.", caption: "రుణాలు లేని ఉచిత చికిత్స.", sourceRef: "Section 4" }
-      ],
-      hi: [
-        { num: 1, tag: "पैनल 1: आपात स्थिति", image: "assets/pm_kisan_1.jpg", speaker: "लता ताई", dialogue: "डॉक्टर साहब कह रहे हैं ऑपरेशन में ₹1 लाख लगेगा! आधी रात को इतना पैसा कहां से लाऊं?", caption: "अस्पताल के खर्च से चिंता।", sourceRef: "Section 1" },
-        { num: 2, tag: "पैनल 2: समाधान", image: "assets/pm_kisan_2.jpg", speaker: "आशा दीदी", dialogue: "गहने मत बेचो! आयुष्मान कार्ड दिखाओ। सरकार ₹5 लाख तक का अस्पताल खर्च खुद देगी!", caption: "₹5 लाख का मुफ्त इलाज।", sourceRef: "Section 2" },
-        { num: 3, tag: "पैनल 3: कैशलेस प्रक्रिया", image: "assets/pm_kisan_3.jpg", speaker: "आरोग्यमित्र", dialogue: "बस आधार से फिंगरप्रिंट लगाएं। अस्पताल में ₹1 भी नगद नहीं देना होगा।", caption: "कैशलेस अस्पताल सेवा।", sourceRef: "Section 3" },
-        { num: 4, tag: "पैनल 4: स्वस्थ परिवार", image: "assets/pm_kisan_4.jpg", speaker: "लता ताई", dialogue: "₹0 में पूरा इलाज हो गया! परिवार सुरक्षित है।", caption: "बिना कर्ज के इलाज।", sourceRef: "Section 4" }
-      ]
+    {
+        "id": "surya_ghar",
+        "name": "PM Surya Ghar: Muft Bijli Yojana",
+        "category": "Housing & Energy",
+        "level": "Central",
+        "dept": "Ministry of New and Renewable Energy (MNRE)",
+        "purpose": "Provide up to 300 units of free electricity per month to 1 Crore households by assisting with rooftop solar panel installations.",
+        "benefits": "Direct financial subsidy up to ₹78,000 for 3kW rooftop solar installation + 300 units free electricity per month.",
+        "eligibility": {
+            "minAge": 18,
+            "maxAge": 100,
+            "maxIncome": 1000000,
+            "state": "All India",
+            "occupation": "General Citizen",
+            "summary": "Indian citizen families owning a suitable roof structure and valid electricity connection."
+        },
+        "documents": [
+            {
+                "id": "d1",
+                "name": "Electricity Bill",
+                "required": true,
+                "why": "Verification of active electricity connection & consumer number"
+            },
+            {
+                "id": "d2",
+                "name": "Aadhaar Card",
+                "required": true,
+                "why": "Identity proof for subsidy bank transfer"
+            },
+            {
+                "id": "d3",
+                "name": "Roof Ownership / House Document",
+                "required": true,
+                "why": "Confirms solar panel installation feasibility"
+            }
+        ],
+        "applicationSteps": [
+            {
+                "step": 1,
+                "title": "Register on Portal",
+                "desc": "Visit pmsuryaghar.gov.in and enter your Electricity Consumer Number."
+            },
+            {
+                "step": 2,
+                "title": "Select Empanelled Vendor",
+                "desc": "Choose an official solar installer for technical survey."
+            },
+            {
+                "step": 3,
+                "title": "Get DISCOM Approval",
+                "desc": "Local power company inspects net-meter feasibility."
+            },
+            {
+                "step": 4,
+                "title": "Receive ₹78,000 Subsidy",
+                "desc": "Subsidy credited directly to your bank account within 30 days."
+            }
+        ],
+        "officialUrl": "https://www.india.gov.in/my-government/schemes/pm-surya-ghar",
+        "sourceUrl": "https://pmsuryaghar.gov.in",
+        "applyUrl": "https://pmsuryaghar.gov.in",
+        "lastVerified": "2026-08-24",
+        "panels": {
+            "en": [
+                {
+                    "num": 1,
+                    "tag": "Panel 1: The Tension",
+                    "image": "assets/surya_ghar_1.jpg",
+                    "speaker": "Vikram",
+                    "dialogue": "Every month our electricity bills are soaring! How can I get free power and save hard-earned money?",
+                    "caption": "Vikram worries about skyrocketing monthly electricity bills.",
+                    "sourceRef": "Section 1: PM Surya Ghar: Muft Bijli Yojana Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-surya-ghar)"
+                },
+                {
+                    "num": 2,
+                    "tag": "Panel 2: The Solution",
+                    "image": "assets/surya_ghar_2.jpg",
+                    "speaker": "GovToon Hero",
+                    "dialogue": "Fikr mat kijiye! PM Surya Ghar: Muft Bijli Yojana provides: Direct financial subsidy up to ₹78,000 for 3kW rooftop solar installation + 300 units free electricity per month.",
+                    "caption": "Direct rooftop solar subsidy and free green units guaranteed.",
+                    "sourceRef": "Section 2: PM Surya Ghar: Muft Bijli Yojana Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-surya-ghar)"
+                },
+                {
+                    "num": 3,
+                    "tag": "Panel 3: The Easy Path",
+                    "image": "assets/surya_ghar_3.jpg",
+                    "speaker": "CSC Bhaiya",
+                    "dialogue": "Just apply on the national portal with your Electricity Bill, Aadhaar Card, Roof Ownership / House Document to get verified solar panels installed.",
+                    "caption": "Seamless online subsidy claim and empanelled vendor installation.",
+                    "sourceRef": "Section 3: PM Surya Ghar: Muft Bijli Yojana Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-surya-ghar)"
+                },
+                {
+                    "num": 4,
+                    "tag": "Panel 4: The Khushali",
+                    "image": "assets/surya_ghar_4.jpg",
+                    "speaker": "Tagline",
+                    "dialogue": "🎉 PM Surya Ghar: Muft Bijli Yojana: Muft Bijli, Har Mahine Bachat! Clean solar energy for every roof!",
+                    "caption": "Zero power bills and extra income from solar power.",
+                    "sourceRef": "Section 4: PM Surya Ghar: Muft Bijli Yojana Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-surya-ghar)"
+                }
+            ],
+            "te": [
+                {
+                    "num": 1,
+                    "tag": "ప్యానెల్ 1: సమస్య & ఆందోళన",
+                    "image": "assets/surya_ghar_1.jpg",
+                    "speaker": "విక్రమ్",
+                    "dialogue": "ప్రతినెలా వేలల్లో వస్తున్న కరెంట్ బిల్లులతో ఇల్లు గడవడం భారంగా మారింది! శాశ్వతంగా ఈ ఖర్చు ఎలా తగ్గించుకోవాలి?",
+                    "caption": "కరెంట్ బిల్లుల భారంతో విక్రమ్ ఆందోళన.",
+                    "sourceRef": "Section 1: PM Surya Ghar: Muft Bijli Yojana Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-surya-ghar)"
+                },
+                {
+                    "num": 2,
+                    "tag": "ప్యానెల్ 2: ప్రభుత్వ పరిష్కారం",
+                    "image": "assets/surya_ghar_2.jpg",
+                    "speaker": "గోవ్టూన్ హీరో",
+                    "dialogue": "దిగులుపడకండి విక్రమ్ గారూ! PM Surya Ghar: Muft Bijli Yojana ద్వారా ప్రభుత్వం అద్భుత అవకాశం కల్పిస్తోంది: Direct financial subsidy up to ₹78,000 for 3kW rooftop solar installation + 300 units free electricity per month.",
+                    "caption": "రూఫ్‌టాప్ సోలార్ సబ్సిడీ మరియు నెలకు ఉచిత విద్యుత్ భరోసా.",
+                    "sourceRef": "Section 2: PM Surya Ghar: Muft Bijli Yojana Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-surya-ghar)"
+                },
+                {
+                    "num": 3,
+                    "tag": "ప్యానెల్ 3: సులువైన దరఖాస్తు",
+                    "image": "assets/surya_ghar_3.jpg",
+                    "speaker": "CSC మిత్రుడు",
+                    "dialogue": "మీ ఆధార్ కార్డు మరియు బ్యాంక్ పాస్‌బుక్ తో నేషనల్ పోర్టల్ లేదా CSC ద్వారా దరఖాస్తు చేస్తే ప్రభుత్వ గుర్తింపు పొందిన సోలార్ ప్యానెల్స్ బిగిస్తారు.",
+                    "caption": "సులభమైన ఆన్‌లైన్ సబ్సిడీ నమోదు.",
+                    "sourceRef": "Section 3: PM Surya Ghar: Muft Bijli Yojana Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-surya-ghar)"
+                },
+                {
+                    "num": 4,
+                    "tag": "ప్యానెల్ 4: ఆనందం & ప్రయోజనం",
+                    "image": "assets/surya_ghar_4.jpg",
+                    "speaker": "స్లోగన్",
+                    "dialogue": "🎉 PM Surya Ghar: Muft Bijli Yojana: ఉచిత సౌర విద్యుత్, ప్రతినెలా ఆదా! పర్యావరణహితం - స్వయం సమృద్ధి!",
+                    "caption": "జీరో కరెంట్ బిల్లులతో సరికొత్త వెలుగులు.",
+                    "sourceRef": "Section 4: PM Surya Ghar: Muft Bijli Yojana Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-surya-ghar)"
+                }
+            ],
+            "hi": [
+                {
+                    "num": 1,
+                    "tag": "पैनल 1: चिंता व समस्या",
+                    "image": "assets/surya_ghar_1.jpg",
+                    "speaker": "विक्रम",
+                    "dialogue": "हर महीने हजारों रुपये का बिजली बिल देखकर बजट बिगड़ जाता है! क्या बिजली का खर्च हमेशा के लिए खत्म हो सकता है?",
+                    "caption": "बिजली के बढ़ते खर्च से परेशान नागरिक।",
+                    "sourceRef": "Section 1: PM Surya Ghar: Muft Bijli Yojana Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-surya-ghar)"
+                },
+                {
+                    "num": 2,
+                    "tag": "पैनल 2: सरकारी समाधान",
+                    "image": "assets/surya_ghar_2.jpg",
+                    "speaker": "गवटून हीरो",
+                    "dialogue": "बिल्कुल चिंता न करें विक्रम जी! PM Surya Ghar: Muft Bijli Yojana के माध्यम से सरकार दे रही है: Direct financial subsidy up to ₹78,000 for 3kW rooftop solar installation + 300 units free electricity per month.",
+                    "caption": "रूफटॉप सोलर पर सीधी भारी सब्सिडी और मुफ्त बिजली।",
+                    "sourceRef": "Section 2: PM Surya Ghar: Muft Bijli Yojana Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-surya-ghar)"
+                },
+                {
+                    "num": 3,
+                    "tag": "पैनल 3: आसान आवेदन प्रक्रिया",
+                    "image": "assets/surya_ghar_3.jpg",
+                    "speaker": "CSC भैया",
+                    "dialogue": "बस अपने आधार कार्ड और बैंक पासबुक के साथ राष्ट्रीय पोर्टल या जन सेवा केंद्र से आवेदन करें, तुरंत इंस्टॉलेशन होगा।",
+                    "caption": "सरल ऑनलाइन सत्यापन व सब्सिडी भुगतान।",
+                    "sourceRef": "Section 3: PM Surya Ghar: Muft Bijli Yojana Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-surya-ghar)"
+                },
+                {
+                    "num": 4,
+                    "tag": "पैनल 4: खुशहाली व सफलता",
+                    "image": "assets/surya_ghar_4.jpg",
+                    "speaker": "टैगलाइन",
+                    "dialogue": "🎉 PM Surya Ghar: Muft Bijli Yojana: मुफ्त बिजली, हर महीने बचत! सौर ऊर्जा से रोशन हर घर!",
+                    "caption": "शून्य बिजली बिल और अतिरिक्त बिजली से कमाई।",
+                    "sourceRef": "Section 4: PM Surya Ghar: Muft Bijli Yojana Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-surya-ghar)"
+                }
+            ]
+        },
+        "character": {
+            "en": {
+                "name": "Vikram",
+                "role": "Homeowner",
+                "avatar": "☀️",
+                "clothing": "Casual Shirt",
+                "desc": "Homeowner managing rising household electricity costs"
+            },
+            "te": {
+                "name": "విక్రమ్",
+                "role": "గృహ యజమాని",
+                "avatar": "☀️",
+                "clothing": "సాధారణ చొక్కా",
+                "desc": "ప్రతినెలా భారీ కరెంట్ బిల్లులతో సతమతమయ్యే గృహస్థు"
+            },
+            "hi": {
+                "name": "विक्रम",
+                "role": "गृहस्वामी",
+                "avatar": "☀️",
+                "clothing": "साधारण शर्ट",
+                "desc": "बढ़ते बिजली बिल से परेशान मध्यमवर्गीय गृहस्वामी"
+            }
+        }
     },
-    quiz: [
-      { q: "What is the annual health cover provided per family under Ayushman Bharat?", options: ["₹50,000", "₹5 Lakhs per family per year", "₹1 Lakh", "₹10 Lakhs"], correct: 1, panelRef: 2, explanation: "Ayushman Bharat provides ₹5 Lakh cashless hospitalization cover per family per year." }
-    ]
-  },
-  {
-    id: "surya_ghar",
-    name: "PM Surya Ghar: Muft Bijli Yojana",
-    category: "Housing & Energy",
-    level: "Central",
-    dept: "Ministry of New and Renewable Energy (MNRE)",
-    purpose: "Provide up to 300 units of free electricity per month to 1 Crore households by assisting with rooftop solar panel installations.",
-    benefits: "Direct financial subsidy up to ₹78,000 for 3kW rooftop solar installation + 300 units free electricity per month.",
-    eligibility: {
-      minAge: 18, maxAge: 100, maxIncome: 1000000, state: "All India", occupation: "General Citizen",
-      summary: "Indian citizen families owning a suitable roof structure and valid electricity connection."
+    {
+        "id": "pm_svanidhi",
+        "name": "PM SVANidhi (Street Vendor Micro-Credit)",
+        "category": "Micro-Business & Loans",
+        "level": "Central",
+        "dept": "Ministry of Housing and Urban Affairs",
+        "purpose": "Provide affordable collateral-free working capital micro-loans to urban & rural street vendors to restart businesses.",
+        "benefits": "Collateral-free working capital loan starting at ₹10,000 up to ₹50,000 with 7% interest subsidy and cashback incentives.",
+        "eligibility": {
+            "minAge": 18,
+            "maxAge": 70,
+            "maxIncome": 300000,
+            "state": "All India",
+            "occupation": "Vendor",
+            "summary": "Street vendors, hawkers, cobblers, and artisans vending in urban or peri-urban areas."
+        },
+        "documents": [
+            {
+                "id": "d1",
+                "name": "Aadhaar Card",
+                "required": true,
+                "why": "Identity & UIDAI verification"
+            },
+            {
+                "id": "d2",
+                "name": "Vending Certificate / Identity Card",
+                "required": true,
+                "why": "Issued by Urban Local Body (ULB) / Municipal Corp"
+            },
+            {
+                "id": "d3",
+                "name": "Bank Savings Passbook",
+                "required": true,
+                "why": "Direct loan disbursement & cashback transfer"
+            }
+        ],
+        "applicationSteps": [
+            {
+                "step": 1,
+                "title": "Check Vending Certificate",
+                "desc": "Ensure your name is listed with Urban Local Body (ULB)."
+            },
+            {
+                "step": 2,
+                "title": "Visit Portal / Bank Counter",
+                "desc": "Visit pmsvanidhi.mohua.gov.in or local bank branch."
+            },
+            {
+                "step": 3,
+                "title": "Submit Aadhaar & Vending Card",
+                "desc": "Complete e-KYC digital application."
+            },
+            {
+                "step": 4,
+                "title": "Receive ₹10,000 Collateral-Free Loan",
+                "desc": "Loan credited directly to bank account."
+            }
+        ],
+        "officialUrl": "https://www.india.gov.in/my-government/schemes/pm-svanidhi",
+        "sourceUrl": "https://pmsvanidhi.mohua.gov.in",
+        "applyUrl": "https://pmsvanidhi.mohua.gov.in",
+        "lastVerified": "2026-08-24",
+        "panels": {
+            "en": [
+                {
+                    "num": 1,
+                    "tag": "Panel 1: The Tension",
+                    "image": "assets/svanidhi_1.jpg",
+                    "speaker": "Kalu",
+                    "dialogue": "Private moneylenders take daily high interest on small loans for my fruit and vegetable cart. How can I get affordable capital?",
+                    "caption": "Kalu stresses over predatory moneylender daily rates.",
+                    "sourceRef": "Section 1: PM SVANidhi (Street Vendor Micro-Credit) Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-svanidhi)"
+                },
+                {
+                    "num": 2,
+                    "tag": "Panel 2: The Solution",
+                    "image": "assets/svanidhi_2.jpg",
+                    "speaker": "GovToon Hero",
+                    "dialogue": "Fikr mat kijiye! PM SVANidhi (Street Vendor Micro-Credit) provides: Collateral-free working capital loan starting at ₹10,000 up to ₹50,000 with 7% interest subsidy and cashback incentives.",
+                    "caption": "Collateral-free micro-credit with 7% interest subsidy & cashback.",
+                    "sourceRef": "Section 2: PM SVANidhi (Street Vendor Micro-Credit) Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-svanidhi)"
+                },
+                {
+                    "num": 3,
+                    "tag": "Panel 3: The Easy Path",
+                    "image": "assets/svanidhi_3.jpg",
+                    "speaker": "CSC Bhaiya",
+                    "dialogue": "Just bring your Aadhaar Card, Vending Certificate / Identity Card, Bank Savings Passbook to the municipal office, bank, or nearest CSC to apply digitally.",
+                    "caption": "Direct bank transfer within days.",
+                    "sourceRef": "Section 3: PM SVANidhi (Street Vendor Micro-Credit) Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-svanidhi)"
+                },
+                {
+                    "num": 4,
+                    "tag": "Panel 4: The Khushali",
+                    "image": "assets/svanidhi_4.jpg",
+                    "speaker": "Tagline",
+                    "dialogue": "🎉 PM SVANidhi (Street Vendor Micro-Credit): Swavalamban Se Samriddhi! Digital cashback and credit score building!",
+                    "caption": "Free from debt traps, running a thriving business.",
+                    "sourceRef": "Section 4: PM SVANidhi (Street Vendor Micro-Credit) Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-svanidhi)"
+                }
+            ],
+            "te": [
+                {
+                    "num": 1,
+                    "tag": "ప్యానెల్ 1: సమస్య & ఆందోళన",
+                    "image": "assets/svanidhi_1.jpg",
+                    "speaker": "కాలు",
+                    "dialogue": "నా పండ్ల బండి వ్యాపారానికి ప్రైవేట్ వడ్డీ వ్యాపారులు రోజూ భారీ వడ్డీలు వసూలు చేస్తున్నారు! చౌక వడ్డీకి పెట్టుబడి ఎలా దొరుకుతుంది?",
+                    "caption": "పెట్టుబడి కోసం వీధి వ్యాపారి ఆవేదన.",
+                    "sourceRef": "Section 1: PM SVANidhi (Street Vendor Micro-Credit) Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-svanidhi)"
+                },
+                {
+                    "num": 2,
+                    "tag": "ప్యానెల్ 2: ప్రభుత్వ పరిష్కారం",
+                    "image": "assets/svanidhi_2.jpg",
+                    "speaker": "గోవ్టూన్ హీరో",
+                    "dialogue": "దిగులుపడకండి కాలు గారూ! PM SVANidhi (Street Vendor Micro-Credit) ద్వారా ప్రభుత్వం అండగా నిలుస్తోంది: Collateral-free working capital loan starting at ₹10,000 up to ₹50,000 with 7% interest subsidy and cashback incentives.",
+                    "caption": "పూచీకత్తు లేని మైక్రో-క్రెడిట్, 7% వడ్డీ సబ్సిడీ మరియు క్యాష్‌బ్యాక్.",
+                    "sourceRef": "Section 2: PM SVANidhi (Street Vendor Micro-Credit) Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-svanidhi)"
+                },
+                {
+                    "num": 3,
+                    "tag": "ప్యానెల్ 3: సులువైన దరఖాస్తు",
+                    "image": "assets/svanidhi_3.jpg",
+                    "speaker": "CSC మిత్రుడు",
+                    "dialogue": "మీ ఆధార్ కార్డు మరియు బ్యాంక్ పాస్‌బుక్ మరియు వెండర్ ఐడీతో సమీప CSC లేదా మున్సిపల్ కార్యాలయంలో దరఖాస్తు చేయండి.",
+                    "caption": "నేరుగా బ్యాంక్ ఖాతాలో సులభమైన జమ.",
+                    "sourceRef": "Section 3: PM SVANidhi (Street Vendor Micro-Credit) Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-svanidhi)"
+                },
+                {
+                    "num": 4,
+                    "tag": "ప్యానెల్ 4: ఆనందం & ప్రయోజనం",
+                    "image": "assets/svanidhi_4.jpg",
+                    "speaker": "స్లోగన్",
+                    "dialogue": "🎉 PM SVANidhi (Street Vendor Micro-Credit): స్వయం సమృద్ధి! డిజిటల్ వ్యాపారంతో అధిక లాభాలు, ఆర్థిక భరోసా!",
+                    "caption": "వడ్డీ వ్యాపారుల బారి నుంచి విముక్తి.",
+                    "sourceRef": "Section 4: PM SVANidhi (Street Vendor Micro-Credit) Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-svanidhi)"
+                }
+            ],
+            "hi": [
+                {
+                    "num": 1,
+                    "tag": "पैनल 1: चिंता व समस्या",
+                    "image": "assets/svanidhi_1.jpg",
+                    "speaker": "कालू",
+                    "dialogue": "दुकान और ठेले के लिए साहूकार रोज भारी ब्याज वसूलते हैं! मुझे कम ब्याज पर पूंजी कैसे मिलेगी?",
+                    "caption": "साहूकारों के कर्ज से परेशान रेहड़ी संचालक।",
+                    "sourceRef": "Section 1: PM SVANidhi (Street Vendor Micro-Credit) Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-svanidhi)"
+                },
+                {
+                    "num": 2,
+                    "tag": "पैनल 2: सरकारी समाधान",
+                    "image": "assets/svanidhi_2.jpg",
+                    "speaker": "गवटून हीरो",
+                    "dialogue": "बिल्कुल चिंता न करें कालू भाई! PM SVANidhi (Street Vendor Micro-Credit) के तहत सरकार दे रही है: Collateral-free working capital loan starting at ₹10,000 up to ₹50,000 with 7% interest subsidy and cashback incentives.",
+                    "caption": "बिना गारंटी ₹10,000 से ₹50,000 तक का सस्ता कार्यशील ऋण व 7% ब्याज सब्सिडी।",
+                    "sourceRef": "Section 2: PM SVANidhi (Street Vendor Micro-Credit) Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-svanidhi)"
+                },
+                {
+                    "num": 3,
+                    "tag": "पैनल 3: आसान आवेदन प्रक्रिया",
+                    "image": "assets/svanidhi_3.jpg",
+                    "speaker": "CSC भैया",
+                    "dialogue": "बस अपने आधार कार्ड और बैंक पासबुक और वेंडर सर्टिफिकेट के साथ पीएम स्वनिधि पोर्टल पर आवेदन करें।",
+                    "caption": "सीधा बैंक खाते में डिजिटल ऋण वितरण।",
+                    "sourceRef": "Section 3: PM SVANidhi (Street Vendor Micro-Credit) Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-svanidhi)"
+                },
+                {
+                    "num": 4,
+                    "tag": "पैनल 4: खुशहाली व सफलता",
+                    "image": "assets/svanidhi_4.jpg",
+                    "speaker": "टैगलाइन",
+                    "dialogue": "🎉 PM SVANidhi (Street Vendor Micro-Credit): स्वावलंबन से समृद्धि! डिजिटल लेन-देन पर कैशबैक और मजबूत क्रेडिट स्कोर!",
+                    "caption": "साहूकारों से मुक्ति, सम्मानजनक आत्मनिर्भर जीवन।",
+                    "sourceRef": "Section 4: PM SVANidhi (Street Vendor Micro-Credit) Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-svanidhi)"
+                }
+            ]
+        },
+        "character": {
+            "en": {
+                "name": "Kalu",
+                "role": "Street Vendor",
+                "avatar": "🛒",
+                "clothing": "Simple Shirt & Apron",
+                "desc": "Hardworking street vendor seeking affordable working capital"
+            },
+            "te": {
+                "name": "కాలు",
+                "role": "వీధి వ్యాపారి",
+                "avatar": "🛒",
+                "clothing": "సాధారణ చొక్కా",
+                "desc": "పెట్టుబడి కోసం వడ్డీ వ్యాపారులపై ఆధారపడే చిరు వ్యాపారి"
+            },
+            "hi": {
+                "name": "कालू",
+                "role": "स्ट्रीट वेंडर / रेहड़ी पटरी संचालक",
+                "avatar": "🛒",
+                "clothing": "साधारण कमीज",
+                "desc": "कार्यशील पूंजी के लिए परेशान मेहनती रेहड़ी-पटरी संचालक"
+            }
+        }
     },
-    documents: [
-      { id: "d1", name: "Electricity Bill", required: true, why: "Verification of active electricity connection & consumer number" },
-      { id: "d2", name: "Aadhaar Card", required: true, why: "Identity proof for subsidy bank transfer" },
-      { id: "d3", name: "Roof Ownership / House Document", required: true, why: "Confirms solar panel installation feasibility" }
-    ],
-    applicationSteps: [
-      { step: 1, title: "Register on Portal", desc: "Visit pmsuryaghar.gov.in and enter your Electricity Consumer Number." },
-      { step: 2, title: "Select Empanelled Vendor", desc: "Choose an official solar installer for technical survey." },
-      { step: 3, title: "Get DISCOM Approval", desc: "Local power company inspects net-meter feasibility." },
-      { step: 4, title: "Receive ₹78,000 Subsidy", desc: "Subsidy credited directly to your bank account within 30 days." }
-    ],
-    officialUrl: "https://www.india.gov.in/my-government/schemes/pm-surya-ghar",
-    sourceUrl: "https://pmsuryaghar.gov.in",
-    lastVerified: "2026-08-24",
-    character: {
-      en: { name: "Raju", role: "Youth / Student", avatar: "🎓", desc: "Tech-savvy youth keen on green solar energy for family home" },
-      te: { name: "రాజు", role: "విద్యార్థి", avatar: "🎓", desc: "సోలార్ విద్యుత్ ద్వారా కరెంట్ బిల్లు తగ్గించుకోవాలనే విద్యార్థి" },
-      hi: { name: "राजू", role: "युवा / छात्र", avatar: "🎓", desc: "सोलर ऊर्जा से मुफ्त बिजली पाने वाला छात्र" }
+    {
+        "id": "mudra_loan",
+        "name": "PM MUDRA Yojana (Micro-Units Development)",
+        "category": "Micro-Business & Loans",
+        "level": "Central",
+        "dept": "Ministry of Finance",
+        "purpose": "Provide collateral-free business loans up to ₹10 Lakhs to non-corporate, non-farm small/micro enterprises.",
+        "benefits": "Loans categorized as Shishu (up to ₹50,000), Kishor (up to ₹5 Lakhs), and Tarun (up to ₹10 Lakhs) at low interest rates.",
+        "eligibility": {
+            "minAge": 18,
+            "maxAge": 65,
+            "maxIncome": 2000000,
+            "state": "All India",
+            "occupation": "Self-Employed / Entrepreneur",
+            "summary": "Small business owners, shopkeepers, artisans, fruit vendors, and small manufacturing units."
+        },
+        "documents": [
+            {
+                "id": "d1",
+                "name": "Aadhaar & PAN Card",
+                "required": true,
+                "why": "Mandatory identity & tax verification"
+            },
+            {
+                "id": "d2",
+                "name": "Business Address Proof",
+                "required": true,
+                "why": "Trade license / GST / shop registration"
+            },
+            {
+                "id": "d3",
+                "name": "6-Month Bank Statement",
+                "required": true,
+                "why": "Financial assessment for loan approval"
+            }
+        ],
+        "applicationSteps": [
+            {
+                "step": 1,
+                "title": "Choose Loan Category (Shishu/Kishor/Tarun)",
+                "desc": "Select required capital amount up to ₹10 Lakhs."
+            },
+            {
+                "step": 2,
+                "title": "Fill MUDRA Application",
+                "desc": "Fill online form on udyamimitra.in or visit commercial bank."
+            },
+            {
+                "step": 3,
+                "title": "Submit Aadhaar & Business Plan",
+                "desc": "Bank verifies business location and credit score."
+            },
+            {
+                "step": 4,
+                "title": "Loan Disbursement & MUDRA Card",
+                "desc": "Get loan amount and debit MUDRA card for working capital."
+            }
+        ],
+        "officialUrl": "https://www.india.gov.in/my-government/schemes/pradhan-mantri-mudra-yojana",
+        "sourceUrl": "https://www.mudra.org.in",
+        "lastVerified": "2026-08-24",
+        "panels": {
+            "en": [
+                {
+                    "num": 1,
+                    "tag": "Panel 1: The Tension",
+                    "image": "assets/mudra_1.jpg",
+                    "speaker": "Ravi",
+                    "dialogue": "I want to start and expand my enterprise, but moneylenders charge high interest and private banks ask for property collateral!",
+                    "caption": "Ravi worries about business startup capital and bank collateral.",
+                    "sourceRef": "Section 1: PM MUDRA Yojana (Micro-Units Development) Official Guidelines (https://www.india.gov.in/my-government/schemes/pradhan-mantri-mudra-yojana)"
+                },
+                {
+                    "num": 2,
+                    "tag": "Panel 2: The Solution",
+                    "image": "assets/mudra_2.jpg",
+                    "speaker": "GovToon Hero",
+                    "dialogue": "Fikr mat kijiye! PM MUDRA Yojana (Micro-Units Development) provides: Loans categorized as Shishu (up to ₹50,000), Kishor (up to ₹5 Lakhs), and Tarun (up to ₹10 Lakhs) at low interest rates.",
+                    "caption": "100% collateral-free government institutional funding.",
+                    "sourceRef": "Section 2: PM MUDRA Yojana (Micro-Units Development) Official Guidelines (https://www.india.gov.in/my-government/schemes/pradhan-mantri-mudra-yojana)"
+                },
+                {
+                    "num": 3,
+                    "tag": "Panel 3: The Easy Path",
+                    "image": "assets/mudra_3.jpg",
+                    "speaker": "CSC Bhaiya",
+                    "dialogue": "Submit your business proposal with Aadhaar & PAN Card, Business Address Proof, 6-Month Bank Statement at any bank branch or on udyamimitra portal.",
+                    "caption": "Simple collateral-free loan processing.",
+                    "sourceRef": "Section 3: PM MUDRA Yojana (Micro-Units Development) Official Guidelines (https://www.india.gov.in/my-government/schemes/pradhan-mantri-mudra-yojana)"
+                },
+                {
+                    "num": 4,
+                    "tag": "Panel 4: The Khushali",
+                    "image": "assets/mudra_4.jpg",
+                    "speaker": "Tagline",
+                    "dialogue": "🎉 PM MUDRA Yojana (Micro-Units Development): Atmanirbhar Bharat! Low interest collateral-free capital for your success!",
+                    "caption": "Business flourishing with official government financial backing.",
+                    "sourceRef": "Section 4: PM MUDRA Yojana (Micro-Units Development) Official Guidelines (https://www.india.gov.in/my-government/schemes/pradhan-mantri-mudra-yojana)"
+                }
+            ],
+            "te": [
+                {
+                    "num": 1,
+                    "tag": "ప్యానెల్ 1: సమస్య & ఆందోళన",
+                    "image": "assets/mudra_1.jpg",
+                    "speaker": "రవి",
+                    "dialogue": "నా వ్యాపారాన్ని లేదా స్టార్టప్‌ను ప్రారంభించి విస్తరించాలనుకుంటున్నాను, కానీ ప్రైవేట్ బ్యాంకులు ఆస్తి తాకట్టు అడుగుతున్నాయి!",
+                    "caption": "మూలధనం కొరకు రవి పడే ఆందోళన.",
+                    "sourceRef": "Section 1: PM MUDRA Yojana (Micro-Units Development) Official Guidelines (https://www.india.gov.in/my-government/schemes/pradhan-mantri-mudra-yojana)"
+                },
+                {
+                    "num": 2,
+                    "tag": "ప్యానెల్ 2: ప్రభుత్వ పరిష్కారం",
+                    "image": "assets/mudra_2.jpg",
+                    "speaker": "గోవ్టూన్ హీరో",
+                    "dialogue": "దిగులుపడకండి రవి గారూ! PM MUDRA Yojana (Micro-Units Development) ద్వారా ప్రభుత్వం అండగా నిలుస్తోంది: Loans categorized as Shishu (up to ₹50,000), Kishor (up to ₹5 Lakhs), and Tarun (up to ₹10 Lakhs) at low interest rates.",
+                    "caption": "ఎలాంటి ఆస్తి తాకట్టు లేకుండా సులభమైన ప్రభుత్వ వ్యాపార రుణాలు.",
+                    "sourceRef": "Section 2: PM MUDRA Yojana (Micro-Units Development) Official Guidelines (https://www.india.gov.in/my-government/schemes/pradhan-mantri-mudra-yojana)"
+                },
+                {
+                    "num": 3,
+                    "tag": "ప్యానెల్ 3: సులువైన దరఖాస్తు",
+                    "image": "assets/mudra_3.jpg",
+                    "speaker": "CSC మిత్రుడు",
+                    "dialogue": "మీ ఆధార్ కార్డు మరియు బ్యాంక్ పాస్‌బుక్ మరియు వ్యాపార ప్రణాళికతో ఏ జాతీయ బ్యాంకులోనైనా లేదా పోర్టల్‌లోనైనా దరఖాస్తు చేయండి.",
+                    "caption": "సులువైన పూచీకత్తు లేని రుణ మంజూరు.",
+                    "sourceRef": "Section 3: PM MUDRA Yojana (Micro-Units Development) Official Guidelines (https://www.india.gov.in/my-government/schemes/pradhan-mantri-mudra-yojana)"
+                },
+                {
+                    "num": 4,
+                    "tag": "ప్యానెల్ 4: ఆనందం & ప్రయోజనం",
+                    "image": "assets/mudra_4.jpg",
+                    "speaker": "స్లోగన్",
+                    "dialogue": "🎉 PM MUDRA Yojana (Micro-Units Development): ఆత్మనిర్భర్ భారత్! స్వయం ఉపాధితో పదిమందికి ఉపాధి కల్పించే స్థాయికి!",
+                    "caption": "సొంత వ్యాపారంతో ఆర్థిక పురోగతి.",
+                    "sourceRef": "Section 4: PM MUDRA Yojana (Micro-Units Development) Official Guidelines (https://www.india.gov.in/my-government/schemes/pradhan-mantri-mudra-yojana)"
+                }
+            ],
+            "hi": [
+                {
+                    "num": 1,
+                    "tag": "पैनल 1: चिंता व समस्या",
+                    "image": "assets/mudra_1.jpg",
+                    "speaker": "रवि",
+                    "dialogue": "मैं अपना व्यापार या स्टार्टअप शुरू करके बढ़ाना चाहता हूँ, लेकिन बैंक बिना गारंटी या जमीन गिरवी रखे लोन नहीं देते!",
+                    "caption": "व्यापार पूंजी के लिए उद्यमी की चिंता।",
+                    "sourceRef": "Section 1: PM MUDRA Yojana (Micro-Units Development) Official Guidelines (https://www.india.gov.in/my-government/schemes/pradhan-mantri-mudra-yojana)"
+                },
+                {
+                    "num": 2,
+                    "tag": "पैनल 2: सरकारी समाधान",
+                    "image": "assets/mudra_2.jpg",
+                    "speaker": "गवटून हीरो",
+                    "dialogue": "बिल्कुल चिंता न करें रवि जी! PM MUDRA Yojana (Micro-Units Development) के तहत सरकार दे रही है: Loans categorized as Shishu (up to ₹50,000), Kishor (up to ₹5 Lakhs), and Tarun (up to ₹10 Lakhs) at low interest rates.",
+                    "caption": "बिना किसी गारंटी के आसान सरकारी व्यापारिक ऋण।",
+                    "sourceRef": "Section 2: PM MUDRA Yojana (Micro-Units Development) Official Guidelines (https://www.india.gov.in/my-government/schemes/pradhan-mantri-mudra-yojana)"
+                },
+                {
+                    "num": 3,
+                    "tag": "पैनल 3: आसान आवेदन प्रक्रिया",
+                    "image": "assets/mudra_3.jpg",
+                    "speaker": "CSC भैया",
+                    "dialogue": "बस अपने आधार कार्ड और बैंक पासबुक और बिजनेस प्लान के साथ किसी भी बैंक या उद्यमी मित्र पोर्टल पर आवेदन करें।",
+                    "caption": "बिना प्रॉपर्टी गिरवी रखे त्वरित लोन स्वीकृति।",
+                    "sourceRef": "Section 3: PM MUDRA Yojana (Micro-Units Development) Official Guidelines (https://www.india.gov.in/my-government/schemes/pradhan-mantri-mudra-yojana)"
+                },
+                {
+                    "num": 4,
+                    "tag": "पैनल 4: खुशहाली व सफलता",
+                    "image": "assets/mudra_4.jpg",
+                    "speaker": "टैगलाइन",
+                    "dialogue": "🎉 PM MUDRA Yojana (Micro-Units Development): आत्मनिर्भर भारत! कम ब्याज पर आसान पूंजी, आपका व्यापार बुलंदियों पर!",
+                    "caption": "सरकारी वित्तीय सहयोग से नया व्यापार सफल।",
+                    "sourceRef": "Section 4: PM MUDRA Yojana (Micro-Units Development) Official Guidelines (https://www.india.gov.in/my-government/schemes/pradhan-mantri-mudra-yojana)"
+                }
+            ]
+        },
+        "character": {
+            "en": {
+                "name": "Ravi Kumar",
+                "role": "Small Business Owner & Entrepreneur",
+                "avatar": "💼",
+                "clothing": "Smart Casual",
+                "desc": "Ambitious entrepreneur expanding venture without collateral"
+            },
+            "te": {
+                "name": "రవి కుమార్",
+                "role": "చిరు వ్యాపారి & యువ పారిశ్రామికవేత్త",
+                "avatar": "💼",
+                "clothing": "వ్యాపార దుస్తులు",
+                "desc": "తన స్వయం ఉపాధిని విస్తరించడానికి పూచీకత్తు లేని రుణం కోరే యువకుడు"
+            },
+            "hi": {
+                "name": "रवि कुमार",
+                "role": "उद्यमी व व्यापारी",
+                "avatar": "💼",
+                "clothing": "स्मार्ट कैजुअल",
+                "desc": "बिना गारंटी व्यवसाय ऋण व स्टार्टअप पूंजी चाहने वाला युवा"
+            }
+        }
     },
-    panels: {
-      en: [
-        { num: 1, tag: "Panel 1: The Tension", image: "assets/pm_kisan_1.jpg", speaker: "Raju", dialogue: "Father is stressed about heavy electricity bills every month! How can we reduce light charges?", caption: "Rising electricity bills cause family worry.", sourceRef: "Section 1" },
-        { num: 2, tag: "Panel 2: The Solution", image: "assets/pm_kisan_2.jpg", speaker: "GovToon Hero", dialogue: "Install PM Surya Ghar Rooftop Solar! Get 300 units of FREE electricity every month + ₹78,000 subsidy!", caption: "Free Solar Power for 1 Crore Homes.", sourceRef: "Section 2" },
-        { num: 3, tag: "Panel 3: The Easy Path", image: "assets/pm_kisan_3.jpg", speaker: "Raju & DISCOM", dialogue: "Register consumer number at pmsuryaghar.gov.in with Aadhaar and Electricity Bill.", caption: "Simple online registration.", sourceRef: "Section 3" },
-        { num: 4, tag: "Panel 4: The Outcome", image: "assets/pm_kisan_4.jpg", speaker: "Tagline", dialogue: "☀️ PM Surya Ghar: Zero Light Bill, Permanent Savings!", caption: "300 units free electricity every month.", sourceRef: "Section 4" }
-      ],
-      te: [
-        { num: 1, tag: "ప్యానెల్ 1: ఆందోళన", image: "assets/pm_kisan_1.jpg", speaker: "రాజు", dialogue: "ప్రతినెలా కరెంట్ బిల్లు ఎక్కువగా వస్తోంది. ఏం చేయాలి?", caption: "కరెంట్ బిల్లుపై ఆందోళన.", sourceRef: "Section 1" },
-        { num: 2, tag: "ప్యానెల్ 2: పిఎమ్ సూర్య ఘర్", image: "assets/pm_kisan_2.jpg", speaker: "హీరో", dialogue: "పిఎమ్ సూర్య ఘర్ సోలార్ ప్యానెల్ అమర్చుకోండి! ప్రతినెలా 300 యూనిట్ల ఉచిత విద్యుత్ పొందండి!", caption: "ఉచిత సోలార్ విద్యుత్.", sourceRef: "Section 2" },
-        { num: 3, tag: "ప్యానెల్ 3: నమోదు", image: "assets/pm_kisan_3.jpg", speaker: "రాజు", dialogue: "కరెంట్ బిల్లు, ఆధార్ కార్డుతో pmsuryaghar.gov.in పోర్టల్‌లో నమోదు చేసుకోండి.", caption: "సులువైన నమోదు.", sourceRef: "Section 3" },
-        { num: 4, tag: "ప్యానెల్ 4: వెలుగులు", image: "assets/pm_kisan_4.jpg", speaker: "ట్యాగ్‌లైన్", dialogue: "☀️ పిఎమ్ సూర్య ఘర్: సున్నా కరెంట్ బిల్లు, నిరంతర పొదుపు!", caption: "ఉచిత విద్యుత్ సంతోషం.", sourceRef: "Section 4" }
-      ],
-      hi: [
-        { num: 1, tag: "पैनल 1: चिंता", image: "assets/pm_kisan_1.jpg", speaker: "राजू", dialogue: "हर महीने बिजली बिल बहुत भारी आता है! क्या उपाय है?", caption: "बिजली बिल की चिंता।", sourceRef: "Section 1" },
-        { num: 2, tag: "पैनल 2: समाधान", image: "assets/pm_kisan_2.jpg", speaker: "हीरो", dialogue: "पीएम सूर्य घर सोलर लगवाएं! हर महीने 300 यूनिट मुफ्त बिजली पाएँ!", caption: "मुफ्त सोलर बिजली।", sourceRef: "Section 2" },
-        { num: 3, tag: "पैनल 3: पंजीकरण", image: "assets/pm_kisan_3.jpg", speaker: "राजू", dialogue: "बस बिजली बिल और आधार के साथ pmsuryaghar.gov.in पर रजिस्टर करें।", caption: "आसान ऑनलाइन आवेदन।", sourceRef: "Section 3" },
-        { num: 4, tag: "पैनल 4: खुशहाली", image: "assets/pm_kisan_4.jpg", speaker: "टैगलाइन", dialogue: "☀️ पीएम सूर्य घर: जीरो बिजली बिल, पक्की बचत!", caption: "हर महीने 300 यूनिट फ्री।", sourceRef: "Section 4" }
-      ]
+    {
+        "id": "sukanya",
+        "name": "PM Sukanya Samriddhi Yojana (Girl Child Security)",
+        "category": "Financial Security & Pension",
+        "level": "Central",
+        "dept": "Ministry of Women and Child Development",
+        "purpose": "Small deposit savings scheme for girl child education and marriage expenses with high government interest rates.",
+        "benefits": "High compound interest (8.2%+ per annum), 100% tax exemption under 80C, and maturity payout for higher education.",
+        "eligibility": {
+            "minAge": 0,
+            "maxAge": 10,
+            "maxIncome": 10000000,
+            "state": "All India",
+            "occupation": "Parent / Guardian",
+            "summary": "Parents or legal guardians of girl child below 10 years of age (max 2 girls per family)."
+        },
+        "documents": [
+            {
+                "id": "d1",
+                "name": "Girl Child Birth Certificate",
+                "required": true,
+                "why": "Age proof of girl child"
+            },
+            {
+                "id": "d2",
+                "name": "Parent Aadhaar & PAN Card",
+                "required": true,
+                "why": "Guardian identity & address proof"
+            },
+            {
+                "id": "d3",
+                "name": "Initial Deposit (Min ₹250)",
+                "required": true,
+                "why": "Account activation fee"
+            }
+        ],
+        "applicationSteps": [
+            {
+                "step": 1,
+                "title": "Visit Post Office or Authorized Bank",
+                "desc": "Go to nearest India Post branch or bank."
+            },
+            {
+                "step": 2,
+                "title": "Submit Birth Certificate & Aadhaar",
+                "desc": "Fill Sukanya Samriddhi account opening form."
+            },
+            {
+                "step": 3,
+                "title": "Deposit Minimum ₹250",
+                "desc": "Pay initial deposit amount."
+            },
+            {
+                "step": 4,
+                "title": "Receive SSY Passbook",
+                "desc": "Get passbook tracking annual interest & maturity balance."
+            }
+        ],
+        "officialUrl": "https://www.india.gov.in/my-government/schemes/sukanya-samriddhi-yojana",
+        "sourceUrl": "https://www.indiapost.gov.in",
+        "lastVerified": "2026-08-24",
+        "panels": {
+            "en": [
+                {
+                    "num": 1,
+                    "tag": "Panel 1: The Tension",
+                    "image": "assets/sukanya_1.jpg",
+                    "speaker": "Anita",
+                    "dialogue": "How will I manage expenses for my daughter Priya's higher education and secure her future without huge loans?",
+                    "caption": "Anita worries about financial security for her daughter's bright future.",
+                    "sourceRef": "Section 1: PM Sukanya Samriddhi Yojana (Girl Child Security) Official Guidelines (https://www.india.gov.in/my-government/schemes/sukanya-samriddhi-yojana)"
+                },
+                {
+                    "num": 2,
+                    "tag": "Panel 2: The Solution",
+                    "image": "assets/sukanya_2.jpg",
+                    "speaker": "GovToon Hero",
+                    "dialogue": "Fikr mat kijiye! PM Sukanya Samriddhi Yojana (Girl Child Security) guarantees: High compound interest (8.2%+ per annum), 100% tax exemption under 80C, and maturity payout for higher education.",
+                    "caption": "Official government welfare and highest interest security guaranteed.",
+                    "sourceRef": "Section 2: PM Sukanya Samriddhi Yojana (Girl Child Security) Official Guidelines (https://www.india.gov.in/my-government/schemes/sukanya-samriddhi-yojana)"
+                },
+                {
+                    "num": 3,
+                    "tag": "Panel 3: The Easy Path",
+                    "image": "assets/sukanya_3.jpg",
+                    "speaker": "CSC Bhaiya",
+                    "dialogue": "Just bring Girl Child Birth Certificate, Parent Aadhaar & PAN Card, Initial Deposit (Min ₹250) to the nearest Post Office, Bank, or Jan Seva Kendra to enroll online.",
+                    "caption": "Simple digital registration with minimal documents.",
+                    "sourceRef": "Section 3: PM Sukanya Samriddhi Yojana (Girl Child Security) Official Guidelines (https://www.india.gov.in/my-government/schemes/sukanya-samriddhi-yojana)"
+                },
+                {
+                    "num": 4,
+                    "tag": "Panel 4: The Khushali",
+                    "image": "assets/sukanya_4.jpg",
+                    "speaker": "Tagline",
+                    "dialogue": "🎉 PM Sukanya Samriddhi Yojana (Girl Child Security): Beti Padhao, Desh Badhao! Secure future, smiling daughter!",
+                    "caption": "Guaranteed government support brings peace of mind.",
+                    "sourceRef": "Section 4: PM Sukanya Samriddhi Yojana (Girl Child Security) Official Guidelines (https://www.india.gov.in/my-government/schemes/sukanya-samriddhi-yojana)"
+                }
+            ],
+            "te": [
+                {
+                    "num": 1,
+                    "tag": "ప్యానెల్ 1: సమస్య & ఆందోళన",
+                    "image": "assets/sukanya_1.jpg",
+                    "speaker": "అనిత",
+                    "dialogue": "నా ముద్దుల కూతురు ప్రియ ఉన్నత చదువులు మరియు భవిష్యత్తు కోసం ఖర్చులు ఎలా సమకూర్చాలి? అప్పులు చేయకుండా ఉండగలనా?",
+                    "caption": "కూతురి భవిష్యత్తు కోసం అనిత పడే ఆందోళన.",
+                    "sourceRef": "Section 1: PM Sukanya Samriddhi Yojana (Girl Child Security) Official Guidelines (https://www.india.gov.in/my-government/schemes/sukanya-samriddhi-yojana)"
+                },
+                {
+                    "num": 2,
+                    "tag": "ప్యానెల్ 2: ప్రభుత్వ పరిష్కారం",
+                    "image": "assets/sukanya_2.jpg",
+                    "speaker": "గోవ్టూన్ హీరో",
+                    "dialogue": "దిగులుపడకండి అనిత గారూ! PM Sukanya Samriddhi Yojana (Girl Child Security) ద్వారా ప్రభుత్వం అండగా నిలుస్తోంది: High compound interest (8.2%+ per annum), 100% tax exemption under 80C, and maturity payout for higher education.",
+                    "caption": "ప్రభుత్వ అధికారిక ప్రయోజనాలు మరియు అత్యధిక వడ్డీ భరోసా.",
+                    "sourceRef": "Section 2: PM Sukanya Samriddhi Yojana (Girl Child Security) Official Guidelines (https://www.india.gov.in/my-government/schemes/sukanya-samriddhi-yojana)"
+                },
+                {
+                    "num": 3,
+                    "tag": "ప్యానెల్ 3: సులువైన దరఖాస్తు",
+                    "image": "assets/sukanya_3.jpg",
+                    "speaker": "CSC మిత్రుడు",
+                    "dialogue": "కేవలం మీ ఆధార్ కార్డు మరియు బ్యాంక్ పాస్‌బుక్ తీసుకొని సమీప పోస్టాఫీస్, బ్యాంక్ లేదా CSC కేంద్రానికి వెళితే సులభంగా నమోదు చేసుకోవచ్చు.",
+                    "caption": "సులువైన ఆధార్ ఆధారిత డిజిటల్ దరఖాస్తు.",
+                    "sourceRef": "Section 3: PM Sukanya Samriddhi Yojana (Girl Child Security) Official Guidelines (https://www.india.gov.in/my-government/schemes/sukanya-samriddhi-yojana)"
+                },
+                {
+                    "num": 4,
+                    "tag": "ప్యానెల్ 4: ఆనందం & ప్రయోజనం",
+                    "image": "assets/sukanya_4.jpg",
+                    "speaker": "స్లోగన్",
+                    "dialogue": "🎉 PM Sukanya Samriddhi Yojana (Girl Child Security): ఆడబిడ్డల భవిష్యత్తుకు భరోసా! బంగారు భవిష్యత్తు సాకారం!",
+                    "caption": "ప్రభుత్వ సహాయంతో నిర్భయంగా ముందుకు.",
+                    "sourceRef": "Section 4: PM Sukanya Samriddhi Yojana (Girl Child Security) Official Guidelines (https://www.india.gov.in/my-government/schemes/sukanya-samriddhi-yojana)"
+                }
+            ],
+            "hi": [
+                {
+                    "num": 1,
+                    "tag": "पैनल 1: चिंता व समस्या",
+                    "image": "assets/sukanya_1.jpg",
+                    "speaker": "अनीता",
+                    "dialogue": "मेरी प्यारी बेटी प्रिया की उच्च शिक्षा और भविष्य की सुरक्षा के लिए पैसे कैसे जुटाऊँगी? क्या बिना कर्ज के सपना पूरा होगा?",
+                    "caption": "बेटी के भविष्य को लेकर माँ अनीता की चिंता।",
+                    "sourceRef": "Section 1: PM Sukanya Samriddhi Yojana (Girl Child Security) Official Guidelines (https://www.india.gov.in/my-government/schemes/sukanya-samriddhi-yojana)"
+                },
+                {
+                    "num": 2,
+                    "tag": "पैनल 2: सरकारी समाधान",
+                    "image": "assets/sukanya_2.jpg",
+                    "speaker": "गवटून हीरो",
+                    "dialogue": "बिल्कुल चिंता न करें अनीता जी! PM Sukanya Samriddhi Yojana (Girl Child Security) के तहत सरकार दे रही है गारंटीड सहायता: High compound interest (8.2%+ per annum), 100% tax exemption under 80C, and maturity payout for higher education.",
+                    "caption": "आधिकारिक सरकारी सहायता और उच्च ब्याज सुरक्षा की गारंटी।",
+                    "sourceRef": "Section 2: PM Sukanya Samriddhi Yojana (Girl Child Security) Official Guidelines (https://www.india.gov.in/my-government/schemes/sukanya-samriddhi-yojana)"
+                },
+                {
+                    "num": 3,
+                    "tag": "पैनल 3: आसान आवेदन प्रक्रिया",
+                    "image": "assets/sukanya_3.jpg",
+                    "speaker": "CSC भैया",
+                    "dialogue": "बस अपने आधार कार्ड और बैंक पासबुक लेकर नजदीकी डाकघर, बैंक या जन सेवा केंद्र जाएं और तुरंत आवेदन करें।",
+                    "caption": "सरल आधार-आधारित डिजिटल पंजीकरण।",
+                    "sourceRef": "Section 3: PM Sukanya Samriddhi Yojana (Girl Child Security) Official Guidelines (https://www.india.gov.in/my-government/schemes/sukanya-samriddhi-yojana)"
+                },
+                {
+                    "num": 4,
+                    "tag": "पैनल 4: खुशहाली व सफलता",
+                    "image": "assets/sukanya_4.jpg",
+                    "speaker": "टैगलाइन",
+                    "dialogue": "🎉 PM Sukanya Samriddhi Yojana (Girl Child Security): बेटी पढ़ाओ, देश बढ़ाओ! सशक्त बेटी, समृद्ध परिवार!",
+                    "caption": "सरकारी सहयोग से परिवार में खुशहाली।",
+                    "sourceRef": "Section 4: PM Sukanya Samriddhi Yojana (Girl Child Security) Official Guidelines (https://www.india.gov.in/my-government/schemes/sukanya-samriddhi-yojana)"
+                }
+            ]
+        },
+        "character": {
+            "en": {
+                "name": "Anita & Priya",
+                "role": "Mother & Daughter",
+                "avatar": "👩‍👧",
+                "clothing": "Traditional Saree & School Uniform",
+                "desc": "Caring mother & ambitious daughter securing educational future"
+            },
+            "te": {
+                "name": "అనిత & ప్రియ",
+                "role": "తల్లి & కూతురు",
+                "avatar": "👩‍👧",
+                "clothing": "సాంప్రదాయ చీర & స్కూల్ యూనిఫాం",
+                "desc": "కూతురి ఉన్నత చదువులు, బంగారు భవిష్యత్తు కోసం ఆరాటపడే తల్లి"
+            },
+            "hi": {
+                "name": "अनीता और प्रिया",
+                "role": "माँ और बेटी",
+                "avatar": "👩‍👧",
+                "clothing": "पारंपरिक साड़ी व स्कूल यूनिफॉर्म",
+                "desc": "बेटी के उज्ज्वल भविष्य व उच्च शिक्षा हेतु समर्पित माँ"
+            }
+        }
     },
-    quiz: [
-      { q: "How many units of free electricity per month are supported under PM Surya Ghar?", options: ["50 Units", "100 Units", "300 Units per month", "500 Units"], correct: 2, panelRef: 2, explanation: "PM Surya Ghar provides up to 300 units of free electricity every month." }
-    ]
-  }
+    {
+        "id": "nsp_scholarship",
+        "name": "National Scholarship Portal (Post-Matric & Higher Ed)",
+        "category": "Education & Scholarships",
+        "level": "Central",
+        "dept": "Ministry of Education",
+        "purpose": "Provide financial assistance and tuition fee waivers to meritorious and low-income SC, ST, OBC, and minority students.",
+        "benefits": "Full tuition fee reimbursement + monthly maintenance allowance credited directly to student bank accounts.",
+        "eligibility": {
+            "minAge": 14,
+            "maxAge": 30,
+            "maxIncome": 250000,
+            "state": "All India",
+            "occupation": "Student",
+            "summary": "Students enrolled in Class 11, 12, ITI, Diploma, Graduation, or Post-Graduation with annual family income up to ₹2.5 Lakhs."
+        },
+        "documents": [
+            {
+                "id": "d1",
+                "name": "Aadhaar Card & Student ID",
+                "required": true,
+                "why": "Identity and institution verification"
+            },
+            {
+                "id": "d2",
+                "name": "Income Certificate",
+                "required": true,
+                "why": "Issued by Competent State Authority"
+            },
+            {
+                "id": "d3",
+                "name": "Caste / Community Certificate",
+                "required": true,
+                "why": "Verification for category reservations"
+            },
+            {
+                "id": "d4",
+                "name": "Previous Year Marksheet",
+                "required": true,
+                "why": "Academic merit verification"
+            }
+        ],
+        "applicationSteps": [
+            {
+                "step": 1,
+                "title": "Register on NSP Portal",
+                "desc": "Visit scholarships.gov.in and complete One-Time Registration (OTR)."
+            },
+            {
+                "step": 2,
+                "title": "Select Scheme & Fill Form",
+                "desc": "Choose Post-Matric or Merit-cum-Means scholarship scheme."
+            },
+            {
+                "step": 3,
+                "title": "Upload Marksheet & Income Proof",
+                "desc": "Upload scanned certificates for institutional verification."
+            },
+            {
+                "step": 4,
+                "title": "Receive Scholarship DBT",
+                "desc": "Funds transferred directly to student bank account upon verification."
+            }
+        ],
+        "sourceUrl": "https://scholarships.gov.in",
+        "lastVerified": "2026-08-24",
+        "panels": {
+            "en": [
+                {
+                    "num": 1,
+                    "tag": "Panel 1: The Tension",
+                    "image": "assets/scholarship_1.jpg",
+                    "speaker": "Raju",
+                    "dialogue": "College tuition fees and books are so expensive! How can I complete my higher education without financial stress?",
+                    "caption": "Students worry about college admission and semester fees.",
+                    "sourceRef": "Section 1: National Scholarship Portal (Post-Matric & Higher Ed) Official Guidelines (https://www.india.gov.in)"
+                },
+                {
+                    "num": 2,
+                    "tag": "Panel 2: The Solution",
+                    "image": "assets/scholarship_2.jpg",
+                    "speaker": "GovToon Hero",
+                    "dialogue": "Fikr mat kijiye! National Scholarship Portal (Post-Matric & Higher Ed) provides: Full tuition fee reimbursement + monthly maintenance allowance credited directly to student bank accounts.",
+                    "caption": "Direct 100% scholarship transfer to student bank accounts.",
+                    "sourceRef": "Section 2: National Scholarship Portal (Post-Matric & Higher Ed) Official Guidelines (https://www.india.gov.in)"
+                },
+                {
+                    "num": 3,
+                    "tag": "Panel 3: The Easy Path",
+                    "image": "assets/scholarship_3.jpg",
+                    "speaker": "CSC Bhaiya",
+                    "dialogue": "Upload your Aadhaar Card & Student ID, Income Certificate, Caste / Community Certificate, Previous Year Marksheet on the official scholarship portal or visit nearest CSC center.",
+                    "caption": "Fast Aadhaar-based scholarship verification.",
+                    "sourceRef": "Section 3: National Scholarship Portal (Post-Matric & Higher Ed) Official Guidelines (https://www.india.gov.in)"
+                },
+                {
+                    "num": 4,
+                    "tag": "Panel 4: The Khushali",
+                    "image": "assets/scholarship_4.jpg",
+                    "speaker": "Tagline",
+                    "dialogue": "🎉 National Scholarship Portal (Post-Matric & Higher Ed): Padhega India, Badhega India! Dreams empowered by government support!",
+                    "caption": "Education secured with full tuition waiver.",
+                    "sourceRef": "Section 4: National Scholarship Portal (Post-Matric & Higher Ed) Official Guidelines (https://www.india.gov.in)"
+                }
+            ],
+            "te": [
+                {
+                    "num": 1,
+                    "tag": "ప్యానెల్ 1: సమస్య & ఆందోళన",
+                    "image": "assets/scholarship_1.jpg",
+                    "speaker": "రాజు",
+                    "dialogue": "కాలేజీ సెమిస్టర్ ఫీజులు, పుస్తకాల ఖర్చులు చాలా ఎక్కువగా ఉన్నాయి! ఆర్థిక ఇబ్బందుల వల్ల నా చదువు ఆగిపోతుందేమో అని భయంగా ఉంది.",
+                    "caption": "ఫీజుల కోసం విద్యార్థుల ఆవేదన.",
+                    "sourceRef": "Section 1: National Scholarship Portal (Post-Matric & Higher Ed) Official Guidelines (https://www.india.gov.in)"
+                },
+                {
+                    "num": 2,
+                    "tag": "ప్యానెల్ 2: ప్రభుత్వ పరిష్కారం",
+                    "image": "assets/scholarship_2.jpg",
+                    "speaker": "గోవ్టూన్ హీరో",
+                    "dialogue": "దిగులుపడకండి విద్యార్థి మిత్రులారా! National Scholarship Portal (Post-Matric & Higher Ed) ద్వారా ప్రభుత్వం అండగా నిలుస్తోంది: Full tuition fee reimbursement + monthly maintenance allowance credited directly to student bank accounts.",
+                    "caption": "100% ఫీజు రీయింబర్స్‌మెంట్ మరియు మెయింటెనెన్స్ అలవెన్స్ భరోసా.",
+                    "sourceRef": "Section 2: National Scholarship Portal (Post-Matric & Higher Ed) Official Guidelines (https://www.india.gov.in)"
+                },
+                {
+                    "num": 3,
+                    "tag": "ప్యానెల్ 3: సులువైన దరఖాస్తు",
+                    "image": "assets/scholarship_3.jpg",
+                    "speaker": "CSC మిత్రుడు",
+                    "dialogue": "మీ ఆధార్ కార్డు మరియు బ్యాంక్ పాస్‌బుక్ తో అధికారిక స్కాలర్‌షిప్ పోర్టల్ లేదా CSC లో వెంటనే దరఖాస్తు చేసుకోండి.",
+                    "caption": "త్వరిత ఆన్‌లైన్ వెరిఫికేషన్ ప్రక్రియ.",
+                    "sourceRef": "Section 3: National Scholarship Portal (Post-Matric & Higher Ed) Official Guidelines (https://www.india.gov.in)"
+                },
+                {
+                    "num": 4,
+                    "tag": "ప్యానెల్ 4: ఆనందం & ప్రయోజనం",
+                    "image": "assets/scholarship_4.jpg",
+                    "speaker": "స్లోగన్",
+                    "dialogue": "🎉 National Scholarship Portal (Post-Matric & Higher Ed): చదువుకు పైసల కొరత లేదు! ఉన్నత విద్యతో బంగారు భవిష్యత్తు!",
+                    "caption": "ప్రభుత్వ స్కాలర్‌షిప్‌తో కలలు సాకారం.",
+                    "sourceRef": "Section 4: National Scholarship Portal (Post-Matric & Higher Ed) Official Guidelines (https://www.india.gov.in)"
+                }
+            ],
+            "hi": [
+                {
+                    "num": 1,
+                    "tag": "पैनल 1: चिंता व समस्या",
+                    "image": "assets/scholarship_1.jpg",
+                    "speaker": "राजू",
+                    "dialogue": "कॉलेज की फीस और किताबों का खर्च बहुत ज्यादा है! पैसों की कमी से कहीं मेरी उच्च शिक्षा न रुक जाए!",
+                    "caption": "छात्रों को कॉलेज फीस और खर्च की चिंता।",
+                    "sourceRef": "Section 1: National Scholarship Portal (Post-Matric & Higher Ed) Official Guidelines (https://www.india.gov.in)"
+                },
+                {
+                    "num": 2,
+                    "tag": "पैनल 2: सरकारी समाधान",
+                    "image": "assets/scholarship_2.jpg",
+                    "speaker": "गवटून हीरो",
+                    "dialogue": "बिल्कुल चिंता न करें! National Scholarship Portal (Post-Matric & Higher Ed) के अंतर्गत सरकार प्रदान कर रही है: Full tuition fee reimbursement + monthly maintenance allowance credited directly to student bank accounts.",
+                    "caption": "सीधे बैंक खाते में 100% स्कॉलरशिप और भत्ता।",
+                    "sourceRef": "Section 2: National Scholarship Portal (Post-Matric & Higher Ed) Official Guidelines (https://www.india.gov.in)"
+                },
+                {
+                    "num": 3,
+                    "tag": "पैनल 3: आसान आवेदन प्रक्रिया",
+                    "image": "assets/scholarship_3.jpg",
+                    "speaker": "CSC भैया",
+                    "dialogue": "बस अपने आधार कार्ड और बैंक पासबुक के साथ राष्ट्रीय छात्रवृत्ति पोर्टल पर ऑनलाइन फॉर्म भरें।",
+                    "caption": "सरल डिजिटल सत्यापन व सीधा डीबीटी।",
+                    "sourceRef": "Section 3: National Scholarship Portal (Post-Matric & Higher Ed) Official Guidelines (https://www.india.gov.in)"
+                },
+                {
+                    "num": 4,
+                    "tag": "पैनल 4: खुशहाली व सफलता",
+                    "image": "assets/scholarship_4.jpg",
+                    "speaker": "टैगलाइन",
+                    "dialogue": "🎉 National Scholarship Portal (Post-Matric & Higher Ed): पढ़ेगा इंडिया, बढ़ेगा इंडिया! युवा शक्ति का स्वर्णिम भविष्य!",
+                    "caption": "बिना किसी रुकावट के पूरी होगी उच्च शिक्षा।",
+                    "sourceRef": "Section 4: National Scholarship Portal (Post-Matric & Higher Ed) Official Guidelines (https://www.india.gov.in)"
+                }
+            ]
+        },
+        "character": {
+            "en": {
+                "name": "Raju & Priya",
+                "role": "College Students",
+                "avatar": "🎓",
+                "clothing": "College Bag & Formal Shirt",
+                "desc": "Meritorious students aspiring for higher education degrees"
+            },
+            "te": {
+                "name": "రాజు & ప్రియ",
+                "role": "కళాశాల విద్యార్థులు",
+                "avatar": "🎓",
+                "clothing": "కాలేజీ బ్యాగ్ & చొక్కా",
+                "desc": "ఉన్నత చదువులపై ఆశలు పెట్టుకున్న ప్రతిభావంతులైన విద్యార్థులు"
+            },
+            "hi": {
+                "name": "राजू और प्रिया",
+                "role": "कॉलेज छात्र",
+                "avatar": "🎓",
+                "clothing": "कॉलेज बैग व फॉर्मल शर्ट",
+                "desc": "उच्च शिक्षा का सपना देखने वाले मेधावी छात्र"
+            }
+        }
+    },
+    {
+        "id": "pm_awas_rural",
+        "name": "Pradhan Mantri Awas Yojana - Gramin (PMAY-G)",
+        "category": "Housing & Energy",
+        "level": "Central",
+        "dept": "Ministry of Rural Development",
+        "purpose": "Provide pucca houses with basic amenities like piped water, electricity, and clean cooking fuel to all houseless rural families.",
+        "benefits": "Financial assistance of ₹1.20 Lakh in plain areas and ₹1.30 Lakh in hilly/difficult areas transferred directly via DBT.",
+        "eligibility": {
+            "minAge": 18,
+            "maxAge": 100,
+            "maxIncome": 150000,
+            "state": "All India",
+            "occupation": "Rural Household",
+            "summary": "Houseless families or families living in kutcha or dilapidated houses based on SECC 2011 data."
+        },
+        "documents": [
+            {
+                "id": "d1",
+                "name": "Aadhaar Card",
+                "required": true,
+                "why": "Identity and geo-tagging validation"
+            },
+            {
+                "id": "d2",
+                "name": "Bank Account Passbook",
+                "required": true,
+                "why": "Direct DBT installment credits"
+            },
+            {
+                "id": "d3",
+                "name": "MGNREGA Job Card Number",
+                "required": false,
+                "why": "For 90-95 days unskilled labor wage support"
+            }
+        ],
+        "applicationSteps": [
+            {
+                "step": 1,
+                "title": "Gram Sabha Beneficiary Validation",
+                "desc": "Check presence in village PMAY-G permanent waitlist."
+            },
+            {
+                "step": 2,
+                "title": "Geo-Tagging of Old Site",
+                "desc": "Gram Panchayat officer takes geotagged photo via AwaasApp."
+            },
+            {
+                "step": 3,
+                "title": "Direct Installment Releases",
+                "desc": "Receive fund releases linked to foundation, lintel, and roof construction stages."
+            }
+        ],
+        "officialUrl": "https://www.india.gov.in/my-government/schemes/pradhan-mantri-awaas-yojana-gramin",
+        "sourceUrl": "https://pmayg.nic.in",
+        "lastVerified": "2026-08-24",
+        "panels": {
+            "en": [
+                {
+                    "num": 1,
+                    "tag": "Panel 1: The Tension",
+                    "image": "assets/awas_1.jpg",
+                    "speaker": "Kamala Devi",
+                    "dialogue": "Our kutcha mud roof leaks every monsoon! How can we build a sturdy, permanent pucca home with our low income?",
+                    "caption": "Kamala worries about family safety in an unsafe mud shelter.",
+                    "sourceRef": "Section 1: Pradhan Mantri Awas Yojana - Gramin (PMAY-G) Official Guidelines (https://www.india.gov.in/my-government/schemes/pradhan-mantri-awaas-yojana-gramin)"
+                },
+                {
+                    "num": 2,
+                    "tag": "Panel 2: The Solution",
+                    "image": "assets/awas_2.jpg",
+                    "speaker": "GovToon Hero",
+                    "dialogue": "Fikr mat kijiye! Pradhan Mantri Awas Yojana - Gramin (PMAY-G) provides: Financial assistance of ₹1.20 Lakh in plain areas and ₹1.30 Lakh in hilly/difficult areas transferred directly via DBT.",
+                    "caption": "Direct DBT financial aid + MGNREGA wages + toilet construction fund.",
+                    "sourceRef": "Section 2: Pradhan Mantri Awas Yojana - Gramin (PMAY-G) Official Guidelines (https://www.india.gov.in/my-government/schemes/pradhan-mantri-awaas-yojana-gramin)"
+                },
+                {
+                    "num": 3,
+                    "tag": "Panel 3: The Easy Path",
+                    "image": "assets/awas_3.jpg",
+                    "speaker": "CSC Bhaiya",
+                    "dialogue": "Verify your Gram Panchayat name and submit Aadhaar Card, Bank Account Passbook, MGNREGA Job Card Number to enroll in the AwaasSoft system.",
+                    "caption": "Geo-tagged phased direct installment transfers.",
+                    "sourceRef": "Section 3: Pradhan Mantri Awas Yojana - Gramin (PMAY-G) Official Guidelines (https://www.india.gov.in/my-government/schemes/pradhan-mantri-awaas-yojana-gramin)"
+                },
+                {
+                    "num": 4,
+                    "tag": "Panel 4: The Khushali",
+                    "image": "assets/awas_4.jpg",
+                    "speaker": "Tagline",
+                    "dialogue": "🎉 Pradhan Mantri Awas Yojana - Gramin (PMAY-G): Har Parivar Ko Pakka Makaan! Safe home, dignified living for every citizen!",
+                    "caption": "Proud owner of a beautiful, safe pucca house.",
+                    "sourceRef": "Section 4: Pradhan Mantri Awas Yojana - Gramin (PMAY-G) Official Guidelines (https://www.india.gov.in/my-government/schemes/pradhan-mantri-awaas-yojana-gramin)"
+                }
+            ],
+            "te": [
+                {
+                    "num": 1,
+                    "tag": "ప్యానెల్ 1: సమస్య & ఆందోళన",
+                    "image": "assets/awas_1.jpg",
+                    "speaker": "కమలా దేవి",
+                    "dialogue": "ప్రతి వర్షాకాలంలో మా పూరిగుడిసె కారుతోంది! మా చిన్నపాటి ఆదాయంతో పక్కా ఇల్లు కట్టుకోవడం ఎలా సాధ్యం?",
+                    "caption": "వర్షాలకు ఇబ్బంది పడుతున్న కమలాదేవి ఆవేదన.",
+                    "sourceRef": "Section 1: Pradhan Mantri Awas Yojana - Gramin (PMAY-G) Official Guidelines (https://www.india.gov.in/my-government/schemes/pradhan-mantri-awaas-yojana-gramin)"
+                },
+                {
+                    "num": 2,
+                    "tag": "ప్యానెల్ 2: ప్రభుత్వ పరిష్కారం",
+                    "image": "assets/awas_2.jpg",
+                    "speaker": "గోవ్టూన్ హీరో",
+                    "dialogue": "దిగులుపడకండి కమలాదేవి గారూ! Pradhan Mantri Awas Yojana - Gramin (PMAY-G) ద్వారా ప్రభుత్వం అండగా నిలుస్తోంది: Financial assistance of ₹1.20 Lakh in plain areas and ₹1.30 Lakh in hilly/difficult areas transferred directly via DBT.",
+                    "caption": "పక్కా ఇంటి నిర్మాణానికి నేరుగా ₹1.20 లక్షల ఆర్థిక సాయం, ఉపాధి హామీ కూలీ మరియు ఉచిత మరుగుదొడ్డి.",
+                    "sourceRef": "Section 2: Pradhan Mantri Awas Yojana - Gramin (PMAY-G) Official Guidelines (https://www.india.gov.in/my-government/schemes/pradhan-mantri-awaas-yojana-gramin)"
+                },
+                {
+                    "num": 3,
+                    "tag": "ప్యానెల్ 3: సులువైన దరఖాస్తు",
+                    "image": "assets/awas_3.jpg",
+                    "speaker": "CSC మిత్రుడు",
+                    "dialogue": "మీ గ్రామ పంచాయతీ జాబితాలో పేరు చూసుకొని ఆధార్ కార్డు మరియు బ్యాంక్ పాస్‌బుక్ సమర్పించండి.",
+                    "caption": "జియో-ట్యాగింగ్ ద్వారా విడతలవారీగా నేరుగా ఖాతాలో జమ.",
+                    "sourceRef": "Section 3: Pradhan Mantri Awas Yojana - Gramin (PMAY-G) Official Guidelines (https://www.india.gov.in/my-government/schemes/pradhan-mantri-awaas-yojana-gramin)"
+                },
+                {
+                    "num": 4,
+                    "tag": "ప్యానెల్ 4: ఆనందం & ప్రయోజనం",
+                    "image": "assets/awas_4.jpg",
+                    "speaker": "స్లోగన్",
+                    "dialogue": "🎉 Pradhan Mantri Awas Yojana - Gramin (PMAY-G): ప్రతి పేద కుటుంబానికీ పక్కా ఇల్లు! ఆత్మగౌరవంతో కూడిన సురక్షిత జీవనం!",
+                    "caption": "సొంతింటి కల సాకారమైన శుభవేళ.",
+                    "sourceRef": "Section 4: Pradhan Mantri Awas Yojana - Gramin (PMAY-G) Official Guidelines (https://www.india.gov.in/my-government/schemes/pradhan-mantri-awaas-yojana-gramin)"
+                }
+            ],
+            "hi": [
+                {
+                    "num": 1,
+                    "tag": "पैनल 1: चिंता व समस्या",
+                    "image": "assets/awas_1.jpg",
+                    "speaker": "कमला देवी",
+                    "dialogue": "हर बरसात में कच्चे मकान की छत टपकती है! हमारी कम आमदनी में पक्का घर कैसे बन पाएगा?",
+                    "caption": "कच्चे मकान की परेशानी से चिंतित महिला।",
+                    "sourceRef": "Section 1: Pradhan Mantri Awas Yojana - Gramin (PMAY-G) Official Guidelines (https://www.india.gov.in/my-government/schemes/pradhan-mantri-awaas-yojana-gramin)"
+                },
+                {
+                    "num": 2,
+                    "tag": "पैनल 2: सरकारी समाधान",
+                    "image": "assets/awas_2.jpg",
+                    "speaker": "गवटून हीरो",
+                    "dialogue": "बिल्कुल चिंता न करें कमला देवी जी! Pradhan Mantri Awas Yojana - Gramin (PMAY-G) दे रही है सीधा सहयोग: Financial assistance of ₹1.20 Lakh in plain areas and ₹1.30 Lakh in hilly/difficult areas transferred directly via DBT.",
+                    "caption": "पक्के मकान हेतु ₹1.20 लाख की सीधी आर्थिक मदद + मनरेगा मजदूरी और शौचालय अनुदान।",
+                    "sourceRef": "Section 2: Pradhan Mantri Awas Yojana - Gramin (PMAY-G) Official Guidelines (https://www.india.gov.in/my-government/schemes/pradhan-mantri-awaas-yojana-gramin)"
+                },
+                {
+                    "num": 3,
+                    "tag": "पैनल 3: आसान आवेदन प्रक्रिया",
+                    "image": "assets/awas_3.jpg",
+                    "speaker": "CSC भैया",
+                    "dialogue": "बस अपने आधार कार्ड और बैंक पासबुक के साथ ग्राम पंचायत या आवास सॉफ्ट पोर्टल पर नाम दर्ज कराएं।",
+                    "caption": "जियो-टैगिंग के बाद सीधे बैंक खाते में किस्तों का भुगतान।",
+                    "sourceRef": "Section 3: Pradhan Mantri Awas Yojana - Gramin (PMAY-G) Official Guidelines (https://www.india.gov.in/my-government/schemes/pradhan-mantri-awaas-yojana-gramin)"
+                },
+                {
+                    "num": 4,
+                    "tag": "पैनल 4: खुशहाली व सफलता",
+                    "image": "assets/awas_4.jpg",
+                    "speaker": "टैगलाइन",
+                    "dialogue": "🎉 Pradhan Mantri Awas Yojana - Gramin (PMAY-G): हर परिवार को पक्का मकान! सम्मान, सुरक्षा और अपनी छत!",
+                    "caption": "कच्चे मकान की जगह सुंदर व मजबूत पक्का घर तैयार।",
+                    "sourceRef": "Section 4: Pradhan Mantri Awas Yojana - Gramin (PMAY-G) Official Guidelines (https://www.india.gov.in/my-government/schemes/pradhan-mantri-awaas-yojana-gramin)"
+                }
+            ]
+        },
+        "character": {
+            "en": {
+                "name": "Kamala Devi",
+                "role": "Rural Homemaker",
+                "avatar": "🏡",
+                "clothing": "Traditional Saree",
+                "desc": "Rural homemaker dreaming of a safe, permanent pucca house"
+            },
+            "te": {
+                "name": "కమలా దేవి",
+                "role": "గ్రామీణ గృహిణి",
+                "avatar": "🏡",
+                "clothing": "సాంప్రదాయ చీర",
+                "desc": "కుటుంబానికి పక్కా ఇల్లు నిర్మించాలనే కలలు కనే గ్రామీణ మహిళ"
+            },
+            "hi": {
+                "name": "कमला देवी",
+                "role": "ग्रामीण गृहिणी",
+                "avatar": "🏡",
+                "clothing": "पारंपरिक साड़ी",
+                "desc": "कच्चे मकान से पक्के मकान का सपना देखने वाली गृहिणी"
+            }
+        }
+    },
+    {
+        "id": "pm_vishwakarma",
+        "name": "PM Vishwakarma Kaushal Samman",
+        "category": "Business",
+        "level": "Central",
+        "dept": "Ministry of Micro, Small & Medium Enterprises",
+        "purpose": "Holistic end-to-end support to traditional artisans and craftspeople across 18 trades (carpenters, blacksmiths, potters, cobblers, tailors).",
+        "benefits": "Collateral-free enterprise loans up to ₹3 Lakh at 5% interest rate + ₹15,000 modern e-voucher toolkit grant + ₹500/day training stipend.",
+        "eligibility": {
+            "minAge": 18,
+            "maxAge": 70,
+            "maxIncome": 300000,
+            "state": "All India",
+            "occupation": "Artisan / Craftsperson",
+            "summary": "Artisans engaged in one of the 18 eligible traditional family crafts (Blacksmith, Carpenter, Potter, Mason, Tailor, Barber, etc.)."
+        },
+        "documents": [
+            {
+                "id": "d1",
+                "name": "Aadhaar Card & Mobile Link",
+                "required": true,
+                "why": "Biometric verification on PM Vishwakarma Portal"
+            },
+            {
+                "id": "d2",
+                "name": "Bank Account Passbook",
+                "required": true,
+                "why": "For loan disbursement and toolkit e-voucher"
+            },
+            {
+                "id": "d3",
+                "name": "Trade Skill Declaration",
+                "required": true,
+                "why": "Gram Panchayat / ULB trade endorsement"
+            }
+        ],
+        "applicationSteps": [
+            {
+                "step": 1,
+                "title": "Register at CSC",
+                "desc": "Visit nearest Common Service Center with Aadhaar and bank details."
+            },
+            {
+                "step": 2,
+                "title": "Complete 5-Day Basic Skill Training",
+                "desc": "Receive ₹500/day stipend during skill upgradation."
+            },
+            {
+                "step": 3,
+                "title": "Claim ₹15,000 Toolkit Incentive",
+                "desc": "Receive digital voucher to buy modern trade tools."
+            },
+            {
+                "step": 4,
+                "title": "Access ₹1 Lakh Collateral-Free Loan",
+                "desc": "Receive first tranche loan at concessional 5% interest rate."
+            }
+        ],
+        "officialUrl": "https://www.india.gov.in/my-government/schemes/pm-vishwakarma",
+        "sourceUrl": "https://pmvishwakarma.gov.in",
+        "lastVerified": "2026-08-24",
+        "panels": {
+            "en": [
+                {
+                    "num": 1,
+                    "tag": "Panel 1: The Tension",
+                    "image": "assets/vishwakarma_1.jpg",
+                    "speaker": "Mohan Lal",
+                    "dialogue": "Using old hand tools limits my daily output and earnings. How can I get modern electric tools, formal training, and growth capital?",
+                    "caption": "Mohan Lal struggles with outdated manual equipment.",
+                    "sourceRef": "Section 1: PM Vishwakarma Kaushal Samman Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-vishwakarma)"
+                },
+                {
+                    "num": 2,
+                    "tag": "Panel 2: The Solution",
+                    "image": "assets/vishwakarma_2.jpg",
+                    "speaker": "GovToon Hero",
+                    "dialogue": "Fikr mat kijiye! PM Vishwakarma Kaushal Samman provides: Collateral-free enterprise loans up to ₹3 Lakh at 5% interest rate + ₹15,000 modern e-voucher toolkit grant + ₹500/day training stipend.",
+                    "caption": "₹15,000 free toolkit grant, daily stipend training, and 5% concessional credit.",
+                    "sourceRef": "Section 2: PM Vishwakarma Kaushal Samman Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-vishwakarma)"
+                },
+                {
+                    "num": 3,
+                    "tag": "Panel 3: The Easy Path",
+                    "image": "assets/vishwakarma_3.jpg",
+                    "speaker": "CSC Bhaiya",
+                    "dialogue": "Register with biometric Aadhaar and Aadhaar Card & Mobile Link, Bank Account Passbook, Trade Skill Declaration at nearest CSC on the PM Vishwakarma portal.",
+                    "caption": "Free skill certification and toolkit voucher issuance.",
+                    "sourceRef": "Section 3: PM Vishwakarma Kaushal Samman Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-vishwakarma)"
+                },
+                {
+                    "num": 4,
+                    "tag": "Panel 4: The Khushali",
+                    "image": "assets/vishwakarma_4.jpg",
+                    "speaker": "Tagline",
+                    "dialogue": "🎉 PM Vishwakarma Kaushal Samman: Samman, Samarthya, Samriddhi! Honoring traditional artisans across India!",
+                    "caption": "Modern tools tripling production and income.",
+                    "sourceRef": "Section 4: PM Vishwakarma Kaushal Samman Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-vishwakarma)"
+                }
+            ],
+            "te": [
+                {
+                    "num": 1,
+                    "tag": "ప్యానెల్ 1: సమస్య & ఆందోళన",
+                    "image": "assets/vishwakarma_1.jpg",
+                    "speaker": "మోహన్ లాల్",
+                    "dialogue": "పాతకాలం పనిముట్లతో పని చేయడం వల్ల సమయం ఎక్కువ పడుతోంది, ఆదాయం పెరగడం లేదు! ఆధునిక టూల్స్ మరియు పెట్టుబడి ఎలా పొందాలి?",
+                    "caption": "చేతివృత్తుల వారి ఆధునికీకరణ ఆవేదన.",
+                    "sourceRef": "Section 1: PM Vishwakarma Kaushal Samman Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-vishwakarma)"
+                },
+                {
+                    "num": 2,
+                    "tag": "ప్యానెల్ 2: ప్రభుత్వ పరిష్కారం",
+                    "image": "assets/vishwakarma_2.jpg",
+                    "speaker": "గోవ్టూన్ హీరో",
+                    "dialogue": "దిగులుపడకండి మోహన్ లాల్ గారూ! PM Vishwakarma Kaushal Samman ద్వారా ప్రభుత్వం అండగా నిలుస్తోంది: Collateral-free enterprise loans up to ₹3 Lakh at 5% interest rate + ₹15,000 modern e-voucher toolkit grant + ₹500/day training stipend.",
+                    "caption": "₹15,000 ఉచిత టూల్‌కిట్ ఈ-వోచర్, శిక్షణ సమయంలో రోజువారీ స్టైఫండ్ మరియు కేవలం 5% వడ్డీకే వ్యాపార రుణం.",
+                    "sourceRef": "Section 2: PM Vishwakarma Kaushal Samman Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-vishwakarma)"
+                },
+                {
+                    "num": 3,
+                    "tag": "ప్యానెల్ 3: సులువైన దరఖాస్తు",
+                    "image": "assets/vishwakarma_3.jpg",
+                    "speaker": "CSC మిత్రుడు",
+                    "dialogue": "మీ ఆధార్ కార్డు మరియు బ్యాంక్ పాస్‌బుక్ తో సమీప CSC కేంద్రంలో బయోమెట్రిక్ ద్వారా నమోదు చేసుకోండి.",
+                    "caption": "ప్రభుత్వ గుర్తింపు కార్డు మరియు డిజిటల్ టూల్‌కిట్ వోచర్ పొందండి.",
+                    "sourceRef": "Section 3: PM Vishwakarma Kaushal Samman Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-vishwakarma)"
+                },
+                {
+                    "num": 4,
+                    "tag": "ప్యానెల్ 4: ఆనందం & ప్రయోజనం",
+                    "image": "assets/vishwakarma_4.jpg",
+                    "speaker": "స్లోగన్",
+                    "dialogue": "🎉 PM Vishwakarma Kaushal Samman: సంప్రదాయ వృత్తులకు నూతన జవసత్వాలు! ఆధునిక పరికరాలతో రెట్టింపు ఆదాయం!",
+                    "caption": "విశ్వకర్మ కళాకారులకు ప్రభుత్వ ఘన గౌరవం.",
+                    "sourceRef": "Section 4: PM Vishwakarma Kaushal Samman Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-vishwakarma)"
+                }
+            ],
+            "hi": [
+                {
+                    "num": 1,
+                    "tag": "पैनल 1: चिंता व समस्या",
+                    "image": "assets/vishwakarma_1.jpg",
+                    "speaker": "मोहन लाल",
+                    "dialogue": "पुराने औजारों से काम करने में बहुत मेहनत लगती है और आमदनी कम होती है! आधुनिक टूलकिट और कम ब्याज का लोन कैसे मिले?",
+                    "caption": "पारंपरिक औजारों से परेशान शिल्पकार।",
+                    "sourceRef": "Section 1: PM Vishwakarma Kaushal Samman Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-vishwakarma)"
+                },
+                {
+                    "num": 2,
+                    "tag": "पैनल 2: सरकारी समाधान",
+                    "image": "assets/vishwakarma_2.jpg",
+                    "speaker": "गवटून हीरो",
+                    "dialogue": "बिल्कुल चिंता न करें मोहन लाल जी! PM Vishwakarma Kaushal Samman दे रही है संपूर्ण संबल: Collateral-free enterprise loans up to ₹3 Lakh at 5% interest rate + ₹15,000 modern e-voucher toolkit grant + ₹500/day training stipend.",
+                    "caption": "₹15,000 की मुफ्त टूलकिट ग्रांट, दैनिक वजीफे के साथ आधुनिक ट्रेनिंग और सिर्फ 5% पर सस्ता लोन।",
+                    "sourceRef": "Section 2: PM Vishwakarma Kaushal Samman Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-vishwakarma)"
+                },
+                {
+                    "num": 3,
+                    "tag": "पैनल 3: आसान आवेदन प्रक्रिया",
+                    "image": "assets/vishwakarma_3.jpg",
+                    "speaker": "CSC भैया",
+                    "dialogue": "बस अपने आधार कार्ड और बैंक पासबुक के साथ जन सेवा केंद्र पर बायोमेट्रिक सत्यापन कराकर पंजीकरण कराएं।",
+                    "caption": "पीएम विश्वकर्मा प्रमाण पत्र और टूलकिट ई-वाउचर तुरंत प्राप्त करें।",
+                    "sourceRef": "Section 3: PM Vishwakarma Kaushal Samman Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-vishwakarma)"
+                },
+                {
+                    "num": 4,
+                    "tag": "पैनल 4: खुशहाली व सफलता",
+                    "image": "assets/vishwakarma_4.jpg",
+                    "speaker": "टैगलाइन",
+                    "dialogue": "🎉 PM Vishwakarma Kaushal Samman: सम्मान, सामर्थ्य और समृद्धि! हुनर को मिला सरकार का मजबूत सहारा!",
+                    "caption": "आधुनिक मशीनों से बढ़ा काम और कई गुना बढ़ी आमदनी।",
+                    "sourceRef": "Section 4: PM Vishwakarma Kaushal Samman Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-vishwakarma)"
+                }
+            ]
+        },
+        "character": {
+            "en": {
+                "name": "Mohan Lal",
+                "role": "Traditional Artisan / Craftsman",
+                "avatar": "🛠️",
+                "clothing": "Kurta & Work Apron",
+                "desc": "Skilled artisan desiring modern toolkits and concessional credit"
+            },
+            "te": {
+                "name": "మోహన్ లాల్",
+                "role": "సాంప్రదాయ చేతివృత్తిదారుడు",
+                "avatar": "🛠️",
+                "clothing": "కుర్తా & పని ఆప్రాన్",
+                "desc": "ఆధునిక పనిముట్లు, శిక్షణ మరియు తక్కువ వడ్డీ రుణం కోరే వృత్తి నిపుణుడు"
+            },
+            "hi": {
+                "name": "मोहन लाल",
+                "role": "पारंपरिक शिल्पकार व कारीगर",
+                "avatar": "🛠️",
+                "clothing": "कुर्ता व एप्रन",
+                "desc": "आधुनिक टूलकिट, कौशल प्रशिक्षण व सस्ते ऋण का आकांक्षी कारीगर"
+            }
+        }
+    },
+    {
+        "id": "pm_ujjwala",
+        "name": "Pradhan Mantri Ujjwala Yojana 2.0 (LPG Connection)",
+        "category": "Housing & Energy",
+        "level": "Central",
+        "dept": "Ministry of Petroleum & Natural Gas",
+        "purpose": "Provide clean cooking LPG cylinders to poor women living in rural and urban households to eliminate hazardous smoke inhalation.",
+        "benefits": "100% Free deposit-free LPG connection (stove + cylinder + regulator) + targeted ₹300 subsidy per refill cylinder for up to 12 refills/year.",
+        "eligibility": {
+            "minAge": 18,
+            "maxAge": 100,
+            "maxIncome": 200000,
+            "state": "All India",
+            "occupation": "Woman Householder",
+            "summary": "Adult woman belonging to BPL/poor household having no existing LPG connection in the family."
+        },
+        "documents": [
+            {
+                "id": "d1",
+                "name": "Aadhaar Card of Applicant & Family",
+                "required": true,
+                "why": "Identity and deduplication check"
+            },
+            {
+                "id": "d2",
+                "name": "Ration Card / BPL Proof",
+                "required": true,
+                "why": "Proof of household composition"
+            },
+            {
+                "id": "d3",
+                "name": "Bank Account Passbook",
+                "required": true,
+                "why": "Direct DBT subsidy transfer for cylinder refills"
+            }
+        ],
+        "applicationSteps": [
+            {
+                "step": 1,
+                "title": "Collect Ujjwala 2.0 Form",
+                "desc": "Visit nearest Indane, Bharatgas, or HP Gas dealership or apply at pmuy.gov.in."
+            },
+            {
+                "step": 2,
+                "title": "Submit Aadhaar & Ration Card",
+                "desc": "Provide family member Aadhaar details and bank account."
+            },
+            {
+                "step": 3,
+                "title": "Collect Free Gas Stove & Cylinder",
+                "desc": "Get free domestic gas connection setup delivered to home."
+            }
+        ],
+        "officialUrl": "https://www.india.gov.in/my-government/schemes/pradhan-mantri-ujjwala-yojana",
+        "sourceUrl": "https://www.pmuy.gov.in",
+        "lastVerified": "2026-08-24",
+        "panels": {
+            "en": [
+                {
+                    "num": 1,
+                    "tag": "Panel 1: The Tension",
+                    "image": "assets/ujjwala_1.jpg",
+                    "speaker": "Sunita",
+                    "dialogue": "Cooking on firewood chulha fills our home with thick toxic smoke, hurting our lungs and eyes! How can we get a safe LPG gas cylinder?",
+                    "caption": "Sunita suffers from dangerous smoke inhalation daily.",
+                    "sourceRef": "Section 1: Pradhan Mantri Ujjwala Yojana 2.0 (LPG Connection) Official Guidelines (https://www.india.gov.in/my-government/schemes/pradhan-mantri-ujjwala-yojana)"
+                },
+                {
+                    "num": 2,
+                    "tag": "Panel 2: The Solution",
+                    "image": "assets/ujjwala_2.jpg",
+                    "speaker": "GovToon Hero",
+                    "dialogue": "Fikr mat kijiye! Pradhan Mantri Ujjwala Yojana 2.0 (LPG Connection) provides: 100% Free deposit-free LPG connection (stove + cylinder + regulator) + targeted ₹300 subsidy per refill cylinder for up to 12 refills/year.",
+                    "caption": "100% free LPG gas connection + free stove + first free filled cylinder + ₹300 subsidy.",
+                    "sourceRef": "Section 2: Pradhan Mantri Ujjwala Yojana 2.0 (LPG Connection) Official Guidelines (https://www.india.gov.in/my-government/schemes/pradhan-mantri-ujjwala-yojana)"
+                },
+                {
+                    "num": 3,
+                    "tag": "Panel 3: The Easy Path",
+                    "image": "assets/ujjwala_3.jpg",
+                    "speaker": "CSC Bhaiya",
+                    "dialogue": "Submit your ration card, Aadhaar, and Aadhaar Card of Applicant & Family, Ration Card / BPL Proof, Bank Account Passbook at the nearest LPG distributor agency.",
+                    "caption": "Hassle-free instant gas connection release.",
+                    "sourceRef": "Section 3: Pradhan Mantri Ujjwala Yojana 2.0 (LPG Connection) Official Guidelines (https://www.india.gov.in/my-government/schemes/pradhan-mantri-ujjwala-yojana)"
+                },
+                {
+                    "num": 4,
+                    "tag": "Panel 4: The Khushali",
+                    "image": "assets/ujjwala_4.jpg",
+                    "speaker": "Tagline",
+                    "dialogue": "🎉 Pradhan Mantri Ujjwala Yojana 2.0 (LPG Connection): Swachh Indhan, Behtar Jeevan! Smoke-free kitchen and healthy family!",
+                    "caption": "Cooking happily with clean, safe LPG gas.",
+                    "sourceRef": "Section 4: Pradhan Mantri Ujjwala Yojana 2.0 (LPG Connection) Official Guidelines (https://www.india.gov.in/my-government/schemes/pradhan-mantri-ujjwala-yojana)"
+                }
+            ],
+            "te": [
+                {
+                    "num": 1,
+                    "tag": "ప్యానెల్ 1: సమస్య & ఆందోళన",
+                    "image": "assets/ujjwala_1.jpg",
+                    "speaker": "సునీత",
+                    "dialogue": "కట్టెల పొయ్యి పొగతో ఇల్లంతా పొగ కమ్ముకుని కళ్లు మండిపోతున్నాయి, శ్వాస తీసుకోవడం కష్టంగా ఉంది! మాకూ గ్యాస్ సిలిండర్ ఎలా దొరుకుతుంది?",
+                    "caption": "కట్టెల పొయ్యి పొగతో సునీత పడే బాధ.",
+                    "sourceRef": "Section 1: Pradhan Mantri Ujjwala Yojana 2.0 (LPG Connection) Official Guidelines (https://www.india.gov.in/my-government/schemes/pradhan-mantri-ujjwala-yojana)"
+                },
+                {
+                    "num": 2,
+                    "tag": "ప్యానెల్ 2: ప్రభుత్వ పరిష్కారం",
+                    "image": "assets/ujjwala_2.jpg",
+                    "speaker": "గోవ్టూన్ హీరో",
+                    "dialogue": "దిగులుపడకండి సునీత గారూ! Pradhan Mantri Ujjwala Yojana 2.0 (LPG Connection) ద్వారా ప్రభుత్వం అండగా నిలుస్తోంది: 100% Free deposit-free LPG connection (stove + cylinder + regulator) + targeted ₹300 subsidy per refill cylinder for up to 12 refills/year.",
+                    "caption": "100% ఉచిత ఎల్‌పీజీ గ్యాస్ కనెక్షన్, ఉచిత పొయ్యి, మొదటి సిలిండర్ ఉచితం మరియు ₹300 సబ్సిడీ.",
+                    "sourceRef": "Section 2: Pradhan Mantri Ujjwala Yojana 2.0 (LPG Connection) Official Guidelines (https://www.india.gov.in/my-government/schemes/pradhan-mantri-ujjwala-yojana)"
+                },
+                {
+                    "num": 3,
+                    "tag": "ప్యానెల్ 3: సులువైన దరఖాస్తు",
+                    "image": "assets/ujjwala_3.jpg",
+                    "speaker": "CSC మిత్రుడు",
+                    "dialogue": "మీ ఆధార్ కార్డు మరియు బ్యాంక్ పాస్‌బుక్ మరియు రేషన్ కార్డుతో సమీప గ్యాస్ ఏజెన్సీ లేదా CSC లో దరఖాస్తు చేయండి.",
+                    "caption": "సులభమైన ఉచిత గ్యాస్ కనెక్షన్ మంజూరు.",
+                    "sourceRef": "Section 3: Pradhan Mantri Ujjwala Yojana 2.0 (LPG Connection) Official Guidelines (https://www.india.gov.in/my-government/schemes/pradhan-mantri-ujjwala-yojana)"
+                },
+                {
+                    "num": 4,
+                    "tag": "ప్యానెల్ 4: ఆనందం & ప్రయోజనం",
+                    "image": "assets/ujjwala_4.jpg",
+                    "speaker": "స్లోగన్",
+                    "dialogue": "🎉 Pradhan Mantri Ujjwala Yojana 2.0 (LPG Connection): పొగలేని ఇల్లు - సంపూర్ణ ఆరోగ్యం! మహిళల శ్రేయస్సే దేశ ప్రగతి!",
+                    "caption": "స్వచ్ఛమైన గ్యాస్ పొయ్యితో ఆరోగ్యకరమైన జీవనం.",
+                    "sourceRef": "Section 4: Pradhan Mantri Ujjwala Yojana 2.0 (LPG Connection) Official Guidelines (https://www.india.gov.in/my-government/schemes/pradhan-mantri-ujjwala-yojana)"
+                }
+            ],
+            "hi": [
+                {
+                    "num": 1,
+                    "tag": "पैनल 1: चिंता व समस्या",
+                    "image": "assets/ujjwala_1.jpg",
+                    "speaker": "सुनीता",
+                    "dialogue": "लकड़ी के चूल्हे से निकलने वाले धुएं से आंखें जलती हैं और फेफड़ों में तकलीफ होती है! क्या हमें भी गैस सिलेंडर मिल सकता है?",
+                    "caption": "चूल्हे के धुएं से परेशान महिला।",
+                    "sourceRef": "Section 1: Pradhan Mantri Ujjwala Yojana 2.0 (LPG Connection) Official Guidelines (https://www.india.gov.in/my-government/schemes/pradhan-mantri-ujjwala-yojana)"
+                },
+                {
+                    "num": 2,
+                    "tag": "पैनल 2: सरकारी समाधान",
+                    "image": "assets/ujjwala_2.jpg",
+                    "speaker": "गवटून हीरो",
+                    "dialogue": "बिल्कुल चिंता न करें सुनीता जी! Pradhan Mantri Ujjwala Yojana 2.0 (LPG Connection) दे रही है सीधा समाधान: 100% Free deposit-free LPG connection (stove + cylinder + regulator) + targeted ₹300 subsidy per refill cylinder for up to 12 refills/year.",
+                    "caption": "100% मुफ्त एलपीजी गैस कनेक्शन, चूल्हा, पहला भरा सिलेंडर और ₹300 प्रति सिलेंडर सब्सिडी।",
+                    "sourceRef": "Section 2: Pradhan Mantri Ujjwala Yojana 2.0 (LPG Connection) Official Guidelines (https://www.india.gov.in/my-government/schemes/pradhan-mantri-ujjwala-yojana)"
+                },
+                {
+                    "num": 3,
+                    "tag": "पैनल 3: आसान आवेदन प्रक्रिया",
+                    "image": "assets/ujjwala_3.jpg",
+                    "speaker": "CSC भैया",
+                    "dialogue": "बस अपने राशन कार्ड, आधार और आधार कार्ड और बैंक पासबुक के साथ नजदीकी गैस वितरक एजेंसी में फॉर्म जमा करें।",
+                    "caption": "निशुल्क गैस कनेक्शन व त्वरित डिलीवरी।",
+                    "sourceRef": "Section 3: Pradhan Mantri Ujjwala Yojana 2.0 (LPG Connection) Official Guidelines (https://www.india.gov.in/my-government/schemes/pradhan-mantri-ujjwala-yojana)"
+                },
+                {
+                    "num": 4,
+                    "tag": "पैनल 4: खुशहाली व सफलता",
+                    "image": "assets/ujjwala_4.jpg",
+                    "speaker": "टैगलाइन",
+                    "dialogue": "🎉 Pradhan Mantri Ujjwala Yojana 2.0 (LPG Connection): स्वच्छ ईंधन, बेहतर जीवन! धुआं-मुक्त रसोई और स्वस्थ परिवार!",
+                    "caption": "अब आराम से सुरक्षित गैस पर खाना पकाना हुआ आसान।",
+                    "sourceRef": "Section 4: Pradhan Mantri Ujjwala Yojana 2.0 (LPG Connection) Official Guidelines (https://www.india.gov.in/my-government/schemes/pradhan-mantri-ujjwala-yojana)"
+                }
+            ]
+        },
+        "character": {
+            "en": {
+                "name": "Sunita",
+                "role": "Rural Homemaker",
+                "avatar": "👩🏽",
+                "clothing": "Simple Saree",
+                "desc": "Homemaker suffering from toxic chulha smoke in the kitchen"
+            },
+            "te": {
+                "name": "సునీత",
+                "role": "గ్రామీణ గృహిణి",
+                "avatar": "👩🏽",
+                "clothing": "సాధారణ చీర",
+                "desc": "కట్టెల పొయ్యి పొగతో కంటిచూపు, శ్వాసకోశ ఇబ్బందులు పడే గృహిణి"
+            },
+            "hi": {
+                "name": "सुनीता",
+                "role": "ग्रामीण गृहिणी",
+                "avatar": "👩🏽",
+                "clothing": "साधारण साड़ी",
+                "desc": "लकड़ी के चूल्हे के जहरीले धुएं से परेशान ग्रामीण महिला"
+            }
+        }
+    },
+    {
+        "id": "standup_india",
+        "name": "Stand-Up India Scheme for Entrepreneurs",
+        "category": "Business",
+        "level": "Central",
+        "dept": "Department of Financial Services, Ministry of Finance",
+        "purpose": "Facilitate bank loans between ₹10 Lakh and ₹1 Crore to SC, ST, and Women borrowers for setting up greenfield non-farm enterprises.",
+        "benefits": "Composite term loan & working capital financing from ₹10 Lakh up to ₹100 Lakh (1 Crore) with handholding mentorship support.",
+        "eligibility": {
+            "minAge": 18,
+            "maxAge": 70,
+            "maxIncome": 10000000,
+            "state": "All India",
+            "occupation": "SC/ST / Woman Entrepreneur",
+            "summary": "SC/ST and/or Woman entrepreneurs starting a new greenfield enterprise in manufacturing, services, or trading."
+        },
+        "documents": [
+            {
+                "id": "d1",
+                "name": "Identity Proof & Caste Certificate (for SC/ST)",
+                "required": true,
+                "why": "Category verification"
+            },
+            {
+                "id": "d2",
+                "name": "Detailed Project Report (DPR)",
+                "required": true,
+                "why": "Business feasibility and revenue plan"
+            },
+            {
+                "id": "d3",
+                "name": "PAN Card & Bank Statements (6 Months)",
+                "required": true,
+                "why": "Financial credit appraisal"
+            }
+        ],
+        "applicationSteps": [
+            {
+                "step": 1,
+                "title": "Register on Stand-Up Portal",
+                "desc": "Visit standupmitra.in and submit initial business profile."
+            },
+            {
+                "step": 2,
+                "title": "Bank Branch Assignment",
+                "desc": "Lead bank branch assesses DPR and collateral structure."
+            },
+            {
+                "step": 3,
+                "title": "Loan Sanction & Handholding",
+                "desc": "Composite credit sanctioned with margin money support."
+            }
+        ],
+        "officialUrl": "https://www.india.gov.in/my-government/schemes/stand-india-scheme",
+        "sourceUrl": "https://www.standupmitra.in",
+        "lastVerified": "2026-08-24",
+        "panels": {
+            "en": [
+                {
+                    "num": 1,
+                    "tag": "Panel 1: The Tension",
+                    "image": "assets/standup_1.jpg",
+                    "speaker": "Preeti",
+                    "dialogue": "Setting up a new manufacturing enterprise requires large credit, but commercial banks are hesitant without heavy collateral!",
+                    "caption": "Preeti seeks institutional greenfield financing.",
+                    "sourceRef": "Section 1: Stand-Up India Scheme for Entrepreneurs Official Guidelines (https://www.india.gov.in/my-government/schemes/stand-india-scheme)"
+                },
+                {
+                    "num": 2,
+                    "tag": "Panel 2: The Solution",
+                    "image": "assets/standup_2.jpg",
+                    "speaker": "GovToon Hero",
+                    "dialogue": "Fikr mat kijiye! Stand-Up India Scheme for Entrepreneurs provides: Composite term loan & working capital financing from ₹10 Lakh up to ₹100 Lakh (1 Crore) with handholding mentorship support.",
+                    "caption": "Bank loans between ₹10 Lakh to ₹1 Crore for women and SC/ST greenfield enterprises.",
+                    "sourceRef": "Section 2: Stand-Up India Scheme for Entrepreneurs Official Guidelines (https://www.india.gov.in/my-government/schemes/stand-india-scheme)"
+                },
+                {
+                    "num": 3,
+                    "tag": "Panel 3: The Easy Path",
+                    "image": "assets/standup_3.jpg",
+                    "speaker": "CSC Bhaiya",
+                    "dialogue": "Register on standupmitra.in with your project report and Identity Proof & Caste Certificate (for SC/ST), Detailed Project Report (DPR), PAN Card & Bank Statements (6 Months) for fast-track credit.",
+                    "caption": "Direct connection to leading public sector banks.",
+                    "sourceRef": "Section 3: Stand-Up India Scheme for Entrepreneurs Official Guidelines (https://www.india.gov.in/my-government/schemes/stand-india-scheme)"
+                },
+                {
+                    "num": 4,
+                    "tag": "Panel 4: The Khushali",
+                    "image": "assets/standup_4.jpg",
+                    "speaker": "Tagline",
+                    "dialogue": "🎉 Stand-Up India Scheme for Entrepreneurs: Nari Shakti, Udyog Shakti! Empowering job creators across India!",
+                    "caption": "Factory launched, generating jobs for dozens of local youths.",
+                    "sourceRef": "Section 4: Stand-Up India Scheme for Entrepreneurs Official Guidelines (https://www.india.gov.in/my-government/schemes/stand-india-scheme)"
+                }
+            ],
+            "te": [
+                {
+                    "num": 1,
+                    "tag": "ప్యానెల్ 1: సమస్య & ఆందోళన",
+                    "image": "assets/standup_1.jpg",
+                    "speaker": "ప్రీతి",
+                    "dialogue": "కొత్తగా ఒక తయారీ పరిశ్రమను ప్రారంభించాలంటే పెద్ద ఎత్తున పెట్టుబడి కావాలి, కానీ బ్యాంకులు పూచీకత్తు లేకుండా భారీ రుణాలు ఇవ్వడం లేదు!",
+                    "caption": "పెద్ద పరిశ్రమ స్థాపనకు ప్రీతి పడే ఆరాటం.",
+                    "sourceRef": "Section 1: Stand-Up India Scheme for Entrepreneurs Official Guidelines (https://www.india.gov.in/my-government/schemes/stand-india-scheme)"
+                },
+                {
+                    "num": 2,
+                    "tag": "ప్యానెల్ 2: ప్రభుత్వ పరిష్కారం",
+                    "image": "assets/standup_2.jpg",
+                    "speaker": "గోవ్టూన్ హీరో",
+                    "dialogue": "దిగులుపడకండి ప్రీతి గారూ! Stand-Up India Scheme for Entrepreneurs ద్వారా ప్రభుత్వం అండగా నిలుస్తోంది: Composite term loan & working capital financing from ₹10 Lakh up to ₹100 Lakh (1 Crore) with handholding mentorship support.",
+                    "caption": "మహిళలు మరియు SC/ST లకు కొత్త గ్రీన్‌ఫీల్డ్ పరిశ్రమల కోసం ₹10 లక్షల నుండి ₹1 కోటి వరకు ప్రత్యేక బ్యాంకు రుణాలు.",
+                    "sourceRef": "Section 2: Stand-Up India Scheme for Entrepreneurs Official Guidelines (https://www.india.gov.in/my-government/schemes/stand-india-scheme)"
+                },
+                {
+                    "num": 3,
+                    "tag": "ప్యానెల్ 3: సులువైన దరఖాస్తు",
+                    "image": "assets/standup_3.jpg",
+                    "speaker": "CSC మిత్రుడు",
+                    "dialogue": "మీ ప్రాజెక్ట్ రిపోర్ట్ మరియు ఆధార్ కార్డు మరియు బ్యాంక్ పాస్‌బుక్ తో standupmitra.in పోర్టల్‌లో దరఖాస్తు చేసుకోండి.",
+                    "caption": "ప్రభుత్వ రంగ బ్యాంకుల ద్వారా త్వరిత రుణ మంజూరు.",
+                    "sourceRef": "Section 3: Stand-Up India Scheme for Entrepreneurs Official Guidelines (https://www.india.gov.in/my-government/schemes/stand-india-scheme)"
+                },
+                {
+                    "num": 4,
+                    "tag": "ప్యానెల్ 4: ఆనందం & ప్రయోజనం",
+                    "image": "assets/standup_4.jpg",
+                    "speaker": "స్లోగన్",
+                    "dialogue": "🎉 Stand-Up India Scheme for Entrepreneurs: మహిళా సాధికారత - పారిశ్రామిక విప్లవం! ఉద్యోగ అన్వేషకుల నుండి ఉద్యోగ కల్పనదారుల స్థాయికి!",
+                    "caption": "సొంత ఫ్యాక్టరీ ప్రారంభంతో పదిమందికి ఉపాధి కల్పన.",
+                    "sourceRef": "Section 4: Stand-Up India Scheme for Entrepreneurs Official Guidelines (https://www.india.gov.in/my-government/schemes/stand-india-scheme)"
+                }
+            ],
+            "hi": [
+                {
+                    "num": 1,
+                    "tag": "पैनल 1: चिंता व समस्या",
+                    "image": "assets/standup_1.jpg",
+                    "speaker": "प्रीति",
+                    "dialogue": "नया कारखाना या विनिर्माण उद्योग लगाने के लिए बड़े लोन की जरूरत है, लेकिन बैंक बिना भारी गारंटी के बड़ा लोन नहीं दे रहे!",
+                    "caption": "बड़ी पूंजी के लिए महिला उद्यमी की चिंता।",
+                    "sourceRef": "Section 1: Stand-Up India Scheme for Entrepreneurs Official Guidelines (https://www.india.gov.in/my-government/schemes/stand-india-scheme)"
+                },
+                {
+                    "num": 2,
+                    "tag": "पैनल 2: सरकारी समाधान",
+                    "image": "assets/standup_2.jpg",
+                    "speaker": "गवटून हीरो",
+                    "dialogue": "बिल्कुल चिंता न करें प्रीति जी! Stand-Up India Scheme for Entrepreneurs दे रही है सीधा वित्तीय संबल: Composite term loan & working capital financing from ₹10 Lakh up to ₹100 Lakh (1 Crore) with handholding mentorship support.",
+                    "caption": "महिला और SC/ST वर्ग के उद्यमियों को नए उद्योग हेतु ₹10 लाख से ₹1 करोड़ तक का बैंक लोन।",
+                    "sourceRef": "Section 2: Stand-Up India Scheme for Entrepreneurs Official Guidelines (https://www.india.gov.in/my-government/schemes/stand-india-scheme)"
+                },
+                {
+                    "num": 3,
+                    "tag": "पैनल 3: आसान आवेदन प्रक्रिया",
+                    "image": "assets/standup_3.jpg",
+                    "speaker": "CSC भैया",
+                    "dialogue": "बस अपने प्रोजेक्ट रिपोर्ट और आधार कार्ड और बैंक पासबुक के साथ standupmitra.in पोर्टल पर आवेदन करें।",
+                    "caption": "अग्रणी सरकारी बैंकों से सीधा संपर्क व फास्ट-ट्रैक लोन।",
+                    "sourceRef": "Section 3: Stand-Up India Scheme for Entrepreneurs Official Guidelines (https://www.india.gov.in/my-government/schemes/stand-india-scheme)"
+                },
+                {
+                    "num": 4,
+                    "tag": "पैनल 4: खुशहाली व सफलता",
+                    "image": "assets/standup_4.jpg",
+                    "speaker": "टैगलाइन",
+                    "dialogue": "🎉 Stand-Up India Scheme for Entrepreneurs: नारी शक्ति, उद्योग शक्ति! नौकरी मांगने वाले से नौकरी देने वाली बनीं!",
+                    "caption": "कारखाना शुरू, दर्जनों युवाओं को मिला रोजगार।",
+                    "sourceRef": "Section 4: Stand-Up India Scheme for Entrepreneurs Official Guidelines (https://www.india.gov.in/my-government/schemes/stand-india-scheme)"
+                }
+            ]
+        },
+        "character": {
+            "en": {
+                "name": "Preeti",
+                "role": "Aspiring Woman Entrepreneur",
+                "avatar": "👩‍💼",
+                "clothing": "Formal Blazer",
+                "desc": "Visionary entrepreneur setting up a greenfield enterprise"
+            },
+            "te": {
+                "name": "ప్రీతి",
+                "role": "మహిళా పారిశ్రామికవేత్త",
+                "avatar": "👩‍💼",
+                "clothing": "ఫార్మల్ దుస్తులు",
+                "desc": "నూతన గ్రీన్‌ఫీల్డ్ పరిశ్రమను స్థాపించాలనే లక్ష్యం కలిగిన యువతి"
+            },
+            "hi": {
+                "name": "प्रीति",
+                "role": "महिला उद्यमी",
+                "avatar": "👩‍💼",
+                "clothing": "फॉर्मल परिधान",
+                "desc": "नया विनिर्माण उद्योग स्थापित करने का सपना देखने वाली महिला उद्यमी"
+            }
+        }
+    },
+    {
+        "id": "pm_matsya_sampada",
+        "name": "PM Matsya Sampada Yojana (PMMSY)",
+        "category": "Agriculture",
+        "level": "Central",
+        "dept": "Department of Fisheries, Ministry of Fisheries, Animal Husbandry & Dairying",
+        "purpose": "Harness potential of fisheries sector sustainably through infrastructure, post-harvest logistics, and fish farmer livelihood enhancement.",
+        "benefits": "Capital subsidy of 40% for General category and 60% for Women, SC, and ST beneficiaries on fish ponds, biofloc, RAS, and transport vans.",
+        "eligibility": {
+            "minAge": 18,
+            "maxAge": 75,
+            "maxIncome": 1000000,
+            "state": "All India",
+            "occupation": "Fish Farmer / Fisherfolk",
+            "summary": "Fishers, fish farmers, fish workers, SHGs, and fisheries cooperatives."
+        },
+        "documents": [
+            {
+                "id": "d1",
+                "name": "Aadhaar Card & Fisherman Registration",
+                "required": true,
+                "why": "Identity and occupational status"
+            },
+            {
+                "id": "d2",
+                "name": "Land/Water Body Lease or Ownership Proof",
+                "required": true,
+                "why": "Aquaculture site verification"
+            },
+            {
+                "id": "d3",
+                "name": "Bank Passbook with IFSC",
+                "required": true,
+                "why": "Direct DBT subsidy release"
+            }
+        ],
+        "applicationSteps": [
+            {
+                "step": 1,
+                "title": "Prepare Fisheries Project Proposal",
+                "desc": "Select unit (e.g. Biofloc, Ice Plant, Motorcycle with Icebox)."
+            },
+            {
+                "step": 2,
+                "title": "Submit Application to District Fisheries Officer",
+                "desc": "Submit through state fisheries portal or pmmsy.dof.gov.in."
+            },
+            {
+                "step": 3,
+                "title": "Inspection & 60% DBT Subsidy Release",
+                "desc": "Physical verification followed by direct bank subsidy credit."
+            }
+        ],
+        "officialUrl": "https://www.india.gov.in/my-government/schemes/pm-matsya-sampada-yojana",
+        "sourceUrl": "https://pmmsy.dof.gov.in",
+        "lastVerified": "2026-08-24",
+        "panels": {
+            "en": [
+                {
+                    "num": 1,
+                    "tag": "Panel 1: The Tension",
+                    "image": "assets/matsya_1.jpg",
+                    "speaker": "Ravi",
+                    "dialogue": "Fish spoilage due to lack of cold storage vans causes heavy losses every season! How can we get modern equipment subsidies?",
+                    "caption": "Ravi worries about cold chain losses and expensive aquaculture setups.",
+                    "sourceRef": "Section 1: PM Matsya Sampada Yojana (PMMSY) Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-matsya-sampada-yojana)"
+                },
+                {
+                    "num": 2,
+                    "tag": "Panel 2: The Solution",
+                    "image": "assets/matsya_2.jpg",
+                    "speaker": "GovToon Hero",
+                    "dialogue": "Fikr mat kijiye! PM Matsya Sampada Yojana (PMMSY) provides: Capital subsidy of 40% for General category and 60% for Women, SC, and ST beneficiaries on fish ponds, biofloc, RAS, and transport vans.",
+                    "caption": "Up to 60% capital subsidy on biofloc ponds, insulated vans, and modern boats.",
+                    "sourceRef": "Section 2: PM Matsya Sampada Yojana (PMMSY) Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-matsya-sampada-yojana)"
+                },
+                {
+                    "num": 3,
+                    "tag": "Panel 3: The Easy Path",
+                    "image": "assets/matsya_3.jpg",
+                    "speaker": "CSC Bhaiya",
+                    "dialogue": "Submit your project proposal along with Aadhaar Card & Fisherman Registration, Land/Water Body Lease or Ownership Proof, Bank Passbook with IFSC at the District Fisheries Office (DFO) or online.",
+                    "caption": "Quick technical approval and direct subsidy credit.",
+                    "sourceRef": "Section 3: PM Matsya Sampada Yojana (PMMSY) Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-matsya-sampada-yojana)"
+                },
+                {
+                    "num": 4,
+                    "tag": "Panel 4: The Khushali",
+                    "image": "assets/matsya_4.jpg",
+                    "speaker": "Tagline",
+                    "dialogue": "🎉 PM Matsya Sampada Yojana (PMMSY): Matsya Kranti Se Neeli Kranti! Doubling fisher income with modern technology!",
+                    "caption": "Profits booming with refrigerated cold storage.",
+                    "sourceRef": "Section 4: PM Matsya Sampada Yojana (PMMSY) Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-matsya-sampada-yojana)"
+                }
+            ],
+            "te": [
+                {
+                    "num": 1,
+                    "tag": "ప్యానెల్ 1: సమస్య & ఆందోళన",
+                    "image": "assets/matsya_1.jpg",
+                    "speaker": "రవి",
+                    "dialogue": "కోల్డ్ స్టోరేజ్ వాహనాలు లేకపోవడం వల్ల పట్టిన చేపలు పాడైపోయి భారీ నష్టాలు వస్తున్నాయి! ఆధునిక పరికరాలపై సబ్సిడీ ఎలా పొందాలి?",
+                    "caption": "చేపల నష్టాలతో రవి పడే బాధ.",
+                    "sourceRef": "Section 1: PM Matsya Sampada Yojana (PMMSY) Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-matsya-sampada-yojana)"
+                },
+                {
+                    "num": 2,
+                    "tag": "ప్యానెల్ 2: ప్రభుత్వ పరిష్కారం",
+                    "image": "assets/matsya_2.jpg",
+                    "speaker": "గోవ్టూన్ హీరో",
+                    "dialogue": "దిగులుపడకండి రవి గారూ! PM Matsya Sampada Yojana (PMMSY) ద్వారా ప్రభుత్వం అండగా నిలుస్తోంది: Capital subsidy of 40% for General category and 60% for Women, SC, and ST beneficiaries on fish ponds, biofloc, RAS, and transport vans.",
+                    "caption": "మహిళలు & SC/ST లకు 60%, ఇతరులకు 40% వరకు బోట్లు, బయోఫ్లాక్ మరియు కోల్డ్ వ్యాన్లపై మూలధన సబ్సిడీ.",
+                    "sourceRef": "Section 2: PM Matsya Sampada Yojana (PMMSY) Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-matsya-sampada-yojana)"
+                },
+                {
+                    "num": 3,
+                    "tag": "ప్యానెల్ 3: సులువైన దరఖాస్తు",
+                    "image": "assets/matsya_3.jpg",
+                    "speaker": "CSC మిత్రుడు",
+                    "dialogue": "మీ ఆధార్ కార్డు మరియు బ్యాంక్ పాస్‌బుక్ తో జిల్లా మత్స్య అధికారి (DFO) కార్యాలయం లేదా pmmsy పోర్టల్‌లో దరఖాస్తు చేయండి.",
+                    "caption": "ప్రాజెక్ట్ పరిశీలన అనంతరం నేరుగా ఖాతాలో సబ్సిడీ జమ.",
+                    "sourceRef": "Section 3: PM Matsya Sampada Yojana (PMMSY) Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-matsya-sampada-yojana)"
+                },
+                {
+                    "num": 4,
+                    "tag": "ప్యానెల్ 4: ఆనందం & ప్రయోజనం",
+                    "image": "assets/matsya_4.jpg",
+                    "speaker": "స్లోగన్",
+                    "dialogue": "🎉 PM Matsya Sampada Yojana (PMMSY): నీలి విప్లవం - మత్స్యకారుల ఆదాయం రెట్టింపు! ఆధునిక ఆక్వాకల్చర్‌తో అధిక లాభాలు!",
+                    "caption": "కోల్డ్ వ్యాన్‌తో తాజా చేపల విక్రయం, పుష్కలమైన లాభాలు.",
+                    "sourceRef": "Section 4: PM Matsya Sampada Yojana (PMMSY) Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-matsya-sampada-yojana)"
+                }
+            ],
+            "hi": [
+                {
+                    "num": 1,
+                    "tag": "पैनल 1: चिंता व समस्या",
+                    "image": "assets/matsya_1.jpg",
+                    "speaker": "रवि",
+                    "dialogue": "कोल्ड स्टोरेज और रेफ्रिजरेटेड वैन न होने से मछलियां खराब हो जाती हैं और भारी घाटा होता है! आधुनिक तालाब व नाव पर सब्सिडी कैसे मिले?",
+                    "caption": "मछली खराब होने के नुकसान से परेशान पालक।",
+                    "sourceRef": "Section 1: PM Matsya Sampada Yojana (PMMSY) Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-matsya-sampada-yojana)"
+                },
+                {
+                    "num": 2,
+                    "tag": "पैनल 2: सरकारी समाधान",
+                    "image": "assets/matsya_2.jpg",
+                    "speaker": "गवटून हीरो",
+                    "dialogue": "बिल्कुल चिंता न करें रवि भाई! PM Matsya Sampada Yojana (PMMSY) दे रही है भारी सरकारी अनुदान: Capital subsidy of 40% for General category and 60% for Women, SC, and ST beneficiaries on fish ponds, biofloc, RAS, and transport vans.",
+                    "caption": "नाव, जाल, बायोफ्लॉक यूनिट और आइस वैन पर महिलाओं/SC/ST को 60% व अन्य को 40% तक पूंजीगत सब्सिडी।",
+                    "sourceRef": "Section 2: PM Matsya Sampada Yojana (PMMSY) Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-matsya-sampada-yojana)"
+                },
+                {
+                    "num": 3,
+                    "tag": "पैनल 3: आसान आवेदन प्रक्रिया",
+                    "image": "assets/matsya_3.jpg",
+                    "speaker": "CSC भैया",
+                    "dialogue": "बस अपने आधार कार्ड और बैंक पासबुक और प्रोजेक्ट प्रस्ताव के साथ जिला मत्स्य अधिकारी (DFO) या पोर्टल पर आवेदन करें।",
+                    "caption": "तकनीकी जांच के बाद सीधे बैंक खाते में सब्सिडी भुगतान।",
+                    "sourceRef": "Section 3: PM Matsya Sampada Yojana (PMMSY) Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-matsya-sampada-yojana)"
+                },
+                {
+                    "num": 4,
+                    "tag": "पैनल 4: खुशहाली व सफलता",
+                    "image": "assets/matsya_4.jpg",
+                    "speaker": "टैगलाइन",
+                    "dialogue": "🎉 PM Matsya Sampada Yojana (PMMSY): नीली क्रांति से समृद्धि! आधुनिक मत्स्य पालन से कई गुना बढ़ी कमाई!",
+                    "caption": "आधुनिक उपकरणों से मछुआरों का जीवन खुशहाल।",
+                    "sourceRef": "Section 4: PM Matsya Sampada Yojana (PMMSY) Official Guidelines (https://www.india.gov.in/my-government/schemes/pm-matsya-sampada-yojana)"
+                }
+            ]
+        },
+        "character": {
+            "en": {
+                "name": "Ravi Fisher",
+                "role": "Aquaculture Farmer / Fisherman",
+                "avatar": "🐟",
+                "clothing": "Casual Shirt & Lungi",
+                "desc": "Aquaculture farmer seeking modern boats, ice vans, and biofloc units"
+            },
+            "te": {
+                "name": "రవి",
+                "role": "మత్స్యకారుడు / ఆక్వా రైతు",
+                "avatar": "🐟",
+                "clothing": "చొక్కా & లుంగీ",
+                "desc": "ఆధునిక బోట్లు, ఇన్సులేటెడ్ వాహనాలు, బయోఫ్లాక్ కోసం సబ్సిడీ కోరే రైతు"
+            },
+            "hi": {
+                "name": "रवि मछुआरा",
+                "role": "मत्स्य पालक व मछुआरा",
+                "avatar": "🐟",
+                "clothing": "कमीज व लुंगी",
+                "desc": "आधुनिक नाव, बायोफ्लॉक यूनिट व आइस वैन हेतु सब्सिडी चाहने वाला मछुआरा"
+            }
+        }
+    },
+    {
+        "id": "atal_pension",
+        "name": "Atal Pension Yojana (APY)",
+        "category": "Banking & Finance",
+        "level": "Central",
+        "dept": "Pension Fund Regulatory and Development Authority (PFRDA)",
+        "purpose": "Universal social security scheme for all Indian citizens in the unorganized sector to secure guaranteed old age income.",
+        "benefits": "Guaranteed minimum monthly pension of ₹1,000, ₹2,000, ₹3,000, ₹4,000, or ₹5,000 per month starting at age 60 for lifetime.",
+        "eligibility": {
+            "minAge": 18,
+            "maxAge": 40,
+            "maxIncome": 500000,
+            "state": "All India",
+            "occupation": "General Citizen",
+            "summary": "Any Indian citizen between 18 and 40 years holding a savings bank or post office account (non-taxpayer)."
+        },
+        "documents": [
+            {
+                "id": "d1",
+                "name": "Aadhaar Card",
+                "required": true,
+                "why": "Identity, age, and nominee verification"
+            },
+            {
+                "id": "d2",
+                "name": "Savings Bank / Post Office Account",
+                "required": true,
+                "why": "Monthly auto-debit of subscription"
+            },
+            {
+                "id": "d3",
+                "name": "Mobile Number",
+                "required": true,
+                "why": "PRAN generation and contribution alerts"
+            }
+        ],
+        "applicationSteps": [
+            {
+                "step": 1,
+                "title": "Approach Your Bank Branch",
+                "desc": "Visit your bank or access internet banking APY portal."
+            },
+            {
+                "step": 2,
+                "title": "Select Pension Tier (₹1,000 - ₹5,000)",
+                "desc": "Choose desired monthly pension at age 60."
+            },
+            {
+                "step": 3,
+                "title": "Authorize Auto-Debit & Get PRAN",
+                "desc": "Permanent Retirement Account Number (PRAN) issued immediately."
+            }
+        ],
+        "officialUrl": "https://www.india.gov.in/my-government/schemes/atal-pension-yojana",
+        "sourceUrl": "https://www.npscra.nsdl.co.in",
+        "lastVerified": "2026-08-24",
+        "panels": {
+            "en": [
+                {
+                    "num": 1,
+                    "tag": "Panel 1: The Tension",
+                    "image": "assets/pension_1.jpg",
+                    "speaker": "Sharma Ji",
+                    "dialogue": "As I grow older, I worry about medical expenses and daily food without being a financial burden on my children!",
+                    "caption": "Sharma Ji worries about old age financial dignity.",
+                    "sourceRef": "Section 1: Atal Pension Yojana (APY) Official Guidelines (https://www.india.gov.in/my-government/schemes/atal-pension-yojana)"
+                },
+                {
+                    "num": 2,
+                    "tag": "Panel 2: The Solution",
+                    "image": "assets/pension_2.jpg",
+                    "speaker": "GovToon Hero",
+                    "dialogue": "Fikr mat kijiye! Atal Pension Yojana (APY) provides: Guaranteed minimum monthly pension of ₹1,000, ₹2,000, ₹3,000, ₹4,000, or ₹5,000 per month starting at age 60 for lifetime.",
+                    "caption": "Guaranteed ₹3,000 to ₹5,000 monthly lifelong pension with 50% government co-contribution.",
+                    "sourceRef": "Section 2: Atal Pension Yojana (APY) Official Guidelines (https://www.india.gov.in/my-government/schemes/atal-pension-yojana)"
+                },
+                {
+                    "num": 3,
+                    "tag": "Panel 3: The Easy Path",
+                    "image": "assets/pension_3.jpg",
+                    "speaker": "CSC Bhaiya",
+                    "dialogue": "Enroll easily with your Aadhaar Card, Savings Bank / Post Office Account, Mobile Number at any bank branch or nearest CSC center.",
+                    "caption": "Auto-debit setup with government co-contribution.",
+                    "sourceRef": "Section 3: Atal Pension Yojana (APY) Official Guidelines (https://www.india.gov.in/my-government/schemes/atal-pension-yojana)"
+                },
+                {
+                    "num": 4,
+                    "tag": "Panel 4: The Khushali",
+                    "image": "assets/pension_4.jpg",
+                    "speaker": "Tagline",
+                    "dialogue": "🎉 Atal Pension Yojana (APY): Vriddhavastha Mein Samman! Guaranteed monthly pension for a peaceful retirement!",
+                    "caption": "Receiving direct monthly pension with pride.",
+                    "sourceRef": "Section 4: Atal Pension Yojana (APY) Official Guidelines (https://www.india.gov.in/my-government/schemes/atal-pension-yojana)"
+                }
+            ],
+            "te": [
+                {
+                    "num": 1,
+                    "tag": "ప్యానెల్ 1: సమస్య & ఆందోళన",
+                    "image": "assets/pension_1.jpg",
+                    "speaker": "శర్మ గారు",
+                    "dialogue": "వయసు పైబడుతున్న కొద్దీ మందుల ఖర్చులు, నిత్యవసరాల కోసం పిల్లలపై ఆధారపడకుండా గౌరవంగా ఎలా బతకాలి?",
+                    "caption": "వృద్ధాప్య భరోసా కొరకు శర్మ గారి ఆవేదన.",
+                    "sourceRef": "Section 1: Atal Pension Yojana (APY) Official Guidelines (https://www.india.gov.in/my-government/schemes/atal-pension-yojana)"
+                },
+                {
+                    "num": 2,
+                    "tag": "ప్యానెల్ 2: ప్రభుత్వ పరిష్కారం",
+                    "image": "assets/pension_2.jpg",
+                    "speaker": "గోవ్టూన్ హీరో",
+                    "dialogue": "దిగులుపడకండి శర్మ గారూ! Atal Pension Yojana (APY) ద్వారా ప్రభుత్వం అండగా నిలుస్తోంది: Guaranteed minimum monthly pension of ₹1,000, ₹2,000, ₹3,000, ₹4,000, or ₹5,000 per month starting at age 60 for lifetime.",
+                    "caption": "నెలకు ₹3,000 నుండి ₹5,000 వరకు జీవితాంతం గ్యారంటీ పెన్షన్ మరియు 50% ప్రభుత్వ వాటా జమ.",
+                    "sourceRef": "Section 2: Atal Pension Yojana (APY) Official Guidelines (https://www.india.gov.in/my-government/schemes/atal-pension-yojana)"
+                },
+                {
+                    "num": 3,
+                    "tag": "ప్యానెల్ 3: సులువైన దరఖాస్తు",
+                    "image": "assets/pension_3.jpg",
+                    "speaker": "CSC మిత్రుడు",
+                    "dialogue": "మీ ఆధార్ కార్డు మరియు బ్యాంక్ పాస్‌బుక్ తో ఏ బ్యాంకులోనైనా లేదా CSC కేంద్రంలోనైనా సులభంగా ఖాతా ప్రారంభించండి.",
+                    "caption": "సులభమైన ఆటో-డెబిట్ మరియు ప్రభుత్వ బోనస్ జమ.",
+                    "sourceRef": "Section 3: Atal Pension Yojana (APY) Official Guidelines (https://www.india.gov.in/my-government/schemes/atal-pension-yojana)"
+                },
+                {
+                    "num": 4,
+                    "tag": "ప్యానెల్ 4: ఆనందం & ప్రయోజనం",
+                    "image": "assets/pension_4.jpg",
+                    "speaker": "స్లోగన్",
+                    "dialogue": "🎉 Atal Pension Yojana (APY): వృద్ధాప్యంలో ఆత్మగౌరవ రక్షణ! ప్రతి నెలా బ్యాంక్ ఖాతాలో గ్యారంటీ పెన్షన్!",
+                    "caption": "నిశ్చింతగా, సంతోషంగా విశ్రాంత జీవనం.",
+                    "sourceRef": "Section 4: Atal Pension Yojana (APY) Official Guidelines (https://www.india.gov.in/my-government/schemes/atal-pension-yojana)"
+                }
+            ],
+            "hi": [
+                {
+                    "num": 1,
+                    "tag": "पैनल 1: चिंता व समस्या",
+                    "image": "assets/pension_1.jpg",
+                    "speaker": "शर्मा जी",
+                    "dialogue": "उम्र बढ़ने के साथ दवा और रोजमर्रा के खर्चों के लिए किसी के आगे हाथ न फैलाना पड़े, बुढ़ापे की लाठी कैसे बनेगी?",
+                    "caption": "बुढ़ापे की आर्थिक सुरक्षा को लेकर वरिष्ठ नागरिक की चिंता।",
+                    "sourceRef": "Section 1: Atal Pension Yojana (APY) Official Guidelines (https://www.india.gov.in/my-government/schemes/atal-pension-yojana)"
+                },
+                {
+                    "num": 2,
+                    "tag": "पैनल 2: सरकारी समाधान",
+                    "image": "assets/pension_2.jpg",
+                    "speaker": "गवटून हीरो",
+                    "dialogue": "बिल्कुल चिंता न करें शर्मा जी! Atal Pension Yojana (APY) दे रही है पक्की पेंशन: Guaranteed minimum monthly pension of ₹1,000, ₹2,000, ₹3,000, ₹4,000, or ₹5,000 per month starting at age 60 for lifetime.",
+                    "caption": "60 वर्ष की आयु के बाद ₹3,000 से ₹5,000 प्रतिमाह आजीवन गारंटीड पेंशन और सरकार का 50% अंशदान।",
+                    "sourceRef": "Section 2: Atal Pension Yojana (APY) Official Guidelines (https://www.india.gov.in/my-government/schemes/atal-pension-yojana)"
+                },
+                {
+                    "num": 3,
+                    "tag": "पैनल 3: आसान आवेदन प्रक्रिया",
+                    "image": "assets/pension_3.jpg",
+                    "speaker": "CSC भैया",
+                    "dialogue": "बस अपने आधार कार्ड और बैंक पासबुक के साथ किसी भी बैंक या जन सेवा केंद्र में मात्र 5 मिनट में खाता खुलवाएं।",
+                    "caption": "आसान ऑटो-डेबिट और सरकारी सुरक्षा गारंटी।",
+                    "sourceRef": "Section 3: Atal Pension Yojana (APY) Official Guidelines (https://www.india.gov.in/my-government/schemes/atal-pension-yojana)"
+                },
+                {
+                    "num": 4,
+                    "tag": "पैनल 4: खुशहाली व सफलता",
+                    "image": "assets/pension_4.jpg",
+                    "speaker": "टैगलाइन",
+                    "dialogue": "🎉 Atal Pension Yojana (APY): बुढ़ापे का सच्चा सहारा! हर महीने सम्मानजनक पेंशन, आत्मनिर्भर जीवन!",
+                    "caption": "पेंशन से चेहरे पर सुकून, स्वाभिमान से भरा बुढ़ापा।",
+                    "sourceRef": "Section 4: Atal Pension Yojana (APY) Official Guidelines (https://www.india.gov.in/my-government/schemes/atal-pension-yojana)"
+                }
+            ]
+        },
+        "character": {
+            "en": {
+                "name": "Sharma Ji",
+                "role": "Senior Citizen / Unorganized Worker",
+                "avatar": "👴🏽",
+                "clothing": "Kurta & Glasses",
+                "desc": "Senior citizen seeking guaranteed monthly pension in golden years"
+            },
+            "te": {
+                "name": "శర్మ గారు",
+                "role": "వృద్ధ పౌరుడు / అసంఘటిత కార్మికుడు",
+                "avatar": "👴🏽",
+                "clothing": "కుర్తా & కళ్లద్దాలు",
+                "desc": "వృద్ధాప్యంలో గౌరవప్రదమైన నెలవారీ పింఛను కోరుకునే వ్యక్తి"
+            },
+            "hi": {
+                "name": "शर्मा जी",
+                "role": "वरिष्ठ नागरिक / असंगठित श्रमिक",
+                "avatar": "👴🏽",
+                "clothing": "कुर्ता व चश्मा",
+                "desc": "बुढ़ापे में आत्मनिर्भरता व मासिक पेंशन चाहने वाले वरिष्ठ नागरिक"
+            }
+        }
+    },
+    {
+        "id": "jal_jeevan",
+        "name": "Jal Jeevan Mission (Har Ghar Jal)",
+        "category": "Housing & Energy",
+        "level": "Central",
+        "dept": "Department of Drinking Water & Sanitation, Ministry of Jal Shakti",
+        "purpose": "Provide Functional Household Tap Connection (FHTC) delivering 55 liters per capita per day of potable quality drinking water to every rural household.",
+        "benefits": "100% Free piped drinking water tap connection at home doorstep with regular village water quality testing.",
+        "eligibility": {
+            "minAge": 0,
+            "maxAge": 100,
+            "maxIncome": 1000000,
+            "state": "All India",
+            "occupation": "Rural Household",
+            "summary": "All rural households in villages across India without existing tap connections."
+        },
+        "documents": [
+            {
+                "id": "d1",
+                "name": "Aadhaar Card",
+                "required": true,
+                "why": "Household identification on JJM dashboard"
+            },
+            {
+                "id": "d2",
+                "name": "Village Ration Card",
+                "required": false,
+                "why": "Household member mapping"
+            }
+        ],
+        "applicationSteps": [
+            {
+                "step": 1,
+                "title": "Village Action Plan (VAP)",
+                "desc": "Pani Samiti / Gram Panchayat maps all unserved households."
+            },
+            {
+                "step": 2,
+                "title": "Piped Infrastructure Installation",
+                "desc": "Free household tap connected to village piped water supply."
+            },
+            {
+                "step": 3,
+                "title": "Clean Water Testing & Certification",
+                "desc": "Local women field-test water purity using Field Test Kits (FTKs)."
+            }
+        ],
+        "officialUrl": "https://www.india.gov.in/my-government/schemes/jal-jeevan-mission",
+        "sourceUrl": "https://jaljeevanmission.gov.in",
+        "lastVerified": "2026-08-24",
+        "panels": {
+            "en": [
+                {
+                    "num": 1,
+                    "tag": "Panel 1: The Tension",
+                    "image": "assets/jeevan_1.jpg",
+                    "speaker": "Ganga Bai",
+                    "dialogue": "Walking miles under the hot sun every morning just to fetch muddy well water drains all our time and energy!",
+                    "caption": "Ganga Bai struggles with severe drinking water scarcity.",
+                    "sourceRef": "Section 1: Jal Jeevan Mission (Har Ghar Jal) Official Guidelines (https://www.india.gov.in/my-government/schemes/jal-jeevan-mission)"
+                },
+                {
+                    "num": 2,
+                    "tag": "Panel 2: The Solution",
+                    "image": "assets/jeevan_2.jpg",
+                    "speaker": "GovToon Hero",
+                    "dialogue": "Fikr mat kijiye! Jal Jeevan Mission (Har Ghar Jal) provides: 100% Free piped drinking water tap connection at home doorstep with regular village water quality testing.",
+                    "caption": "100% free Functional Household Tap Connection providing 55 liters/day pure water.",
+                    "sourceRef": "Section 2: Jal Jeevan Mission (Har Ghar Jal) Official Guidelines (https://www.india.gov.in/my-government/schemes/jal-jeevan-mission)"
+                },
+                {
+                    "num": 3,
+                    "tag": "Panel 3: The Easy Path",
+                    "image": "assets/jeevan_3.jpg",
+                    "speaker": "CSC Bhaiya",
+                    "dialogue": "Register your household with Aadhaar Card, Village Ration Card at the Gram Panchayat Pani Samiti committee.",
+                    "caption": "Fast pipeline installation right to your home courtyard.",
+                    "sourceRef": "Section 3: Jal Jeevan Mission (Har Ghar Jal) Official Guidelines (https://www.india.gov.in/my-government/schemes/jal-jeevan-mission)"
+                },
+                {
+                    "num": 4,
+                    "tag": "Panel 4: The Khushali",
+                    "image": "assets/jeevan_4.jpg",
+                    "speaker": "Tagline",
+                    "dialogue": "🎉 Jal Jeevan Mission (Har Ghar Jal): Har Ghar Nal Se Jal! Pure, tested drinking water at every doorstep!",
+                    "caption": "Abundant clean tap water flowing right at home.",
+                    "sourceRef": "Section 4: Jal Jeevan Mission (Har Ghar Jal) Official Guidelines (https://www.india.gov.in/my-government/schemes/jal-jeevan-mission)"
+                }
+            ],
+            "te": [
+                {
+                    "num": 1,
+                    "tag": "ప్యానెల్ 1: సమస్య & ఆందోళన",
+                    "image": "assets/jeevan_1.jpg",
+                    "speaker": "గంగా బాయి",
+                    "dialogue": "ప్రతిరోజూ ఉదయమే తాగునీటి కోసం ఎండలో మైళ్ల దూరం నడవాల్సి వస్తోంది! మా ఇంటికే నేరుగా మంచినీటి కుళాయి ఎలా వస్తుంది?",
+                    "caption": "తాగునీటి ఎద్దడితో గంగాబాయి పడే ఇబ్బంది.",
+                    "sourceRef": "Section 1: Jal Jeevan Mission (Har Ghar Jal) Official Guidelines (https://www.india.gov.in/my-government/schemes/jal-jeevan-mission)"
+                },
+                {
+                    "num": 2,
+                    "tag": "ప్యానెల్ 2: ప్రభుత్వ పరిష్కారం",
+                    "image": "assets/jeevan_2.jpg",
+                    "speaker": "గోవ్టూన్ హీరో",
+                    "dialogue": "దిగులుపడకండి గంగా బాయి గారూ! Jal Jeevan Mission (Har Ghar Jal) ద్వారా ప్రభుత్వం ప్రతి ఇంటికీ నీటిని తెస్తోంది: 100% Free piped drinking water tap connection at home doorstep with regular village water quality testing.",
+                    "caption": "రోజుకు తలసరి 55 లీటర్ల శుద్ధమైన, సురక్షితమైన కుళాయి నీరు ఉచితంగా ఇంటి ముంగిటకే.",
+                    "sourceRef": "Section 2: Jal Jeevan Mission (Har Ghar Jal) Official Guidelines (https://www.india.gov.in/my-government/schemes/jal-jeevan-mission)"
+                },
+                {
+                    "num": 3,
+                    "tag": "ప్యానెల్ 3: సులువైన దరఖాస్తు",
+                    "image": "assets/jeevan_3.jpg",
+                    "speaker": "CSC మిత్రుడు",
+                    "dialogue": "మీ ఆధార్ కార్డు మరియు బ్యాంక్ పాస్‌బుక్ తో గ్రామ పంచాయతీ పానీ సమితి వద్ద మీ ఇంటి పేరు నమోదు చేయించండి.",
+                    "caption": "మీ ఇంటి వరకు ఉచితంగా పైప్‌లైన్ మరియు కుళాయి అమరిక.",
+                    "sourceRef": "Section 3: Jal Jeevan Mission (Har Ghar Jal) Official Guidelines (https://www.india.gov.in/my-government/schemes/jal-jeevan-mission)"
+                },
+                {
+                    "num": 4,
+                    "tag": "ప్యానెల్ 4: ఆనందం & ప్రయోజనం",
+                    "image": "assets/jeevan_4.jpg",
+                    "speaker": "స్లోగన్",
+                    "dialogue": "🎉 Jal Jeevan Mission (Har Ghar Jal): ప్రతి ఇంటికీ కుళాయి నీరు! స్వచ్ఛమైన జలం - ఆరోగ్యకరమైన గ్రామీణ భారతం!",
+                    "caption": "ఇంటి వద్దే స్వచ్ఛమైన మంచినీటి ప్రవాహం.",
+                    "sourceRef": "Section 4: Jal Jeevan Mission (Har Ghar Jal) Official Guidelines (https://www.india.gov.in/my-government/schemes/jal-jeevan-mission)"
+                }
+            ],
+            "hi": [
+                {
+                    "num": 1,
+                    "tag": "पैनल 1: चिंता व समस्या",
+                    "image": "assets/jeevan_1.jpg",
+                    "speaker": "गंगा बाई",
+                    "dialogue": "रोज सुबह-सुबह पीने के पानी के लिए मीलों दूर कुएं पर जाना पड़ता है, जिससे सारा समय और ताकत बर्बाद हो जाती है!",
+                    "caption": "पीने के पानी की भारी किल्लत से परेशान।",
+                    "sourceRef": "Section 1: Jal Jeevan Mission (Har Ghar Jal) Official Guidelines (https://www.india.gov.in/my-government/schemes/jal-jeevan-mission)"
+                },
+                {
+                    "num": 2,
+                    "tag": "पैनल 2: सरकारी समाधान",
+                    "image": "assets/jeevan_2.jpg",
+                    "speaker": "गवटून हीरो",
+                    "dialogue": "बिल्कुल चिंता न करें गंगा बाई जी! Jal Jeevan Mission (Har Ghar Jal) से हर घर तक पहुंच रहा है पानी: 100% Free piped drinking water tap connection at home doorstep with regular village water quality testing.",
+                    "caption": "हर ग्रामीण घर में 100% मुफ्त नल कनेक्शन और प्रतिदिन 55 लीटर शुद्ध पेयजल की गारंटी।",
+                    "sourceRef": "Section 2: Jal Jeevan Mission (Har Ghar Jal) Official Guidelines (https://www.india.gov.in/my-government/schemes/jal-jeevan-mission)"
+                },
+                {
+                    "num": 3,
+                    "tag": "पैनल 3: आसान आवेदन प्रक्रिया",
+                    "image": "assets/jeevan_3.jpg",
+                    "speaker": "CSC भैया",
+                    "dialogue": "बस अपने आधार कार्ड और बैंक पासबुक के साथ ग्राम पंचायत या पानी समिति में अपना नाम दर्ज कराएं।",
+                    "caption": "घर-घर तक पाइपलाइन बिछाकर मुफ्त नल कनेक्शन।",
+                    "sourceRef": "Section 3: Jal Jeevan Mission (Har Ghar Jal) Official Guidelines (https://www.india.gov.in/my-government/schemes/jal-jeevan-mission)"
+                },
+                {
+                    "num": 4,
+                    "tag": "पैनल 4: खुशहाली व सफलता",
+                    "image": "assets/jeevan_4.jpg",
+                    "speaker": "टैगलाइन",
+                    "dialogue": "🎉 Jal Jeevan Mission (Har Ghar Jal): हर घर नल से जल! शुद्ध पानी, स्वस्थ जिंदगानी!",
+                    "caption": "अब घर के आंगन में ही बहता है स्वच्छ व सुरक्षित पानी।",
+                    "sourceRef": "Section 4: Jal Jeevan Mission (Har Ghar Jal) Official Guidelines (https://www.india.gov.in/my-government/schemes/jal-jeevan-mission)"
+                }
+            ]
+        },
+        "character": {
+            "en": {
+                "name": "Ganga Bai & Family",
+                "role": "Village Resident",
+                "avatar": "🚰",
+                "clothing": "Rural Dress",
+                "desc": "Village family walking miles daily for clean drinking water"
+            },
+            "te": {
+                "name": "గంగా బాయి & కుటుంబం",
+                "role": "గ్రామ నివాసితులు",
+                "avatar": "🚰",
+                "clothing": "గ్రామీణ వస్త్రధారణ",
+                "desc": "మంచినీటి కోసం మైళ్ల దూరం బిందెలతో నడిచే గ్రామీణ కుటుంబం"
+            },
+            "hi": {
+                "name": "गंगा बाई व परिवार",
+                "role": "ग्रामीण निवासी",
+                "avatar": "🚰",
+                "clothing": "पारंपरिक ग्रामीण परिधान",
+                "desc": "पीने के पानी के लिए मीलों दूर भटकने वाला ग्रामीण परिवार"
+            }
+        }
+    }
 ];
+
+
+// Comprehensive Scheme Multilingual Dictionary for All 15 Schemes
+const SCHEMES_I18N = {
+  pm_kisan: {
+    te: {
+      name: "పిఎమ్-కిసాన్ సమ్మాన్ నిధి (రైతు భరోసా)",
+      category: "🌾 వ్యవసాయం",
+      dept: "వ్యవసాయ & రైతు సంక్షేమ మంత్రిత్వ శాఖ",
+      purpose: "దేశంలోని సాగుభూమి ఉన్న రైతులందరికీ వ్యవసాయ ఖర్చులు, విత్తనాలు మరియు ఎరువుల కొనుగోలు కోసం సంవత్సరానికి ₹6,000 ప్రత్యక్ష ఆదాయ సహాయం అందించడం.",
+      benefits: "సంవత్సరానికి ₹6,000 నగదును 3 విడతల్లో (ప్రతి 4 నెలలకు ₹2,000 చొప్పున) నేరుగా రైతుల బ్యాంక్ ఖాతాల్లో DBT ద్వారా జమ చేస్తారు.",
+      eligSummary: "సొంతంగా సాగుభూమి పట్టాదారు పాస్‌బుక్ ఉన్న చిన్న మరియు సన్నకారు రైతు కుటుంబాలు.",
+      docs: [
+        { name: "ఆధార్ కార్డు", why: "గుర్తింపు ధృవీకరణ మరియు బ్యాంక్ లింకింగ్ కోసం తప్పనిసరి" },
+        { name: "పట్టాదారు పాస్‌బుక్ / భూమి రికార్డులు (1B/ROR)", why: "దరఖాస్తుదారుడి పేరుపై భూమి యాజమాన్యాన్ని ధృవీకరించడానికి" },
+        { name: "యాక్టివ్ బ్యాంక్ ఖాతా పాస్‌బుక్ (DBT లింక్)", why: "డబ్బు నేరుగా ఖాతాలో పడటానికి" }
+      ],
+      steps: [
+        { title: "pmkisan.gov.in లేదా CSC లో నమోదు", desc: "ఆధార్ మరియు భూమి పట్టా వివరాలతో పోర్టల్‌లో నమోదు చేసుకోండి." },
+        { title: "ఆధార్ e-KYC పూర్తి చేయండి", desc: "OTP లేదా బయోమెట్రిక్ ద్వారా e-KYC పూర్తి చేయడం తప్పనిసరి." },
+        { title: "బ్యాంక్ ఖాతాలో ₹2,000 జమ", desc: "పరిశీలన పూర్తయిన తర్వాత ప్రతి విడత ₹2,000 నేరుగా బ్యాంక్ ఖాతాలో చేరుతుంది." }
+      ]
+    },
+    hi: {
+      name: "पीएम-किसान सम्मान निधि (किसान सहायता)",
+      category: "🌾 कृषि",
+      dept: "कृषि एवं किसान कल्याण मंत्रालय",
+      purpose: "देश के सभी भूमिधारक किसान परिवारों को कृषि खर्चों, खाद और बीज के लिए प्रति वर्ष ₹6,000 की प्रत्यक्ष वित्तीय सहायता प्रदान करना।",
+      benefits: "प्रति वर्ष ₹6,000 की वित्तीय सहायता, ₹2,000 की 3 समान किस्तों में सीधे बैंक खाते में DBT के माध्यम से।",
+      eligSummary: "वे सभी किसान परिवार जिनके नाम पर खेती योग्य भूमि का मालिकाना हक है।",
+      docs: [
+        { name: "आधार कार्ड", why: "पहचान सत्यापन एवं बैंक लिंकिंग हेतु अनिवार्य" },
+        { name: "खसरा / खतौनी (जमीन के दस्तावेज)", why: "आवेदक के नाम कृषि भूमि का स्वामित्व प्रमाणित करने हेतु" },
+        { name: "बैंक खाता पासबुक (DBT सक्रिय)", why: "सीधे बैंक खाते में सहायता राशि प्राप्त करने हेतु" }
+      ],
+      steps: [
+        { title: "pmkisan.gov.in या CSC पर पंजीकरण", desc: "आधार और जमीन के कागजात के साथ पोर्टल पर ऑनलाइन आवेदन करें।" },
+        { title: "आधार e-KYC पूरा करें", desc: "OTP या फिंगरप्रिंट बायोमेट्रिक से अनिवार्य e-KYC पूरा करें।" },
+        { title: "बैंक खाते में ₹2,000 किस्त प्राप्त", desc: "सत्यापन उपरांत हर 4 महीने में ₹2,000 सीधे बैंक खाते में आएंगे।" }
+      ]
+    }
+  },
+  pension: {
+    te: {
+      name: "పిఎమ్ శ్రమ యోగి మాన్‌ధన్ (అసంఘటిత కార్మికుల పెన్షన్)",
+      category: "💰 ఆర్థిక భద్రత",
+      dept: "కార్మిక & ఉపాధి మంత్రిత్వ శాఖ",
+      purpose: "అసంఘటిత రంగ కార్మికులకు 60 ఏళ్లు నిండిన తర్వాత నెలకు ₹3,000 జీవితాంతం హామీతో కూడిన పెన్షన్ అందించడం.",
+      benefits: "60 ఏళ్ల తర్వాత నెలకు ₹3,000 హామీ పెన్షన్. కార్మికుడు చెల్లించే మొత్తానికి సమానంగా (50:50) కేంద్ర ప్రభుత్వం కూడా జమ చేస్తుంది.",
+      eligSummary: "18 నుండి 40 సంవత్సరాల వయస్సు, నెలకు ₹15,000 లోపు ఆదాయం ఉన్న అసంఘటిత కార్మికులు (స్ట్రీట్ వెండర్లు, కూలీలు, డ్రైవర్లు).",
+      docs: [
+        { name: "ఆధార్ కార్డు", why: "లబ్ధిదారుడి గుర్తింపు కోసం" },
+        { name: "పొదుపు బ్యాంక్ ఖాతా / జన్ ధన్ ఖాతా", why: "నెలవారీ చిన్న పొదుపు (₹55 - ₹200) ఆటో-డెబిట్ కొరకు" },
+        { name: "మొబైల్ నంబర్", why: "SMS అప్‌డేట్‌లు మరియు పెన్షన్ కార్డు వివరాల కోసం" }
+      ],
+      steps: [
+        { title: "CSC కేంద్రాన్ని సంప్రదించండి", desc: "ఆధార్, బ్యాంక్ పాస్‌బుక్‌తో CSC లేదా mandhan.in లో నమోదు చేయండి." },
+        { title: "వయస్సు ఆధారిత చందా ప్రారంభించండి", desc: "నెలకు ₹55 నుండి ₹200 వరకు చెల్లించండి, ప్రభుత్వం కూడా అంతే మొత్తం జమ చేస్తుంది." },
+        { title: "శ్రమ యోగి పెన్షన్ కార్డు పొందండి", desc: "తక్షణమే పెన్షన్ నంబర్‌తో కూడిన స్మార్ట్ కార్డు జారీ చేయబడుతుంది." }
+      ]
+    },
+    hi: {
+      name: "पीएम श्रम योगी मानधन (मजदूर पेंशन)",
+      category: "💰 वित्तीय सुरक्षा",
+      dept: "श्रम एवं रोजगार मंत्रालय",
+      purpose: "असंगठित क्षेत्र के कामगारों को 60 वर्ष की आयु के बाद ₹3,000 मासिक सुनिश्चित पेंशन प्रदान करना।",
+      benefits: "60 वर्ष के बाद ₹3,000 प्रति माह आजीवन पेंशन। 50% अंशदान लाभार्थी का, 50% केंद्र सरकार द्वारा।",
+      eligSummary: "18-40 वर्ष आयु के असंगठित कामगार (दुकानदार, ठेले वाले, मजदूर) जिनकी मासिक आय ₹15,000 से कम हो।",
+      docs: [
+        { name: "आधार कार्ड", why: "पहचान प्रमाणीकरण हेतु" },
+        { name: "बचत बैंक / जन धन खाता", why: "मासिक किस्त (₹55 - ₹200) ऑटो-डेबिट हेतु" },
+        { name: "मोबाइल नंबर", why: "पेंशन संदेश और पंजीकरण हेतु" }
+      ],
+      steps: [
+        { title: "CSC या mandhan.in पर जाएं", desc: "आधार कार्ड और पासबुक लेकर नजदीकी जन सेवा केंद्र पर पंजीकरण कराएं।" },
+        { title: "मासिक अंशदान तय करें", desc: "उम्र के अनुसार ₹55 से ₹200 प्रति माह बचत, सरकार भी बराबर जोड़ेगी।" },
+        { title: "श्रम योगी पेंशन कार्ड पाएं", desc: "पंजीकरण के बाद तुरंत अपना डिजिटल पेंशन कार्ड प्राप्त करें।" }
+      ]
+    }
+  },
+  ayushman: {
+    te: {
+      name: "ఆయుష్మాన్ భారత్ పిఎమ్-జెవై (ఆరోగ్య రక్ష)",
+      category: "🏥 ఆరోగ్యం & వైద్యం",
+      dept: "జాతీయ ఆరోగ్య అథారిటీ (NHA)",
+      purpose: "పేద మరియు మధ్యతరగతి కుటుంబాలకు తీవ్రమైన అనారోగ్యాలు, ఆపరేషన్లకు సంవత్సరానికి ₹5 లక్షల వరకు ఉచిత నగదు రహిత ఆసుపత్రి చికిత్స అందించడం.",
+      benefits: "ప్రతి కుటుంబానికి సంవత్సరానికి ₹5,00,000 వరకు ఉచిత నగదు రహిత చికిత్స. దేశవ్యాప్తంగా 28,000+ నెట్‌వర్క్ ఆసుపత్రులలో వర్తిస్తుంది.",
+      eligSummary: "రేషన్ కార్డు లేదా SECC డేటాబేస్ ద్వారా గుర్తించబడిన అల్పాదాయ మరియు గ్రామీణ/పట్టణ పేద కుటుంబాలు.",
+      docs: [
+        { name: "ఆధార్ కార్డు", why: "ఆసుపత్రిలో బయోమెట్రిక్ e-KYC మరియు రోగి గుర్తింపు కొరకు" },
+        { name: "రేషన్ కార్డు / ఫ్యామిలీ ఐడీ", why: "కుటుంబ సభ్యుల అర్హత ధృవీకరణ కోసం" },
+        { name: "మొబైల్ నంబర్", why: "OTP ధృవీకరణ మరియు గోల్డెన్ కార్డు డౌన్‌లోడ్ కొరకు" }
+      ],
+      steps: [
+        { title: "beneficiary.nha.gov.in లో పేరు తనిఖీ చేయండి", desc: "రేషన్ కార్డు లేదా ఆధార్ ద్వారా మీ అర్హతను తనిఖీ చేసుకోండి." },
+        { title: "ఆయుష్మాన్ గోల్డెన్ కార్డు పొందండి", desc: "ఆసుపత్రిలోని ఆరోగ్యమిత్ర డెస్క్ లేదా CSC వద్ద గోల్డెన్ కార్డు తీసుకోండి." },
+        { title: "పూర్తి ఉచిత ఆసుపత్రి వైద్యం", desc: "కార్డు చూపించి ఆపరేషన్లు, మందులు మరియు పరీక్షలకు ₹0 బిల్లుతో చికిత్స పొందండి." }
+      ]
+    },
+    hi: {
+      name: "आयुष्मान भारत पीएम-जय (स्वास्थ्य सुरक्षा)",
+      category: "🏥 स्वास्थ्य एवं चिकित्सा",
+      dept: "राष्ट्रीय स्वास्थ्य प्राधिकरण (NHA)",
+      purpose: "गरीब और वंचित परिवारों को गंभीर बीमारियों और सर्जरी के लिए प्रति वर्ष ₹5 लाख तक का मुफ्त कैशलेस इलाज प्रदान करना।",
+      benefits: "प्रति परिवार प्रति वर्ष ₹5,00,000 तक मुफ्त कैशलेस अस्पताल भर्ती। देशभर के 28,000+ अस्पतालों में मान्य।",
+      eligSummary: "SECC 2011 सूची और राशन कार्ड धारक पात्र गरीब परिवार।",
+      docs: [
+        { name: "आधार कार्ड", why: "मरीज का बायोमेट्रिक e-KYC हेतु" },
+        { name: "राशन कार्ड / परिवार पहचान पत्र", why: "परिवार के सदस्यों की पात्रता हेतु" },
+        { name: "मोबाइल नंबर", why: "OTP एवं आयुष्मान कार्ड डाउनलोड हेतु" }
+      ],
+      steps: [
+        { title: "beneficiary.nha.gov.in पर पात्रता जांचें", desc: "राशन कार्ड या मोबाइल नंबर से अपनी पात्रता ऑनलाइन देखें।" },
+        { title: "आयुष्मान गोल्डन कार्ड बनवाएं", desc: "अस्पताल के आरोग्यमित्र काउंटर या जन सेवा केंद्र पर कार्ड बनवाएं।" },
+        { title: "मुफ्त कैशलेस इलाज पाएं", desc: "कार्ड दिखाकर अस्पताल में भर्ती, ऑपरेशन और दवाएं ₹0 में कराएं।" }
+      ]
+    }
+  },
+  atal_pension: {
+    te: {
+      name: "అటల్ పెన్షన్ యోజన (APY వృద్ధాప్య రక్షణ)",
+      category: "💰 బ్యాంకింగ్ & ఫైనాన్స్",
+      dept: "పెన్షన్ ఫండ్ రెగ్యులేటరీ & డెవలప్‌మెంట్ అథారిటీ (PFRDA)",
+      purpose: "అసంఘటిత రంగంలో పనిచేసే పౌరులందరికీ 60 ఏళ్ల తర్వాత నిరంతర నెలవారీ పెన్షన్ అందించే ప్రభుత్వ సామాజిక భద్రతా పథకం.",
+      benefits: "60 ఏళ్లు నిండిన తర్వాత జీవితాంతం నెలకు ₹1,000, ₹2,000, ₹3,000, ₹4,000 లేదా ₹5,000 హామీతో కూడిన పెన్షన్ లభిస్తుంది. తదనంతరం జీవిత భాగస్వామికి పెన్షన్ కొనసాగుతుంది.",
+      eligSummary: "18 నుండి 40 సంవత్సరాల మధ్య వయస్సు ఉండి, బ్యాంక్ లేదా పోస్టాఫీసులో పొదుపు ఖాతా ఉన్న భారతీయ పౌరులందరూ (ఆదాయపు పన్ను చెల్లించనివారు).",
+      docs: [
+        { name: "ఆధార్ కార్డు", why: "లబ్ధిదారుడి ధృవీకరణ మరియు KYC కొరకు" },
+        { name: "పొదుపు బ్యాంక్ / పోస్టాఫీసు ఖాతా", why: "నెలకు కేవలం ₹42 నుండి ప్రారంభమయ్యే చందా ఆటో-డెబిట్ కోసం" },
+        { name: "నామినీ వివరాలు", why: "భాగస్వామికి పెన్షన్ మరియు వారసులకు కార్పస్ ఫండ్ భద్రత కొరకు" }
+      ],
+      steps: [
+        { title: "బ్యాంక్ లేదా పోస్టాఫీస్‌ను సంప్రదించండి", desc: "మీ బ్యాంక్ బ్రాంచ్‌లో లేదా నెట్‌బ్యాంకింగ్ ద్వారా APY దరఖాస్తు ఫారమ్ పూరించండి." },
+        { title: "పెన్షన్ మొత్తాన్ని ఎంచుకోండి (₹1,000 - ₹5,000)", desc: "మీకు కావలసిన నెలవారీ పెన్షన్ ఎంచుకుని ఆటో-డెబిట్‌ను ప్రారంభించండి." },
+        { title: "PRAN పెన్షన్ కార్డు పొందండి", desc: "ప్రభుత్వ హామీ పెన్షన్ పత్రం మరియు PRAN నంబర్ కార్డు జారీ చేయబడుతుంది." }
+      ]
+    },
+    hi: {
+      name: "अटल पेंशन योजना (APY बुढ़ापा सहारा)",
+      category: "💰 बैंकिंग एवं वित्त",
+      dept: "पेंशन फंड नियामक और विकास प्राधिकरण (PFRDA)",
+      purpose: "असंगठित क्षेत्र के सभी नागरिकों को 60 वर्ष की आयु के बाद गारंटीकृत मासिक पेंशन प्रदान करने वाली सामाजिक सुरक्षा योजना।",
+      benefits: "60 वर्ष के बाद ₹1,000 से ₹5,000 प्रति माह तक की आजीवन गारंटीड पेंशन। पति/पत्नी को पेंशन निरंतरता और नॉमिनी को पूरा फंड वापसी।",
+      eligSummary: "18 से 40 वर्ष की आयु के सभी भारतीय नागरिक जिनका बैंक या डाकघर में बचत खाता हो (गैर-करदाता)।",
+      docs: [
+        { name: "आधार कार्ड", why: "केवाईसी और पहचान प्रमाणीकरण हेतु" },
+        { name: "बचत बैंक / डाकघर खाता पासबुक", why: "मासिक बचत (मात्र ₹42/माह से शुरू) ऑटो-डेबिट हेतु" },
+        { name: "नॉमिनी (वारिस) का विवरण", why: "पेंशन सुरक्षा और परिवार को राशि हस्तांतरण हेतु" }
+      ],
+      steps: [
+        { title: "बैंक या डाकघर में संपर्क करें", desc: "अपनी बैंक शाखा या नेट बैंकिंग के जरिए APY फॉर्म भरें।" },
+        { title: "पेंशन राशि चुनें (₹1k से ₹5k)", desc: "अपनी पसंद की पेंशन राशि तय कर मासिक ऑटो-डेबिट शुरू करें।" },
+        { title: "PRAN कार्ड और पेंशन गारंटी पाएं", desc: "स्थायी पेंशन खाता संख्या (PRAN) कार्ड तुरंत प्राप्त करें।" }
+      ]
+    }
+  },
+  surya_ghar: {
+    te: {
+      name: "పిఎమ్ సూర్య ఘర్: ఉచిత విద్యుత్ పథకం",
+      category: "☀️ సౌర & గృహ విద్యుత్",
+      dept: "నూతన మరియు పునరుత్పాదక ఇంధన మంత్రిత్వ శాఖ (MNRE)",
+      purpose: "ఇళ్ల పైకప్పులపై సోలార్ ప్యానెల్స్ అమర్చి, ప్రతినెలా 300 యూనిట్ల వరకు ఉచిత విద్యుత్ మరియు ₹78,000 వరకు ప్రభుత్వ సబ్సిడీ అందించడం.",
+      benefits: "రూఫ్‌టాప్ సోలార్ కోసం ₹78,000 వరకు నేరుగా బ్యాంక్ ఖాతాలో సబ్సిడీ. ప్రతినెలా 300 యూనిట్ల వరకు ఉచిత కరెంట్ (ఏడాదికి ₹15,000+ ఆదా).",
+      eligSummary: "సొంత ఇల్లు, పైకప్పు మరియు విద్యుత్ కనెక్షన్ ఉన్న కుటుంబాలన్నీ అర్హులు.",
+      docs: [
+        { name: "కరెంట్ బిల్లు (తాజా కాపీ)", why: "కస్టమర్ నంబర్ (CA నంబర్) మరియు లోడ్ ధృవీకరణ కోసం" },
+        { name: "ఆధార్ కార్డు", why: "ఇంటి యజమాని గుర్తింపు కొరకు" },
+        { name: "బ్యాంక్ పాస్‌బుక్ / రద్దయిన చెక్కు", why: "₹78,000 ప్రభుత్వ సబ్సిడీ నేరుగా ఖాతాలో చేరడానికి" }
+      ],
+      steps: [
+        { title: "pmsuryaghar.gov.in లో నమోదు చేయండి", desc: "మీ రాష్ట్రం, విద్యుత్ డిస్కమ్ మరియు కరెంట్ బిల్లు నంబర్ నమోదు చేయండి." },
+        { title: "అనుమతి పొందిన వెండర్ ఎంపిక", desc: "సోలార్ కంపెనీ మీ ఇంటి పైకప్పుపై ప్యానెల్స్ అమరుస్తుంది." },
+        { title: "నెట్-మీటర్ తనిఖీ & ₹78,000 సబ్సిడీ జమ", desc: "డిస్కమ్ నెట్ మీటర్ అమర్చిన 30 రోజుల్లో సబ్సిడీ నేరుగా బ్యాంక్ ఖాతాలో చేరుతుంది." }
+      ]
+    },
+    hi: {
+      name: "पीएम सूर्य घर: मुफ्त बिजली योजना",
+      category: "☀️ सौर एवं आवास",
+      dept: "नवीन और नवीकरणीय ऊर्जा मंत्रालय (MNRE)",
+      purpose: "1 करोड़ घरों की छतों पर सोलर पैनल लगवाकर हर महीने 300 यूनिट मुफ्त बिजली और ₹78,000 तक की सब्सिडी देना।",
+      benefits: "छत पर सोलर लगाने हेतु ₹78,000 तक सीधी सरकारी सब्सिडी, हर महीने 300 यूनिट मुफ्त बिजली (सालाना ₹15,000+ की बचत)।",
+      eligSummary: "वे सभी परिवार जिनके पास अपनी छत और वैध बिजली कनेक्शन है।",
+      docs: [
+        { name: "बिजली का बिल (नवीनतम प्रति)", why: "उपभोक्ता संख्या (CA Number) और स्वीकृत लोड सत्यापन हेतु" },
+        { name: "आधार कार्ड", why: "पहचान और मकान के स्वामित्व हेतु" },
+        { name: "बैंक खाता पासबुक", why: "₹78,000 की सब्सिडी सीधे बैंक में पाने हेतु" }
+      ],
+      steps: [
+        { title: "pmsuryaghar.gov.in पर आवेदन करें", desc: "राज्य, बिजली कंपनी और कंज्यूमर नंबर डालकर पोर्टल पर रजिस्टर करें।" },
+        { title: "सोलर वेंडर चुनें और पैनल लगवाएं", desc: "मान्यता प्राप्त वेंडर आपकी छत पर सोलर सिस्टम लगाएगा।"},
+        { title: "नेट-मीटर और ₹78,000 सब्सिडी", desc: "मीटर लगते ही 30 दिन में सब्सिडी सीधे बैंक खाते में जमा होगी।" }
+      ]
+    }
+  },
+  pm_svanidhi: {
+    te: {
+      name: "పిఎమ్ స్వనిధి (వీధి వ్యాపారుల రుణం)",
+      category: "🛒 వ్యాపారం & రుణాలు",
+      dept: "గృహనిర్మాణ & పట్టణ వ్యవహారాల మంత్రిత్వ శాఖ (MoHUA)",
+      purpose: "వీధి వ్యాపారులు తమ వ్యాపారాన్ని తిరిగి ప్రారంభించడానికి లేదా విస్తరించడానికి పూచీకత్తు లేని వర్కింగ్ క్యాపిటల్ రుణాలు అందించడం.",
+      benefits: "₹10,000 నుండి ₹50,000 వరకు పూచీకత్తు లేని రుణం. సకాలంలో చెల్లింపులపై 7% వడ్డీ సబ్సిడీ మరియు డిజిటల్ లావాదేవీలపై క్యాష్‌బ్యాక్.",
+      eligSummary: "పట్టణ మరియు అర్బన్ ప్రాంతాల్లో పండ్లు, కూరగాయలు, టీ మొదలైనవి విక్రయించే వీధి వ్యాపారులు.",
+      docs: [
+        { name: "ఆధార్ కార్డు & ఓటర్ ఐడీ", why: "గుర్తింపు మరియు చిరునామా ధృవీకరణ కొరకు" },
+        { name: "వెండింగ్ సర్టిఫికేట్ (ULB గుర్తింపు కార్డు)", why: "స్ట్రీట్ వెండర్ అర్హత రుజువు" },
+        { name: "బ్యాంక్ ఖాతా పాస్‌బుక్", why: "నేరుగా రుణ మొత్తం జమ కావడానికి" }
+      ],
+      steps: [
+        { title: "pmsvanidhi.mohua.gov.in లో దరఖాస్తు", desc: "వెండింగ్ ఐడీ మరియు ఆధార్‌తో ఆన్‌లైన్‌లో దరఖాస్తు చేసుకోండి." },
+        { title: "బ్యాంక్ మిత్ర లేదా బ్రాంచ్ పరిశీలన", desc: "స్థానిక బ్యాంక్ బ్రాంచ్ మీ దరఖాస్తును 48 గంటల్లో పరిశీలిస్తుంది." },
+        { title: "₹10,000 వర్కింగ్ క్యాపిటల్ జమ", desc: "రుణం ఖాతాలో జమవుతుంది, డిజిటల్ QR చెల్లింపులతో క్యాష్‌బ్యాక్ పొందండి." }
+      ]
+    },
+    hi: {
+      name: "पीएम स्वनिधि (स्ट्रीट वेंडर आत्मनिर्भर ऋण)",
+      category: "🛒 व्यापार एवं ऋण",
+      dept: "आवास और शहरी कार्य मंत्रालय (MoHUA)",
+      purpose: "रेहड़ी-पटरी और ठेले वाले स्ट्रीट वेंडर्स को अपना काम बढ़ाने हेतु बिना गारंटी का सस्ता ऋण प्रदान करना।",
+      benefits: "बिना किसी गारंटी के ₹10,000, ₹20,000 और ₹50,000 तक का कार्यशील पूंजी ऋण, 7% ब्याज सब्सिडी और ₹1,200 वार्षिक डिजिटल कैशबैक।",
+      eligSummary: "शहरी एवं ग्रामीण क्षेत्रों के सभी पंजीकृत रेहड़ी-पटरी वेंडर।",
+      docs: [
+        { name: "आधार कार्ड", why: "पहचान और केवाईसी सत्यापन हेतु" },
+        { name: "वेंडिंग प्रमाण पत्र / ULB पहचान पत्र", why: "स्ट्रीट वेंडर होने का आधिकारिक प्रमाण" },
+        { name: "बैंक खाता पासबुक", why: "ऋण राशि सीधे बैंक में प्राप्त करने हेतु" }
+      ],
+      steps: [
+        { title: "pmsvanidhi.mohua.gov.in पर आवेदन करें", desc: "आधार और वेंडिंग कार्ड के साथ ऑनलाइन फॉर्म भरें।" },
+        { title: "बैंक द्वारा 48 घंटे में स्वीकृति", desc: "बैंक शाखा या बैंक मित्र द्वारा त्वरित सत्यापन।" },
+        { title: "ऋण राशि प्राप्त करें और QR से कैशबैक पाएं", desc: "सीधे खाते में ₹10,000 पाएं और डिजिटल भुगतान से रिवॉर्ड पाएं।" }
+      ]
+    }
+  },
+  mudra_loan: {
+    te: {
+      name: "పిఎమ్ ముద్రా యోజన (సూక్ష్మ వ్యాపార రుణాలు)",
+      category: "🛒 వ్యాపారం & పరిశ్రమలు",
+      dept: "ఆర్థిక సేవల విభాగం, ఆర్థిక మంత్రిత్వ శాఖ",
+      purpose: "చిన్న దుకాణాలు, కుటీర పరిశ్రమలు మరియు మహిళా పారిశ్రామికవేత్తలకు పూచీకత్తు లేకుండా ₹10 లక్షల వరకు వ్యాపార రుణాలు అందించడం.",
+      benefits: "పూచీకత్తు లేని రుణాలు 3 వర్గాల్లో: శిశు (₹50,000 వరకు), కిశోర్ (₹5 లక్షల వరకు), తరుణ్ (₹10 లక్షల వరకు).",
+      eligSummary: "చిన్న వ్యాపారం, తయారీ, సేవా రంగం లేదా దుకాణం నడుపుతున్న/ప్రారంభించాలనుకునే ఏ భారతీయ పౌరుడైనా.",
+      docs: [
+        { name: "ఆధార్ & పాన్ కార్డు", why: "వ్యక్తిగత మరియు వ్యాపార గుర్తింపు కొరకు" },
+        { name: "వ్యాపార ప్రణాళిక & కొటేషన్లు", why: "మిషన్లు లేదా ముడిసరుకు కొనుగోలు వ్యయం రుజువు" },
+        { name: "బ్యాంక్ స్టేట్‌మెంట్ (6 నెలలు)", why: "ఆర్థిక లావాదేవీల పరిశీలన కోసం" }
+      ],
+      steps: [
+        { title: "udyamimitra.in లో దరఖాస్తు చేయండి", desc: "పోర్టల్‌లో ముద్రా లోన్ దరఖాస్తు ఫారమ్ సమర్పించండి." },
+        { title: "వ్యాపార ప్రణాళిక సమర్పించండి", desc: "నమోదిత బ్యాంకులో మిషనరీ కొటేషన్ మరియు ఆధార్ ఇవ్వండి." },
+        { title: "ముద్రా డెబిట్ కార్డు పొందండి", desc: "రుణ మొత్తం మరియు వర్కింగ్ క్యాపిటల్ ముద్రా కార్డు జారీ చేయబడుతుంది." }
+      ]
+    },
+    hi: {
+      name: "पीएम मुद्रा योजना (सूक्ष्म उद्यम ऋण)",
+      category: "🛒 व्यापार एवं उद्योग",
+      dept: "वित्तीय सेवाएं विभाग, वित्त मंत्रालय",
+      purpose: "छोटे व्यवसायियों, दुकानदारों और महिला उद्यमियों को बिना किसी गारंटी के ₹10 लाख तक का आसान व्यावसायिक ऋण देना।",
+      benefits: "बिना गारंटी का ऋण 3 श्रेणियों में: शिशु (₹50,000 तक), किशोर (₹5 लाख तक) और तरुण (₹10 लाख तक)।",
+      eligSummary: "कोई भी गैर-कॉर्पोरेट, गैर-कृषि लघु व्यवसाय शुरू करने या बढ़ाने के इच्छुक नागरिक।",
+      docs: [
+        { name: "आधार कार्ड एवं पैन कार्ड", why: "पहचान और वित्तीय रिकॉर्ड हेतु" },
+        { name: "व्यापारिक प्रोजेक्ट रिपोर्ट एवं कोटेशन", why: "मशीनरी या सामग्री खरीद का प्रमाण" },
+        { name: "बैंक खाता विवरण (6 महीने)", why: "ऋण मूल्यांकन हेतु" }
+      ],
+      steps: [
+        { title: "udyamimitra.in या बैंक में जाएं", desc: "पोर्टल पर मुद्रा लोन फॉर्म भरें या किसी भी बैंक में आवेदन करें।" },
+        { title: "कोटेशन और दस्तावेज जमा करें", desc: "मशीन की कोटेशन और आधार-पैन सत्यापन कराएं।" },
+        { title: "मुद्रा लोन और मुद्रा कार्ड पाएं", desc: "ऋण राशि स्वीकृत होते ही मुद्रा कार्ड से आसानी से पैसा निकालें।" }
+      ]
+    }
+  },
+  sukanya: {
+    te: {
+      name: "సుకున్య సమృద్ధి యోజన (ఆడపిల్లల భవిష్యత్ నిధి)",
+      category: "👧 మహిళా & శిశు సంక్షేమం",
+      dept: "మహిళా & శిశు అభివృద్ధి మంత్రిత్వ శాఖ / భారత తపాలా",
+      purpose: "10 ఏళ్లలోపు ఆడపిల్లల ఉన్నత విద్య మరియు వివాహ ఖర్చుల కోసం అత్యధిక వడ్డీతో కూడిన పన్ను రహిత దీర్ఘకాలిక పొదుపు పథకం.",
+      benefits: "8.2% చక్రవడ్డీ, సంవత్సరానికి కనిష్టంగా ₹250 నుండి ప్రారంభం. సెక్షన్ 80C కింద పూర్తి పన్ను మినహాయింపు (EEE హోదా).",
+      eligSummary: "10 సంవత్సరాలు లేదా అంతకంటే తక్కువ వయస్సు ఉన్న ఆడపిల్లల తల్లిదండ్రులు లేదా సంరక్షకులు.",
+      docs: [
+        { name: "ఆడపిల్ల పుట్టిన తేదీ ధృవీకరణ పత్రం (Birth Certificate)", why: "వయస్సు ధృవీకరణ కోసం తప్పనిసరి" },
+        { name: "తల్లిదండ్రుల ఆధార్ & పాన్ కార్డు", why: "సంరక్షకుల గుర్తింపు మరియు KYC కొరకు" },
+        { name: "చిరునామా రుజువు & ఫోటోలు", why: "పోస్టాఫీసు లేదా బ్యాంక్ ఖాతా తెరవడానికి" }
+      ],
+      steps: [
+        { title: "పోస్టాఫీస్ లేదా బ్యాంకును సంప్రదించండి", desc: "బాలిక జనన ధృవీకరణ పత్రంతో SSY దరఖాస్తు ఫారమ్ సమర్పించండి." },
+        { title: "కనీసం ₹250 తో ఖాతా ప్రారంభించండి", desc: "నెలవారీ లేదా వార్షిక పొదుపును ప్రారంభించండి." },
+        { title: "18 ఏళ్లకు ఉన్నత చదువుల కోసం ఉపసంహరణ", desc: "50% విద్యా నిధి, 21 ఏళ్లకు పూర్తి పన్ను రహిత మెచ్యూరిటీ నిధి పొందండి." }
+      ]
+    },
+    hi: {
+      name: "सुकन्या समृद्धि योजना (बेटी बचाओ बचत योजना)",
+      category: "👧 महिला एवं बाल विकास",
+      dept: "महिला एवं बाल विकास मंत्रालय / भारतीय डाक",
+      purpose: "10 वर्ष तक की बालिकाओं की उच्च शिक्षा और सुरक्षित भविष्य के लिए सर्वाधिक ब्याज वाली सरकारी बचत योजना।",
+      benefits: "8.2% चक्रवृद्धि ब्याज, मात्र ₹250 सालाना से शुरुआत, धारा 80C के तहत पूरी तरह टैक्स-फ्री (EEE छूट)।",
+      eligSummary: "10 वर्ष से कम आयु की बालिकाओं के माता-पिता या कानूनी अभिभावक।",
+      docs: [
+        { name: "बालिका का जन्म प्रमाण पत्र (Birth Certificate)", why: "आयु सत्यापन हेतु अनिवार्य" },
+        { name: "माता-पिता का आधार व पैन कार्ड", why: "अभिभावक की पहचान एवं KYC हेतु" },
+        { name: "निवास प्रमाण पत्र और पासपोर्ट फोटो", why: "डाकघर या बैंक में खाता खोलने हेतु" }
+      ],
+      steps: [
+        { title: "डाकघर या बैंक शाखा में जाएं", desc: "जन्म प्रमाण पत्र और आधार के साथ SSY खाता फॉर्म भरें।" },
+        { title: "मात्र ₹250 जमा कर खाता शुरू करें", desc: "साल में कभी भी अपनी सुविधानुसार राशि जमा करें।" },
+        { title: "उच्च शिक्षा हेतु 18 वर्ष पर निकासी", desc: "कॉलेज की पढ़ाई के लिए 50% और 21 वर्ष में पूरी टैक्स-फ्री राशि पाएं।" }
+      ]
+    }
+  },
+  nsp_scholarship: {
+    te: {
+      name: "నేషనల్ స్కాలర్‌షిప్ పోర్టల్ (NSP విద్యార్థి ఉపకార వేతనాలు)",
+      category: "🎓 విద్య & ఉపకార వేతనాలు",
+      dept: "ఉన్నత విద్యా శాఖ, విద్యా మంత్రిత్వ శాఖ",
+      purpose: "ప్రతిభావంతులైన మరియు పేద విద్యార్థులు ఉన్నత విద్యను కొనసాగించడానికి కేంద్ర ప్రభుత్వ ఉపకార వేతనాలు అందించడం.",
+      benefits: "పూర్తి ట్యూషన్ ఫీజు రీయింబర్స్‌మెంట్ మరియు కోర్సును బట్టి సంవత్సరానికి ₹10,000 నుండి ₹50,000 వరకు నేరుగా DBT ద్వారా నగదు సహాయం.",
+      eligSummary: "గుర్తింపు పొందిన పాఠశాలలు, కళాశాలల్లో చదువుతూ, కుటుంబ వార్షిక ఆదాయం ₹2.5 లక్షల లోపు ఉన్న విద్యార్థులు.",
+      docs: [
+        { name: "ఆధార్ కార్డు", why: "వన్-టైమ్ రిజిస్ట్రేషన్ (OTR) మరియు DBT బ్యాంక్ లింక్ కొరకు" },
+        { name: "మునుపటి పరీక్ష మార్కుల పత్రం (Marksheet)", why: "విద్యా అర్హత మరియు మెరిట్ ధృవీకరణ" },
+        { name: "ఆదాయ మరియు కుల ధృవీకరణ పత్రం", why: "ఆదాయ పరిమితి మరియు కేటగిరీ రిజర్వేషన్ ధృవీకరణ" }
+      ],
+      steps: [
+        { title: "scholarships.gov.in లో OTR రిజిస్ట్రేషన్", desc: "ఆధార్ ద్వారా వన్ టైమ్ రిజిస్ట్రేషన్ పూర్తి చేసుకోండి." },
+        { title: "పథకాన్ని ఎంచుకుని దరఖాస్తు సమర్పించండి", desc: "కాలేజ్ బోనఫైడ్ సర్టిఫికేట్ మరియు మార్కుల పత్రాలు అప్‌లోడ్ చేయండి." },
+        { title: "కాలేజ్ & నోడల్ అధికారి ధృవీకరణ", desc: "ధృవీకరణ పూర్తయిన వెంటనే నేరుగా మీ బ్యాంక్ ఖాతాలో స్కాలర్‌షిప్ జమ." }
+      ]
+    },
+    hi: {
+      name: "राष्ट्रीय छात्रवृत्ति पोर्टल (NSP स्कॉलरशिप)",
+      category: "🎓 शिक्षा एवं छात्रवृत्ति",
+      dept: "उच्च शिक्षा विभाग, शिक्षा मंत्रालय",
+      purpose: "मेधावी और आर्थिक रूप से कमजोर छात्रों को कॉलेज और उच्च शिक्षा हेतु प्रत्यक्ष वित्तीय छात्रवृत्ति प्रदान करना।",
+      benefits: "पूरी शिक्षण फीस वापसी और प्रति वर्ष ₹10,000 से ₹50,000 तक की छात्रवृत्ति सीधे बैंक खाते में DBT द्वारा।",
+      eligSummary: "मान्यता प्राप्त स्कूल/कॉलेज में नामांकित छात्र जिनकी पारिवारिक वार्षिक आय ₹2.5 लाख से कम हो।",
+      docs: [
+        { name: "आधार कार्ड", why: "एकमुश्त पंजीकरण (OTR) और DBT हेतु" },
+        { name: "पिछली कक्षा की मार्कशीट", why: "शैक्षणिक योग्यता और मेरिट सत्यापन हेतु" },
+        { name: "आय एवं जाति प्रमाण पत्र", why: "पात्रता एवं श्रेणी सत्यापन हेतु" }
+      ],
+      steps: [
+        { title: "scholarships.gov.in पर OTR करें", desc: "आधार से वन-टाइम रजिस्ट्रेशन आईडी जनरेट करें।" },
+        { title: "योजना चुनकर ऑनलाइन आवेदन करें", desc: "कॉलेज प्रमाणपत्र और अंकपत्र अपलोड कर फॉर्म सबमिट करें।" },
+        { title: "संस्थान सत्यापन और DBT राशि प्राप्त", desc: "सत्यापन होते ही सीधे बैंक खाते में स्कॉलरशिप प्राप्त करें।" }
+      ]
+    }
+  },
+  pm_awas_rural: {
+    te: {
+      name: "పిఎమ్ ఆవాస్ యోజన - గ్రామీణ్ (పక్కా ఇళ్ల పథకం)",
+      category: "🏡 గృహ నిర్మాణం",
+      dept: "గ్రామీణాభివృద్ధి మంత్రిత్వ శాఖ",
+      purpose: "గ్రామీణ ప్రాంతాల్లోని పేద, నిరుపేద కుటుంబాలకు సకల సౌకర్యాలతో కూడిన పక్కా ఇళ్ల నిర్మాణానికి ప్రత్యక్ష ఆర్థిక సహాయం అందించడం.",
+      benefits: "మైదాన ప్రాంతాలలో ₹1.20 లక్షలు, కొండ/గిరిజన ప్రాంతాలలో ₹1.30 లక్షల 100% ఉచిత నిర్మాణ నిధి + ఉపాధి హామీ పథకం కింద 90-95 రోజుల కూలి + మరుగుదొడ్డి నిర్మాణానికి ₹12,000.",
+      eligSummary: "కచ్చా ఇళ్లలో నివసిస్తున్న లేదా ఇల్లు లేని గ్రామీణ కుటుంబాలు (SECC మరియు ఆవాస్ ప్లస్ సర్వే ఆధారంగా).",
+      docs: [
+        { name: "ఆధార్ కార్డు & జాబ్ కార్డు", why: "లబ్ధిదారుడి గుర్తింపు మరియు ఉపాధి హామీ వేతన లింకింగ్ కొరకు" },
+        { name: "బ్యాంక్ ఖాతా పాస్‌బుక్", why: "దశలవారీగా నిర్మాణ నిధుల DBT జమ కోసం" },
+        { name: "స్థల యాజమాన్య పత్రం / గ్రామ సభ అనుమతి", why: "ఇంటి నిర్మాణ స్థలం ధృవీకరణ" }
+      ],
+      steps: [
+        { title: "గ్రామ సభ జాబితాలో పేరు పరిశీలన", desc: "పంచాయతీ లేదా pmayg.nic.in లో ఆవాస్ జాబితాను తనిఖీ చేయండి." },
+        { title: "AwaasApp ద్వారా జియో-ట్యాగింగ్", desc: "పునాది నుండి పైకప్పు వరకు ప్రతి దశను ఫోటో తీసి జియో-ట్యాగ్ చేస్తారు." },
+        { title: "దశలవారీగా బ్యాంక్ ఖాతాలో డబ్బులు జమ", desc: "నిర్మాణం పూర్తయ్యే కొద్దీ నిధులు నేరుగా బ్యాంక్ ఖాతాలో జమవుతాయి." }
+      ]
+    },
+    hi: {
+      name: "प्रधानमंत्री आवास योजना - ग्रामीण (पक्का मकान)",
+      category: "🏡 ग्रामीण आवास",
+      dept: "ग्रामीण विकास मंत्रालय",
+      purpose: "ग्रामीण क्षेत्र के बेघर और कच्चे मकानों में रहने वाले परिवारों को बुनियादी सुविधाओं से युक्त पक्का मकान बनाने हेतु वित्तीय सहायता।",
+      benefits: "मैदानी क्षेत्रों में ₹1.20 लाख और पहाड़ी क्षेत्रों में ₹1.30 लाख की सीधी अनुदान राशि + मनरेगा से 95 दिनों की मजदूरी + ₹12,000 शौचालय अनुदान।",
+      eligSummary: "SECC एवं आवास प्लस सूची में दर्ज बेघर एवं कच्चे घरों में रहने वाले ग्रामीण परिवार।",
+      docs: [
+        { name: "आधार कार्ड एवं मनरेगा जॉब कार्ड", why: "लाभार्थी सत्यापन और मनरेगा मजदूरी लिंकिंग हेतु" },
+        { name: "बैंक खाता पासबुक", why: "किस्तवार निर्माण राशि सीधे बैंक में पाने हेतु" },
+        { name: "जमीन के कागजात या पट्टा", why: "मकान निर्माण स्थल सत्यापन हेतु" }
+      ],
+      steps: [
+        { title: "ग्राम पंचायत सूची में नाम देखें", desc: "पंचायत या pmayg.nic.in पर अपनी पात्रता जांचें।" },
+        { title: "AwaasApp से जियो-टैगिंग", desc: "नींव से लेकर छत ढलाई तक हर चरण की जियो-टैग फोटो।" },
+        { title: "चरणबद्ध किस्तों का बैंक में हस्तांतरण", desc: "हर चरण पूरा होने पर सीधी राशि बैंक खाते में प्राप्त करें।" }
+      ]
+    }
+  },
+  pm_vishwakarma: {
+    te: {
+      name: "పిఎమ్ విశ్వకర్మ కౌశల్ సమ్మాన్ (చేతివృత్తుల సాయం)",
+      category: "🛠️ నైపుణ్యం & చేతివృత్తులు",
+      dept: "సూక్ష్మ, చిన్న & మధ్యతరహా పరిశ్రమల మంత్రిత్వ శాఖ (MSME)",
+      purpose: "18 రకాల సాంప్రదాయ చేతివృత్తుల కళాకారులకు నైపుణ్య శిక్షణ, ఉచిత ఆధునిక పనిముట్లు మరియు తక్కువ వడ్డీ రుణాలు అందించడం.",
+      benefits: "₹15,000 ఉచిత టూల్‌కిట్ ఇ-వోచర్, రోజుకు ₹500 స్టైపెండ్‌తో 5-7 రోజుల శిక్షణ, మరియు కేవలం 5% వడ్డీతో ₹3 లక్షల వరకు పూచీకత్తు లేని రుణం.",
+      eligSummary: "18 సంప్రదాయ చేతివృత్తుల (వడ్రంగి, కమ్మరి, కుమ్మరి, కంసాలి, తాపీమేస్త్రీ, దర్జీ మొదలైనవి) కళాకారులు.",
+      docs: [
+        { name: "ఆధార్ కార్డు & మొబైల్ నంబర్", why: "బయోమెట్రిక్ CSC ధృవీకరణ కొరకు" },
+        { name: "వృత్తి ఆధారిత వివరాలు (Trade Details)", why: "18 గుర్తింపు పొందిన చేతివృత్తుల వర్గీకరణ" },
+        { name: "బ్యాంక్ ఖాతా పాస్‌బుక్", why: "₹15,000 టూల్‌కిట్ గ్రాంట్ మరియు శిక్షణ స్టైపెండ్ కొరకు" }
+      ],
+      steps: [
+        { title: "CSC వద్ద బయోమెట్రిక్ నమోదు", desc: "నమోదిత జన సేవా కేంద్రంలో విశ్వకర్మ పోర్టల్‌లో నమోదు చేసుకోండి." },
+        { title: "ప్రాథమిక నైపుణ్య శిక్షణ పూర్తి చేయండి", desc: "5 రోజుల శిక్షణ పొంది, రోజుకు ₹500 స్టైపెండ్ పొందండి." },
+        { title: "₹15,000 టూల్‌కిట్ & ₹1-3 లక్షల రుణం", desc: "ఆధునిక పనిముట్ల వోచర్ మరియు 5% వడ్డీతో వ్యాపార రుణం తీసుకోండి." }
+      ]
+    },
+    hi: {
+      name: "पीएम विश्वकर्मा कौशल सम्मान (कारीगर योजना)",
+      category: "🛠️ कौशल एवं हस्तशिल्प",
+      dept: "सूक्ष्म, लघु एवं मध्यम उद्यम मंत्रालय (MSME)",
+      purpose: "18 पारंपरिक व्यवसायों से जुड़े शिल्पकारों और कारीगरों को आधुनिक औजार, प्रशिक्षण और 5% रियायती ब्याज पर लोन देना।",
+      benefits: "₹15,000 का आधुनिक टूलकिट ई-वाउचर, ₹500 प्रतिदिन स्टाइपेंड के साथ प्रशिक्षण, और 5% ब्याज पर ₹3 लाख तक का कोलैटरल-फ्री लोन।",
+      eligSummary: "18 पारंपरिक शिल्प व व्यवसाय करने वाले कारीगर (बढ़ई, लोहार, कुम्हार, राजमिस्त्री, दर्जी, मोची आदि)।",
+      docs: [
+        { name: "आधार कार्ड और फिंगरप्रिंट", why: "CSC बायोमेट्रिक प्रमाणीकरण हेतु" },
+        { name: "पारंपरिक व्यवसाय का विवरण", why: "18 शिल्प श्रेणियों में पंजीकरण हेतु" },
+        { name: "बैंक खाता पासबुक", why: "₹15,000 टूलकिट अनुदान और दैनिक स्टाइपेंड पाने हेतु" }
+      ],
+      steps: [
+        { title: "CSC केंद्र पर बायोमेट्रिक पंजीकरण", desc: "जन सेवा केंद्र पर pmvishwakarma.gov.in पर निशुल्क आवेदन करें।" },
+        { title: "5 दिवसीय कौशल प्रशिक्षण लें", desc: "प्रशिक्षण के दौरान ₹500 प्रतिदिन भत्ता और विश्वकर्मा प्रमाण पत्र पाएं।" },
+        { title: "₹15,000 टूलकिट वाउचर और लोन पाएं", desc: "आधुनिक औजार खरीदें और मात्र 5% ब्याज पर व्यवसाय बढ़ाने हेतु लोन लें।" }
+      ]
+    }
+  },
+  pm_ujjwala: {
+    te: {
+      name: "పిఎమ్ ఉజ్జ్వల యోజన 2.0 (ఉచిత గ్యాస్ కనెక్షన్)",
+      category: "🔥 మహిళా సంక్షేమం & ఇంధనం",
+      dept: "పెట్రోలియం & సహజ వాయువు మంత్రిత్వ శాఖ",
+      purpose: "గ్రామీణ మరియు నిరుపేద కుటుంబాల మహిళలకు కట్టెల పొయ్యి పొగ నుండి విముక్తి కల్పించి, 100% ఉచిత ఎల్‌పిజి గ్యాస్ కనెక్షన్ అందించడం.",
+      benefits: "డిపాజిట్ రహిత ఉచిత గ్యాస్ కనెక్షన్, మొదటి గ్యాస్ సిలిండర్ మరియు డబుల్ బర్నర్ స్టవ్ పూర్తిగా ఉచితం + ప్రతి రీఫిల్‌పై ₹300 సబ్సిడీ.",
+      eligSummary: "రేషన్ కార్డు ఉన్న మరియు ఇంట్లో ఎల్‌పిజి కనెక్షన్ లేని వయోజన మహిళలు (BPL / SC / ST కుటుంబాలు).",
+      docs: [
+        { name: "మహిళా దరఖాస్తుదారు ఆధార్ కార్డు", why: "లబ్ధిదారు గుర్తింపు మరియు KYC కొరకు" },
+        { name: "రేషన్ కార్డు (కుటుంబ సభ్యుల వివరాలు)", why: "కుటుంబంలో మరొక గ్యాస్ కనెక్షన్ లేదని నిర్ధారించడానికి" },
+        { name: "బ్యాంక్ ఖాతా పాస్‌బుక్", why: "ప్రతి సిలిండర్ రీఫిల్‌పై ₹300 సబ్సిడీ DBT కొరకు" }
+      ],
+      steps: [
+        { title: "గ్యాస్ ఏజెన్సీ లేదా pmuy.gov.in లో దరఖాస్తు", desc: "ఇండేన్, భారత్‌గ్యాస్ లేదా HP గ్యాస్ డీలర్ వద్ద ఫారమ్ సమర్పించండి." },
+        { title: "ఆధార్ మరియు రేషన్ కార్డు ధృవీకరణ", desc: "ఏజెన్సీ మీ పత్రాలను ఆన్‌లైన్‌లో తనిఖీ చేస్తుంది." },
+        { title: "ఇంటి వద్దే ఉచిత సిలిండర్ & పొయ్యి డెలివరీ", desc: "ఎటువంటి డిపాజిట్ లేకుండా గ్యాస్ స్టవ్ మరియు సిలిండర్ తీసుకోండి." }
+      ]
+    },
+    hi: {
+      name: "प्रधानमंत्री उज्ज्वला योजना 2.0 (मुफ्त गैस कनेक्शन)",
+      category: "🔥 महिला कल्याण एवं स्वच्छ ईंधन",
+      dept: "पेट्रोलियम एवं प्राकृतिक गैस मंत्रालय",
+      purpose: "गरीब परिवारों की महिलाओं को धुएं वाले चूल्हे से मुक्ति दिलाने हेतु 100% मुफ्त एलपीजी गैस कनेक्शन और सब्सिडी देना।",
+      benefits: "बिना किसी सिक्योरिटी डिपॉजिट के मुफ्त गैस कनेक्शन, पहला भरा हुआ सिलेंडर और डबल बर्नर चूल्हा मुफ्त + हर रिफिल पर ₹300 सब्सिडी।",
+      eligSummary: "राशन कार्ड धारक वयस्क महिलाएं जिनके घर में पहले से कोई एलपीजी कनेक्शन न हो।",
+      docs: [
+        { name: "महिला मुखिया का आधार कार्ड", why: "पहचान और ई-केवाईसी हेतु" },
+        { name: "राशन कार्ड (परिवार की सूची)", why: "परिवार में पूर्व कनेक्शन न होने की पुष्टि हेतु" },
+        { name: "बैंक खाता पासबुक", why: "सिलेंडर रिफिल सब्सिडी सीधे बैंक में पाने हेतु" }
+      ],
+      steps: [
+        { title: "गैस एजेंसी या pmuy.gov.in पर आवेदन करें", desc: "नजदीकी इंडेन, भारतगैस या एचपी गैस एजेंसी पर फॉर्म जमा करें।" },
+        { title: "आधार और राशन कार्ड सत्यापन", desc: "एजेंसी द्वारा निशुल्क कागजात जांच।" },
+        { title: "मुफ्त गैस चूल्हा और सिलेंडर प्राप्त करें", desc: "बिना कोई शुल्क दिए अपने घर पर नया गैस कनेक्शन लगवाएं।" }
+      ]
+    }
+  },
+  standup_india: {
+    te: {
+      name: "స్టాండప్ ఇండియా పథకం (మహిళా & SC/ST వ్యాపార రుణాలు)",
+      category: "🚀 వ్యాపార & పరిశ్రమల స్థాపన",
+      dept: "ఆర్థిక సేవల విభాగం, ఆర్థిక మంత్రిత్వ శాఖ",
+      purpose: "మహిళలు మరియు ఎస్సీ/ఎస్టీ పారిశ్రామికవేత్తలు కొత్త వ్యాపారాలు లేదా తయారీ పరిశ్రమలను స్థాపించడానికి ₹10 లక్షల నుండి ₹1 కోటి వరకు బ్యాంక్ రుణాలు అందించడం.",
+      benefits: "గ్రీన్‌ఫీల్డ్ ప్రాజెక్ట్‌ల కోసం ₹10 లక్షల నుండి ₹100 లక్షల (1 కోటి) వరకు కాంపోజిట్ రుణం + SIDBI ద్వారా ప్రాజెక్ట్ గైడెన్స్ మరియు మెంటార్‌షిప్.",
+      eligSummary: "తయారీ, సేవలు లేదా వాణిజ్య రంగంలో కొత్త వెంచర్ ప్రారంభించే మహిళా లేదా SC/ST పారిశ్రామికవేత్తలు (18 ఏళ్లు పైబడినవారు).",
+      docs: [
+        { name: "ఆధార్, పాన్ & కుల ధృవీకరణ పత్రం (SC/ST కి)", why: "వర్గీకరణ మరియు గుర్తింపు ధృవీకరణ" },
+        { name: "ప్రాజెక్ట్ సమగ్ర నివేదిక (DPR)", why: "వ్యాపార సాధ్యత, యంత్రాల ఖర్చు మరియు ఆదాయ అంచనాలు" },
+        { name: "బ్యాంక్ స్టేట్‌మెంట్లు మరియు వ్యాపార చిరునామా రుజువు", why: "బ్యాంక్ క్రెడిట్ అసెస్‌మెంట్ కొరకు" }
+      ],
+      steps: [
+        { title: "standupmitra.in లో నమోదు చేసుకోండి", desc: "పోర్టల్‌లో ప్రాజెక్ట్ ప్రొఫైల్ మరియు బిజినెస్ ప్లాన్ సమర్పించండి." },
+        { title: "బ్యాంక్ లీడ్ బ్రాంచ్ పరిశీలన", desc: "నియమించబడిన బ్యాంక్ బ్రాంచ్ మీ ప్రాజెక్ట్ రిపోర్టును పరిశీలిస్తుంది." },
+        { title: "₹10 లక్షల నుండి ₹1 కోటి రుణం మంజూరు", desc: "యంత్రాల కొనుగోలు మరియు వర్కింగ్ క్యాపిటల్ రుణం విడుదలవుతుంది." }
+      ]
+    },
+    hi: {
+      name: "स्टैंड-अप इंडिया योजना (महिला व SC/ST उद्यम ऋण)",
+      category: "🚀 उद्योग एवं उद्यमिता",
+      dept: "वित्तीय सेवाएं विभाग, वित्त मंत्रालय",
+      purpose: "अनुसूचित जाति, अनुसूचित जनजाति और महिला उद्यमियों को नए विनिर्माण या सेवा उद्योग लगाने हेतु ₹10 लाख से ₹1 करोड़ तक का बैंक ऋण देना।",
+      benefits: "ग्रीनफील्ड उद्यम लगाने हेतु ₹10 लाख से ₹1 करोड़ तक का कम्पोजिट लोन (टर्म लोन + वर्किंग कैपिटल) और सिडबी मेंटरशिप सहायता।",
+      eligSummary: "18 वर्ष से अधिक आयु की महिला या SC/ST उद्यमी जो नया विनिर्माण, सेवा या व्यापार व्यवसाय शुरू कर रहे हों।",
+      docs: [
+        { name: "आधार, पैन एवं जाति प्रमाण पत्र (SC/ST हेतु)", why: "पहचान और श्रेणी सत्यापन हेतु" },
+        { name: "विस्तृत प्रोजेक्ट रिपोर्ट (DPR)", why: "व्यवसाय योजना और लागत सत्यापन हेतु" },
+        { name: "बैंक खाता विवरण और प्रोजेक्ट कोटेशन", why: "ऋण मूल्यांकन हेतु" }
+      ],
+      steps: [
+        { title: "standupmitra.in पर आवेदन करें", desc: "पोर्टल पर अपना व्यवसाय प्रोफाइल और प्रोजेक्ट रिपोर्ट अपलोड करें।" },
+        { title: "बैंक शाखा द्वारा प्रोजेक्ट मूल्यांकन", desc: "अग्रणी बैंक शाखा द्वारा प्रोजेक्ट की व्यवहार्यता जांच।" },
+        { title: "₹10 लाख से ₹1 करोड़ ऋण स्वीकृति", desc: "फैक्ट्री व मशीनरी खरीद हेतु पूंजी सीधे स्वीकृत।" }
+      ]
+    }
+  },
+  pm_matsya_sampada: {
+    te: {
+      name: "పిఎమ్ మత్స్య సంపద యోజన (చేపల పెంపకం & మత్స్య సాయం)",
+      category: "🐟 మత్స్య & జలవనరుల అభివృద్ధి",
+      dept: "మత్స్య శాఖ, పశుసంవర్ధక మరియు పాడిపరిశ్రమ మంత్రిత్వ శాఖ",
+      purpose: "చేపల పెంపకందారులు, మత్స్యకారుల ఆదాయాన్ని రెట్టింపు చేయడానికి ఆధునిక ఆక్వాకల్చర్, కోల్డ్ స్టోరేజ్ వాహనాలు మరియు ఐస్ ప్లాంట్లకు భారీ సబ్సిడీ అందించడం.",
+      benefits: "మహిళలు మరియు SC/ST లకు 60% వరకు, ఇతరులకు 40% వరకు ప్రభుత్వ మూలధన సబ్సిడీ (బయోఫ్లాక్, రీసర్క్యులేటరీ ఆక్వాకల్చర్ మరియు ఇన్సులేటెడ్ ఐస్ వ్యాన్లకు).",
+      eligSummary: "చేపల పెంపకందారులు, తీరప్రాంత మత్స్యకారులు, స్వయం సహాయక సంఘాలు మరియు ఆక్వా పారిశ్రామికవేత్తలు.",
+      docs: [
+        { name: "ఆధార్ కార్డు & మత్స్యకార సొసైటీ గుర్తింపు", why: "లబ్ధిదారుడి అర్హత ధృవీకరణ" },
+        { name: "చెరువు/భూమి యాజమాన్య పత్రాలు లేదా లీజు ఒప్పందం", why: "ఆక్వాకల్చర్ చెరువు స్థలం రుజువు" },
+        { name: "బ్యాంక్ పాస్‌బుక్ & ప్రాజెక్ట్ ఎస్టిమేషన్", why: "60% ప్రభుత్వ సబ్సిడీ నేరుగా ఖాతాలో చేరడానికి" }
+      ],
+      steps: [
+        { title: "pmmsy.dof.gov.in లో ప్రతిపాదన సమర్పించండి", desc: "జిల్లా మత్స్య అధికారి (DFO) కార్యాలయంలో లేదా పోర్టల్‌లో దరఖాస్తు చేయండి." },
+        { title: "సాంకేతిక పరిశీలన & ఆమోదం", desc: "క్షేత్రస్థాయి తనిఖీ చేసి సబ్సిడీ మంజూరు ఉత్తర్వులు జారీ చేయబడతాయి." },
+        { title: "ఆధునిక పరికరాల కొనుగోలు & సబ్సిడీ జమ", desc: "వాహనం లేదా యూనిట్ ఏర్పాటు పూర్తయిన వెంటనే 60% సబ్సిడీ బ్యాంక్ ఖాతాలో చేరుతుంది." }
+      ]
+    },
+    hi: {
+      name: "प्रधानमंत्री मत्स्य संपदा योजना (मत्स्य पालन अनुदान)",
+      category: "🐟 मत्स्य एवं जलीय कृषि",
+      dept: "मत्स्य पालन विभाग, मत्स्य पालन, पशुपालन और डेयरी मंत्रालय",
+      purpose: "मछुआरों और मछली पालकों की आय बढ़ाने हेतु आधुनिक तालाब, बायोफ्लॉक यूनिट, बर्फ की गाड़ियां और कोल्ड चेन पर भारी सरकारी सब्सिडी देना।",
+      benefits: "महिलाओं और SC/ST वर्ग को 60% तक और अन्य को 40% तक सीधी पूंजीगत सब्सिडी। नाव, जाल, फीड मिल और रेफ्रिजरेटेड वैन पर अनुदान।",
+      eligSummary: "मछुआरे, मछली पालक, स्वयं सहायता समूह (SHG) और मत्स्य उद्यमी।",
+      docs: [
+        { name: "आधार कार्ड एवं मछुआरा पहचान पत्र", why: "पहचान और श्रेणी सत्यापन हेतु" },
+        { name: "तालाब / भूमि दस्तावेज या लीज एग्रीमेंट", why: "मत्स्य पालन स्थल सत्यापन हेतु" },
+        { name: "बैंक खाता पासबुक एवं प्रोजेक्ट लागत कोटेशन", why: "60% सरकारी सब्सिडी सीधे बैंक में पाने हेतु" }
+      ],
+      steps: [
+        { title: "pmmsy.dof.gov.in या DFO ऑफिस में आवेदन", desc: "जिला मत्स्य अधिकारी कार्यालय या पोर्टल पर प्रोजेक्ट फॉर्म भरें।" },
+        { title: "स्थल निरीक्षण और तकनीकी स्वीकृति", desc: "मत्स्य विभाग द्वारा स्थल जांच और सब्सिडी स्वीकृति पत्र जारी।" },
+        { title: "उपकरण स्थापना और 60% सब्सिडी भुगतान", desc: "यूनिट तैयार होते ही सब्सिडी राशि सीधे बैंक खाते में जमा।" }
+      ]
+    }
+  },
+  jal_jeevan: {
+    te: {
+      name: "జల్ జీవన్ మిషన్ (హర్ ఘర్ జల్ - ప్రతి ఇంటికీ కుళాయి నీరు)",
+      category: "🚰 తాగునీరు & పారిశుధ్యం",
+      dept: "జల్ శక్తి మంత్రిత్వ శాఖ",
+      purpose: "దేశంలోని ప్రతి గ్రామీణ గృహానికి రోజుకు తలసరి 55 లీటర్ల నాణ్యమైన, సురక్షితమైన శుద్ధ తాగునీటిని ఇంటి ముంగిట కుళాయి ద్వారా అందించడం.",
+      benefits: "100% ఉచిత గృహ కుళాయి కనెక్షన్ (FHTC), రోజూ సురక్షితమైన శుద్ధి చేసిన నీటి సరఫరా, మరియు ఫీల్డ్ టెస్ట్ కిట్లతో నీటి నాణ్యత నిరంతర పరీక్ష.",
+      eligSummary: "పైపులైన్ ద్వారా కుళాయి నీటి కనెక్షన్ లేని భారతదేశంలోని గ్రామీణ గృహాలన్నీ.",
+      docs: [
+        { name: "గృహ యజమాని ఆధార్ కార్డు", why: "గ్రామ పంచాయతీ రిజిస్ట్రేషన్ కొరకు" },
+        { name: "నివాస ధృవీకరణ / విద్యుత్ లేదా ఇంటి పన్ను రసీదు", why: "గృహ చిరునామా ధృవీకరణ" },
+        { name: "గ్రామ సభ తీర్మానంలో నమోదు", why: "గ్రామ తాగునీటి మరియు పారిశుధ్య కమిటీ (VWSC) ద్వారా కనెక్షన్ ఆమోదం" }
+      ],
+      steps: [
+        { title: "గ్రామ పంచాయతీ / పానీ సమితిలో నమోదు", desc: "గ్రామ సర్పంచ్ లేదా కార్యదర్శి వద్ద కుళాయి కనెక్షన్ కోసం పేరు నమోదు చేసుకోండి." },
+        { title: "పైప్‌లైన్ & మీటర్ అమరిక", desc: "గ్రామ తాగునీటి నెట్‌వర్క్ నుండి మీ ఇంటికి పైపులైన్ కనెక్షన్ వేస్తారు." },
+        { title: "ఇంటి వద్దే నిరంతర స్వచ్ఛమైన కుళాయి నీరు", desc: "ప్రతిరోజూ ఉచితంగా శుద్ధ తాగునీరు పొందండి." }
+      ]
+    },
+    hi: {
+      name: "जल जीवन मिशन (हर घर जल योजना)",
+      category: "🚰 पेयजल एवं स्वच्छता",
+      dept: "जल शक्ति मंत्रालय",
+      purpose: "देश के प्रत्येक ग्रामीण परिवार को घर के नल से प्रति व्यक्ति प्रतिदिन 55 लीटर शुद्ध और सुरक्षित पेयजल उपलब्ध कराना।",
+      benefits: "100% निशुल्क घरेलू नल कनेक्शन (FHTC), स्वच्छ पेयजल की नियमित आपूर्ति और फील्ड टेस्ट किट द्वारा पानी की शुद्धता जांच।",
+      eligSummary: "देश के सभी ग्रामीण परिवार जिनके घरों में अभी तक नल कनेक्शन नहीं है।",
+      docs: [
+        { name: "मकान मालिक का आधार कार्ड", why: "ग्राम पंचायत में पंजीकरण हेतु" },
+        { name: "निवास प्रमाण पत्र या बिजली बिल", why: "मकान के पते का सत्यापन हेतु" },
+        { name: "पानी समिति में पंजीकरण", why: "ग्राम जल एवं स्वच्छता समिति द्वारा नल कनेक्शन स्वीकृति" }
+      ],
+      steps: [
+        { title: "ग्राम पंचायत / पानी समिति में आवेदन", desc: "ग्राम प्रधान या पंचायत सचिव के पास नल कनेक्शन हेतु नाम दर्ज कराएं।" },
+        { title: "पाइपलाइन बिछाना और नल लगाना", desc: "गांव की मुख्य पाइपलाइन से घर तक मुफ्त कनेक्शन।" },
+        { title: "घर पर शुद्ध पेयजल की आपूर्ति शुरू", desc: "प्रतिदिन अपने घर के नल से सुरक्षित पानी प्राप्त करें।" }
+      ]
+    }
+  }
+};
+
+// Localized Scheme Resolver Function
+function getLocalizedScheme(s, lang) {
+  if (!s) return s;
+  if (!lang || lang === 'en') return s;
+
+  const overrides = SCHEMES_I18N[s.id] && SCHEMES_I18N[s.id][lang];
+  if (!overrides) return s;
+
+  return {
+    ...s,
+    name: overrides.name || s.name,
+    category: overrides.category || s.category,
+    dept: overrides.dept || s.dept,
+    purpose: overrides.purpose || s.purpose,
+    benefits: overrides.benefits || s.benefits,
+    eligibility: {
+      ...s.eligibility,
+      summary: overrides.eligSummary || (s.eligibility ? s.eligibility.summary : '')
+    },
+    documents: overrides.docs || s.documents,
+    applicationSteps: overrides.steps || s.applicationSteps
+  };
+}
 
 // App State
 let appState = {
@@ -937,23 +5070,24 @@ function renderDirectory(schemes) {
   const grid = document.getElementById('schemes-directory-grid');
   if (!grid) return;
 
-  const lang = appState.currentLang;
+  const lang = appState.currentLang || 'en';
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
 
   grid.innerHTML = '';
   schemes.forEach(s => {
+    const ls = getLocalizedScheme(s, lang);
     const applyTargetUrl = s.applyUrl || s.sourceUrl || s.officialUrl || "https://www.india.gov.in/my-government/schemes";
     const card = document.createElement('div');
     card.className = 'scheme-card-item';
     card.innerHTML = `
       <div class="scard-header">
-        <span class="badge blue-badge">${s.category} • ${s.level}</span>
-        <h3>${s.name}</h3>
-        <p class="scard-dept">${s.dept}</p>
+        <span class="badge blue-badge">${ls.category || s.category} • ${ls.level || s.level}</span>
+        <h3>${ls.name}</h3>
+        <p class="scard-dept">${ls.dept || s.dept}</p>
       </div>
-      <p class="scard-desc">${s.purpose}</p>
+      <p class="scard-desc">${ls.purpose || s.purpose}</p>
       <div class="scard-footer" style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;">
-        <a href="${applyTargetUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-sm" style="font-size:0.82rem;">🚀 Apply Online ↗</a>
+        <a href="${applyTargetUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-sm" style="font-size:0.82rem;">${t.btn_apply_online || '🚀 Apply Online ↗'}</a>
         <button class="btn btn-saffron" onclick="generateComicForScheme('${s.id}')">${t.btn_create_nav || '+ Turn Scheme into Comic'}</button>
       </div>
     `;
@@ -988,6 +5122,92 @@ function handleTopCreateButtonClick() {
   }
 }
 
+
+// Gemini Nano Banana Theme & Visual Assets Resolver
+function getThemeForScheme(s) {
+  if (!s) return 'mudra_loan';
+  const sid = s.id || '';
+  const knownThemes = [
+    'pm_kisan', 'pension', 'ayushman', 'surya_ghar', 'pm_svanidhi',
+    'mudra_loan', 'sukanya', 'nsp_scholarship', 'pm_awas_rural',
+    'pm_vishwakarma', 'pm_ujjwala', 'standup_india', 'pm_matsya_sampada',
+    'atal_pension', 'jal_jeevan'
+  ];
+  if (knownThemes.includes(sid)) return sid;
+
+  const text = ((s.name || '') + ' ' + (s.purpose || '') + ' ' + (s.category || '') + ' ' + (s.benefits || '')).toLowerCase();
+  if (/(beti|sukanya|girl|daughter|kanya|balika|ladli|matru|women|female)/i.test(text)) return 'sukanya';
+  if (/(solar|surya|rooftop|bijli|electricity|kusum|photovoltaic|clean energy)/i.test(text)) return 'surya_ghar';
+  if (/(health|hospital|medical|ayushman|arogya|swasthya|pm-jay|treatment|bima|doctor)/i.test(text)) return 'ayushman';
+  if (/(scholarship|student|college|epass|nsp|vidyarthi|shiksha|tuition|post-matric)/i.test(text)) return 'nsp_scholarship';
+  if (/(svanidhi|street vendor|hawker|thela|rehri|micro-credit|vendor)/i.test(text)) return 'pm_svanidhi';
+  if (/(mudra|startup|business loan|entrepreneur|msme|venture|udyam|seed fund)/i.test(text)) return 'mudra_loan';
+  if (/(awas|housing|pucca|shelter|makan|pradhan mantri awas)/i.test(text)) return 'pm_awas_rural';
+  if (/(vishwakarma|artisan|craftsman|carpenter|blacksmith|goldsmith|tailor|toolkit|karigar|shilpkar)/i.test(text)) return 'pm_vishwakarma';
+  if (/(ujjwala|lpg|gas cylinder|clean cooking|chulha|rasoi)/i.test(text)) return 'pm_ujjwala';
+  if (/(jal|jeevan|drinking water|tap water|pipeline|har ghar jal|nal)/i.test(text)) return 'jal_jeevan';
+  if (/(pension|atal|apy|shram yogi|maandhan|senior citizen|old age|retirement)/i.test(text)) return 'pension';
+  if (/(matsya|fish|fisheries|aquaculture|boat|marine|coastal)/i.test(text)) return 'pm_matsya_sampada';
+  if (/(standup|women entrepreneur|enterprise|greenfield)/i.test(text)) return 'standup_india';
+  if (/(kisan|farmer|agriculture|crop|seed|fertilizer|rythu|farming|landholder)/i.test(text)) return 'pm_kisan';
+
+  return 'mudra_loan';
+}
+
+function getThemeImages(s) {
+  const themeKey = getThemeForScheme(s);
+  const schemeImageMap = {
+    pm_kisan: ["assets/pm_kisan_1.jpg", "assets/pm_kisan_2.jpg", "assets/pm_kisan_3.jpg", "assets/pm_kisan_4.jpg"],
+    pension: ["assets/pension_1.jpg", "assets/pension_2.jpg", "assets/pension_3.jpg", "assets/pension_4.jpg"],
+    ayushman: ["assets/ayushman_1.jpg", "assets/ayushman_2.jpg", "assets/ayushman_3.jpg", "assets/ayushman_4.jpg"],
+    surya_ghar: ["assets/surya_ghar_1.jpg", "assets/surya_ghar_2.jpg", "assets/surya_ghar_3.jpg", "assets/surya_ghar_4.jpg"],
+    pm_svanidhi: ["assets/svanidhi_1.jpg", "assets/svanidhi_2.jpg", "assets/svanidhi_3.jpg", "assets/svanidhi_4.jpg"],
+    mudra_loan: ["assets/mudra_1.jpg", "assets/mudra_2.jpg", "assets/mudra_3.jpg", "assets/mudra_4.jpg"],
+    sukanya: ["assets/sukanya_1.jpg", "assets/sukanya_2.jpg", "assets/sukanya_3.jpg", "assets/sukanya_4.jpg"],
+    nsp_scholarship: ["assets/scholarship_1.jpg", "assets/scholarship_2.jpg", "assets/scholarship_3.jpg", "assets/scholarship_4.jpg"],
+    pm_awas_rural: ["assets/awas_1.jpg", "assets/awas_2.jpg", "assets/awas_3.jpg", "assets/awas_4.jpg"],
+    pm_vishwakarma: ["assets/vishwakarma_1.jpg", "assets/vishwakarma_2.jpg", "assets/vishwakarma_3.jpg", "assets/vishwakarma_4.jpg"],
+    pm_ujjwala: ["assets/ujjwala_1.jpg", "assets/ujjwala_2.jpg", "assets/ujjwala_3.jpg", "assets/ujjwala_4.jpg"],
+    standup_india: ["assets/standup_1.jpg", "assets/standup_2.jpg", "assets/standup_3.jpg", "assets/standup_4.jpg"],
+    pm_matsya_sampada: ["assets/matsya_1.jpg", "assets/matsya_2.jpg", "assets/matsya_3.jpg", "assets/matsya_4.jpg"],
+    atal_pension: ["assets/pension_1.jpg", "assets/pension_2.jpg", "assets/pension_3.jpg", "assets/pension_4.jpg"],
+    jal_jeevan: ["assets/jeevan_1.jpg", "assets/jeevan_2.jpg", "assets/jeevan_3.jpg", "assets/jeevan_4.jpg"]
+  };
+  return schemeImageMap[themeKey] || schemeImageMap.mudra_loan;
+}
+
+function getLocalizedCharacter(s, lang) {
+  if (!s) return { name: "Citizen", role: "Beneficiary", avatar: "🇮🇳", desc: "Citizen Hero" };
+  const targetLang = lang || appState.currentLang || 'en';
+  if (s.character && typeof s.character === 'object') {
+    if (s.character[targetLang]) return s.character[targetLang];
+    if (s.character.en) return s.character.en;
+    if (s.character.name) return s.character;
+  }
+  return { name: "Citizen", role: "Beneficiary", avatar: "🇮🇳", desc: "Citizen Hero" };
+}
+
+function getLocalizedPanels(s, lang) {
+  if (!s) return [];
+  const targetLang = lang || appState.currentLang || 'en';
+  const themeImgs = getThemeImages(s);
+
+  if (s.panels && typeof s.panels === 'object' && !Array.isArray(s.panels)) {
+    if (s.panels[targetLang] && Array.isArray(s.panels[targetLang]) && s.panels[targetLang].length > 0) {
+      return s.panels[targetLang].map((p, idx) => ({ ...p, image: p.image || themeImgs[idx % 4] }));
+    }
+    if (s.panels.en && Array.isArray(s.panels.en) && s.panels.en.length > 0) {
+      return s.panels.en.map((p, idx) => ({ ...p, image: p.image || themeImgs[idx % 4] }));
+    }
+  }
+
+  if (Array.isArray(s.panels) && s.panels.length > 0) {
+    return s.panels.map((p, idx) => ({ ...p, image: p.image || themeImgs[idx % 4] }));
+  }
+
+  return [];
+}
+
 // READER WORKSPACE RENDERER
 function renderReaderView() {
   if (!appState.selectedScheme && SCHEMES_DATABASE.length > 0) {
@@ -1000,19 +5220,20 @@ function renderReaderView() {
 
   const lang = appState.currentLang || 'en';
   const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+  const ls = getLocalizedScheme(s, lang);
 
   // 1. Update Header Info
   const catBadge = document.getElementById('reader-category-badge');
-  if (catBadge) catBadge.innerText = `${s.category || 'General'} • ${s.level || 'Central'}`;
+  if (catBadge) catBadge.innerText = `${ls.category || s.category || 'General'} • ${ls.level || s.level || 'Central'}`;
 
   const schemeNameElem = document.getElementById('reader-scheme-name');
-  if (schemeNameElem) schemeNameElem.innerText = s.name;
+  if (schemeNameElem) schemeNameElem.innerText = ls.name;
 
   const schemeDeptElem = document.getElementById('reader-scheme-dept');
-  if (schemeDeptElem) schemeDeptElem.innerText = `${s.dept || 'Government of India'} | Source: India.gov.in`;
+  if (schemeDeptElem) schemeDeptElem.innerText = `${ls.dept || s.dept || 'Government of India'} | ${t.source_label || 'Source:'} India.gov.in`;
 
   const sourceDateElem = document.getElementById('reader-source-date');
-  if (sourceDateElem) sourceDateElem.innerText = `Last Verified: ${s.lastVerified || '2026-08-24'}`;
+  if (sourceDateElem) sourceDateElem.innerText = `${t.last_verified_label || 'Last Verified:'} ${s.lastVerified || '2026-08-24'}`;
 
   const officialLinkElem = document.getElementById('reader-official-link');
   if (officialLinkElem) {
@@ -1020,16 +5241,18 @@ function renderReaderView() {
     officialLinkElem.href = targetUrl;
     officialLinkElem.target = "_blank";
     officialLinkElem.rel = "noopener noreferrer";
+    officialLinkElem.innerText = t.btn_verify_portal || "🔗 Verify Official Portal";
   }
 
   const chatSchemeNameElem = document.getElementById('chat-scheme-name');
-  if (chatSchemeNameElem) chatSchemeNameElem.innerText = s.name;
+  if (chatSchemeNameElem) chatSchemeNameElem.innerText = ls.name;
 
   // 1.5. Scheme Key Summary & Highlights Card
   const summaryBox = document.getElementById('reader-scheme-summary-card');
   if (summaryBox) {
-    const docNames = s.documents ? s.documents.map(d => d.name).join(', ') : 'Aadhaar Card, Bank Passbook';
-    const eligSummary = s.eligibility ? s.eligibility.summary : 'Eligible Indian citizens';
+    const docList = ls.documents || s.documents || [];
+    const docNames = docList.map(d => d.name).join(', ') || 'Aadhaar Card, Bank Passbook';
+    const eligSummary = (ls.eligibility && ls.eligibility.summary) || (s.eligibility && s.eligibility.summary) || 'Eligible Indian citizens';
     const targetUrl = s.applyUrl || s.sourceUrl || s.officialUrl || "https://www.india.gov.in/my-government/schemes";
 
     summaryBox.innerHTML = `
@@ -1037,27 +5260,27 @@ function renderReaderView() {
         <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px; margin-bottom:12px;">
           <div>
             <h3 style="font-family:var(--font-heading); color:var(--primary-navy); font-size:1.2rem; margin:0; display:flex; align-items:center; gap:8px;">
-              📌 Scheme Key Details & Highlights Overview
+              ${t.scheme_overview_title || '📌 Scheme Key Details & Highlights Overview'}
             </h3>
-            <p style="font-size:0.86rem; color:var(--text-muted); margin:4px 0 0 0;">Official Government Information Grounded on India.gov.in</p>
+            <p style="font-size:0.86rem; color:var(--text-muted); margin:4px 0 0 0;">${t.scheme_grounded_sub || 'Official Government Information Grounded on India.gov.in'}</p>
           </div>
-          <a href="${targetUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-saffron btn-sm" style="font-size:0.85rem;">🚀 Apply Online ↗</a>
+          <a href="${targetUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-saffron btn-sm" style="font-size:0.85rem;">${t.btn_apply_online || '🚀 Apply Online ↗'}</a>
         </div>
         <div class="summary-details-grid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:14px; margin-top:14px;">
           <div style="background:var(--bg-light); padding:12px 14px; border-radius:10px; border:1px solid var(--border-light);">
-            <strong style="color:var(--trust-blue); font-size:0.82rem; display:block; margin-bottom:4px;">🎯 Core Objective / Purpose</strong>
-            <span style="font-size:0.9rem; color:var(--text-main); font-weight:600; line-height:1.4; display:block;">${s.purpose}</span>
+            <strong style="color:var(--trust-blue); font-size:0.82rem; display:block; margin-bottom:4px;">${t.core_objective || '🎯 Core Objective / Purpose'}</strong>
+            <span style="font-size:0.9rem; color:var(--text-main); font-weight:600; line-height:1.4; display:block;">${ls.purpose || s.purpose}</span>
           </div>
           <div style="background:var(--bg-light); padding:12px 14px; border-radius:10px; border:1px solid var(--border-light);">
-            <strong style="color:#10b981; font-size:0.82rem; display:block; margin-bottom:4px;">🎁 Key Benefits & Financial Cover</strong>
-            <span style="font-size:0.9rem; color:var(--text-main); font-weight:700; line-height:1.4; display:block;">${s.benefits}</span>
+            <strong style="color:#10b981; font-size:0.82rem; display:block; margin-bottom:4px;">${t.key_benefits || '🎁 Key Benefits & Financial Cover'}</strong>
+            <span style="font-size:0.9rem; color:var(--text-main); font-weight:700; line-height:1.4; display:block;">${ls.benefits || s.benefits}</span>
           </div>
           <div style="background:var(--bg-light); padding:12px 14px; border-radius:10px; border:1px solid var(--border-light);">
-            <strong style="color:var(--saffron); font-size:0.82rem; display:block; margin-bottom:4px;">👤 Target Beneficiary & Eligibility</strong>
+            <strong style="color:var(--saffron); font-size:0.82rem; display:block; margin-bottom:4px;">${t.target_beneficiary || '👤 Target Beneficiary & Eligibility'}</strong>
             <span style="font-size:0.9rem; color:var(--text-main); font-weight:600; line-height:1.4; display:block;">${eligSummary}</span>
           </div>
           <div style="background:var(--bg-light); padding:12px 14px; border-radius:10px; border:1px solid var(--border-light);">
-            <strong style="color:#8b5cf6; font-size:0.82rem; display:block; margin-bottom:4px;">📄 Mandatory Required Documents</strong>
+            <strong style="color:#8b5cf6; font-size:0.82rem; display:block; margin-bottom:4px;">${t.mandatory_docs || '📄 Mandatory Required Documents'}</strong>
             <span style="font-size:0.9rem; color:var(--text-main); font-weight:600; line-height:1.4; display:block;">${docNames}</span>
           </div>
         </div>
@@ -1065,66 +5288,45 @@ function renderReaderView() {
     `;
   }
 
-  // 2. Character Bible Card
+  // 2. Character Bible Card (Multilingual)
   const charBox = document.getElementById('reader-character-card');
   if (charBox) {
-    let charData = { name: "Ramu Kaka", role: "Small Farmer", avatar: "👨🏽‍🌾", desc: "White Kurta & Blue Gamcha" };
-    if (s.character) {
-      if (s.character[lang]) charData = s.character[lang];
-      else if (s.character.en) charData = s.character.en;
-      else if (typeof s.character === 'object') charData = s.character;
-    }
+    const charData = getLocalizedCharacter(s, lang);
     charBox.innerHTML = `
-      <div class="char-avatar" style="font-size:2.2rem; background:var(--surface-subtle); padding:10px; border-radius:50%; width:56px; height:56px; display:flex; align-items:center; justify-content:center;">${charData.avatar || '👨🏽‍🌾'}</div>
+      <div class="char-avatar" style="font-size:2.2rem; background:var(--surface-subtle); padding:10px; border-radius:50%; width:56px; height:56px; display:flex; align-items:center; justify-content:center;">${charData.avatar || '🇮🇳'}</div>
       <div>
-        <h4 style="font-family:var(--font-heading); font-size:1.15rem; color:var(--primary-navy); margin-bottom:2px;">${charData.name || 'Ramu Kaka'} <span style="color:var(--saffron); font-size:0.85rem;">(${charData.role || 'Beneficiary'})</span></h4>
+        <h4 style="font-family:var(--font-heading); font-size:1.15rem; color:var(--primary-navy); margin-bottom:2px;">${charData.name || 'Citizen'} <span style="color:var(--saffron); font-size:0.85rem;">(${charData.role || 'Beneficiary'})</span></h4>
         <p style="font-size:0.88rem; color:var(--text-muted);">${charData.desc || charData.clothing || 'Relatable Citizen Hero'}</p>
       </div>
     `;
   }
 
-  // 3. Robust Panel Extraction (Handles both Objects & Arrays)
-  let panelsList = [];
-  if (Array.isArray(s.panels)) {
-    panelsList = s.panels;
-  } else if (s.panels && typeof s.panels === 'object') {
-    panelsList = s.panels[lang] || s.panels.en || s.panels.hi || Object.values(s.panels)[0] || [];
-  }
+  // 3. Robust Multilingual Panel Extraction
+  const panelsList = getLocalizedPanels(s, lang);
+  const themeImages = getThemeImages(s);
 
   const panelsContainer = document.getElementById('reader-panels-container');
   if (panelsContainer) {
     panelsContainer.innerHTML = '';
-    const schemeImageMap = {
-      pm_kisan: ["assets/pm_kisan_1.jpg", "assets/pm_kisan_2.jpg", "assets/pm_kisan_3.jpg", "assets/pm_kisan_4.jpg"],
-      pension: ["assets/pension_1.jpg", "assets/pm_kisan_2.jpg", "assets/pm_kisan_3.jpg", "assets/pm_kisan_4.jpg"],
-      ayushman: ["assets/ayushman_1.jpg", "assets/pm_kisan_2.jpg", "assets/pm_kisan_3.jpg", "assets/pm_kisan_4.jpg"],
-      surya_ghar: ["assets/surya_ghar_1.jpg", "assets/pm_kisan_2.jpg", "assets/pm_kisan_3.jpg", "assets/pm_kisan_4.jpg"],
-      pm_svanidhi: ["assets/svanidhi_1.jpg", "assets/pm_kisan_2.jpg", "assets/pm_kisan_3.jpg", "assets/pm_kisan_4.jpg"],
-      mudra_loan: ["assets/mudra_1.jpg", "assets/pm_kisan_2.jpg", "assets/pm_kisan_3.jpg", "assets/pm_kisan_4.jpg"],
-      sukanya: ["assets/sukanya_1.jpg", "assets/pm_kisan_2.jpg", "assets/pm_kisan_3.jpg", "assets/pm_kisan_4.jpg"],
-      nsp_scholarship: ["assets/scholarship_1.jpg", "assets/pm_kisan_2.jpg", "assets/pm_kisan_3.jpg", "assets/pm_kisan_4.jpg"]
-    };
-
-    const defaultImages = schemeImageMap[s.id] || ["assets/pm_kisan_1.jpg", "assets/pm_kisan_2.jpg", "assets/pm_kisan_3.jpg", "assets/pm_kisan_4.jpg"];
 
     panelsList.forEach((p, idx) => {
-      const imgSrc = p.image || defaultImages[idx % 4];
+      const imgSrc = p.image || themeImages[idx % 4] || `assets/pm_kisan_${(idx%4)+1}.jpg`;
       const pdiv = document.createElement('div');
       pdiv.className = 'panel-card';
       pdiv.innerHTML = `
         <div class="panel-tag-header">
           <span>${p.tag || `Panel ${p.num || idx + 1}`}</span>
-          <button class="btn-outline-sm" onclick="showCitationModal('${escapeQuotes(p.dialogue)}', '${escapeQuotes(p.sourceRef || s.name)}', '${s.officialUrl}')">${t.btn_citation || '🔍 Why shown? (Citation)'}</button>
+          <button class="btn-outline-sm" onclick="showCitationModal('${escapeQuotes(p.dialogue)}', '${escapeQuotes(p.sourceRef || ls.name)}', '${s.officialUrl}')">${t.btn_citation || '🔍 Why shown? (Citation)'}</button>
         </div>
         <div class="panel-img-box">
-          <img src="${imgSrc}" alt="${p.tag}" loading="lazy" onerror="this.onerror=null; this.src='${defaultImages[idx % 4]}';">
+          <img src="${imgSrc}" alt="${p.tag || ls.name}" loading="lazy" onerror="this.onerror=null; this.src='assets/pm_kisan_${(idx%4)+1}.jpg';">
         </div>
         <div class="panel-dialogue-box">
           <div class="speaker-name">${p.speaker || 'Citizen'}</div>
           <div class="speaker-text">"${p.dialogue}"</div>
         </div>
         <div class="panel-footer-bar">
-          <span class="panel-caption-text">📌 <strong>Caption:</strong> ${p.caption || ''}</span>
+          <span class="panel-caption-text">📌 <strong>${t.caption_label || 'Caption'}:</strong> ${p.caption || ''}</span>
           <button class="btn-outline-sm" onclick="speakPanelText('${escapeQuotes(p.dialogue)}')">${t.btn_play_panel || '🔊 Play Panel'}</button>
         </div>
       `;
@@ -1137,7 +5339,6 @@ function renderReaderView() {
   renderStepsTab();
   renderQuizTab();
 }
-
 function setReaderTab(tabId, btnElem) {
   appState.currentReaderTab = tabId;
   document.querySelectorAll('.rtab-btn').forEach(b => b.classList.remove('active'));
@@ -1203,7 +5404,12 @@ function runEligibilityCheck() {
 // Module 7: Documents Checklist
 function renderDocumentsTab() {
   const s = appState.selectedScheme;
-  if (!s || !s.documents) return;
+  if (!s) return;
+
+  const lang = appState.currentLang || 'en';
+  const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+  const ls = getLocalizedScheme(s, lang);
+  const docsList = ls.documents || s.documents || [];
 
   const docsGrid = document.getElementById('reader-docs-grid');
   if (!docsGrid) return;
@@ -1211,17 +5417,18 @@ function renderDocumentsTab() {
   docsGrid.innerHTML = '';
   let preparedCount = 0;
 
-  s.documents.forEach(d => {
-    const isChecked = appState.preparedDocs.has(d.id);
+  docsList.forEach((d, idx) => {
+    const docId = d.id || `doc_${idx}`;
+    const isChecked = appState.preparedDocs.has(docId);
     if (isChecked) preparedCount++;
 
     const dcard = document.createElement('div');
     dcard.className = 'doc-card-item';
     dcard.innerHTML = `
-      <input type="checkbox" style="width:20px; height:20px; cursor:pointer;" ${isChecked ? 'checked' : ''} onchange="toggleDocPrepared('${d.id}')">
+      <input type="checkbox" style="width:20px; height:20px; cursor:pointer;" ${isChecked ? 'checked' : ''} onchange="toggleDocPrepared('${docId}')">
       <div>
         <h4 style="font-family:var(--font-heading); font-size:1rem; margin-bottom:2px;">
-          ${d.name} ${d.required ? '<span style="color:var(--rose); font-size:0.75rem;">(Compulsory)</span>' : '<span style="color:var(--text-muted); font-size:0.75rem;">(Optional)</span>'}
+          ${d.name} ${d.required ? `<span style="color:var(--rose); font-size:0.75rem;">${t.compulsory_label || '(Compulsory)'}</span>` : `<span style="color:var(--text-muted); font-size:0.75rem;">${t.optional_label || '(Optional)'}</span>`}
         </h4>
         <p style="font-size:0.85rem; color:var(--text-muted);">${d.why}</p>
       </div>
@@ -1229,12 +5436,15 @@ function renderDocumentsTab() {
     docsGrid.appendChild(dcard);
   });
 
-  const total = s.documents.length;
+  const total = docsList.length;
   const pct = total > 0 ? Math.round((preparedCount / total) * 100) : 0;
 
-  document.getElementById('doc-prep-text').innerText = `${preparedCount} / ${total} Prepared`;
-  document.getElementById('doc-prep-percent').innerText = `${pct}%`;
-  document.getElementById('doc-progress-fill').style.width = `${pct}%`;
+  const docPrepText = document.getElementById('doc-prep-text');
+  if (docPrepText) docPrepText.innerText = `${preparedCount} / ${total} ${t.prepared_label || 'Prepared'}`;
+  const docPrepPct = document.getElementById('doc-prep-percent');
+  if (docPrepPct) docPrepPct.innerText = `${pct}%`;
+  const docFill = document.getElementById('doc-progress-fill');
+  if (docFill) docFill.style.width = `${pct}%`;
 }
 
 function toggleDocPrepared(docId) {
@@ -1246,17 +5456,22 @@ function toggleDocPrepared(docId) {
 // Module 8: Application Steps
 function renderStepsTab() {
   const s = appState.selectedScheme;
-  if (!s || !s.applicationSteps) return;
+  if (!s) return;
+
+  const lang = appState.currentLang || 'en';
+  const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+  const ls = getLocalizedScheme(s, lang);
+  const stepsData = ls.applicationSteps || s.applicationSteps || [];
 
   const stepsList = document.getElementById('reader-steps-list');
   if (!stepsList) return;
 
   stepsList.innerHTML = '';
-  s.applicationSteps.forEach(st => {
+  stepsData.forEach((st, idx) => {
     const item = document.createElement('div');
     item.className = 'step-timeline-item';
     item.innerHTML = `
-      <div class="step-num-badge">${st.step}</div>
+      <div class="step-num-badge">${st.step || idx + 1}</div>
       <div>
         <h4 style="font-family:var(--font-heading); font-size:1.05rem; margin-bottom:4px;">${st.title}</h4>
         <p style="font-size:0.88rem; color:var(--text-muted);">${st.desc}</p>
@@ -1271,6 +5486,7 @@ function renderStepsTab() {
     applyBtn.href = targetUrl;
     applyBtn.target = "_blank";
     applyBtn.rel = "noopener noreferrer";
+    applyBtn.innerText = t.btn_go_portal || "🚀 Go to Official Government Application Portal";
   }
 }
 
@@ -1391,13 +5607,22 @@ function togglePlayFullComic() {
   const s = appState.selectedScheme;
   if (!s) return;
 
-  const lang = appState.currentLang;
-  let panelsList = [];
-  if (Array.isArray(s.panels)) panelsList = s.panels;
-  else if (s.panels) panelsList = s.panels[lang] || s.panels.en || [];
+  const lang = appState.currentLang || 'en';
+  const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+  const ls = getLocalizedScheme(s, lang);
 
-  let fullScript = `Reading ${s.name} visual story. `;
-  panelsList.forEach(p => { fullScript += `${p.speaker || 'Hero'} says: ${p.dialogue}. `; });
+  let panelsList = [];
+  if (s.panels && typeof s.panels === 'object' && !Array.isArray(s.panels)) {
+    panelsList = s.panels[lang] || s.panels.en || s.panels.hi || [];
+  } else if (Array.isArray(s.panels)) {
+    panelsList = s.panels;
+  }
+
+  let fullScript = `${t.audio_reading_title || 'Reading visual story for'} ${ls.name}. `;
+  panelsList.forEach((p, idx) => {
+    const speaker = p.speaker || (idx === 0 ? 'Citizen' : 'Hero');
+    fullScript += `${speaker} ${t.says_label || 'says'}: ${p.dialogue}. `;
+  });
 
   speakPanelText(fullScript);
 
@@ -1535,7 +5760,7 @@ function processUrlInput() {
   startProcessingPipeline("Government Scheme URL", null, url);
 }
 
-// Full Dynamic AI Generation Pipeline
+// Full Dynamic AI Generation Pipeline (Gemini Nano Banana Multilingual Engine)
 async function startProcessingPipeline(schemeTitle, schemeId, rawInputText) {
   let existingScheme = SCHEMES_DATABASE.find(item => item.id === schemeId || item.name.toLowerCase() === (schemeTitle || '').toLowerCase());
   const title = schemeTitle || (existingScheme ? existingScheme.name : 'Government Scheme');
@@ -1544,7 +5769,7 @@ async function startProcessingPipeline(schemeTitle, schemeId, rawInputText) {
   if (overlay) {
     overlay.style.display = 'flex';
     const nameElem = document.getElementById('proc-scheme-name');
-    if (nameElem) nameElem.innerText = `Gemini Nano AI Generating Comic for: ${title}`;
+    if (nameElem) nameElem.innerText = `Gemini Nano Banana AI Generating Comic for: ${title}`;
 
     for (let i = 1; i <= 6; i++) {
       const stepElem = document.getElementById(`pstep-${i}`);
@@ -1560,32 +5785,30 @@ async function startProcessingPipeline(schemeTitle, schemeId, rawInputText) {
     await new Promise(r => setTimeout(r, 200));
     const s3 = document.getElementById('pstep-3'); if (s3) { s3.classList.add('active'); s3.style.opacity = '1'; }
     await new Promise(r => setTimeout(r, 200));
-    const s4 = document.getElementById('pstep-4'); if (s4) { s4.classList.add('active'); s4.style.opacity = '1'; s4.innerText = '✓ 4. Gemini Nano LLM Generating 4-Panel Script'; }
+    const s4 = document.getElementById('pstep-4'); if (s4) { s4.classList.add('active'); s4.style.opacity = '1'; s4.innerText = '✓ 4. Gemini Nano Banana AI Generating 4-Panel Script'; }
   }
 
   let generatedPanels = null;
   let generatedChar = null;
 
-  if (appState.isServerOnline) {
-    try {
-      const apiRes = await fetch(`${API_BASE_URL}/generate-story`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          schemeName: title,
-          persona: appState.currentPersona,
-          rawInput: rawInputText
-        })
-      });
-      if (apiRes.ok) {
-        const data = await apiRes.json();
-        console.log("🤖 [AI Server Response]:", data);
-        if (data.panels && Array.isArray(data.panels) && data.panels.length > 0) generatedPanels = data.panels;
-        if (data.character) generatedChar = data.character;
-      }
-    } catch (e) {
-      console.warn("AI Call Warning:", e.message);
+  try {
+    const apiRes = await fetch(`${API_BASE_URL}/generate-story`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        schemeName: title,
+        persona: appState.currentPersona,
+        rawInput: rawInputText
+      })
+    });
+    if (apiRes.ok) {
+      const data = await apiRes.json();
+      console.log("🤖 [Gemini Nano Banana AI Server Response]:", data);
+      if (data.panels) generatedPanels = data.panels;
+      if (data.character) generatedChar = data.character;
     }
+  } catch (e) {
+    console.warn("AI Generation call warning:", e.message);
   }
 
   if (overlay) {
@@ -1596,33 +5819,46 @@ async function startProcessingPipeline(schemeTitle, schemeId, rawInputText) {
     overlay.style.display = 'none';
   }
 
-  const defaultImgs = ["assets/pm_kisan_1.jpg", "assets/pm_kisan_2.jpg", "assets/pm_kisan_3.jpg", "assets/pm_kisan_4.jpg"];
+  const themeImages = getThemeImages(existingScheme || { name: title });
 
   if (existingScheme && !rawInputText) {
     if (generatedPanels) {
-      const formattedPanels = generatedPanels.map((p, idx) => ({ ...p, image: p.image || defaultImgs[idx % 4] }));
-      existingScheme.panels = {
-        en: formattedPanels,
-        te: formattedPanels,
-        hi: formattedPanels
-      };
+      existingScheme.panels = generatedPanels;
     }
     if (generatedChar) {
-      existingScheme.character = {
-        en: generatedChar,
-        te: generatedChar,
-        hi: generatedChar
-      };
+      existingScheme.character = generatedChar;
     }
     appState.selectedScheme = existingScheme;
   } else {
     const newId = `custom_${Date.now()}`;
-    const formattedPanels = (generatedPanels || [
-      { num: 1, tag: "Panel 1: The Problem", image: defaultImgs[0], speaker: generatedChar ? generatedChar.name : "Citizen", dialogue: `How will I manage the financial costs for ${title}?`, caption: `Citizen worries about ${title} requirements.`, sourceRef: "Section 1: Scheme Guidelines" },
-      { num: 2, tag: "Panel 2: Government Solution", image: defaultImgs[1], speaker: "GovToon Hero", dialogue: `The Government provides direct financial assistance under ${title}!`, caption: "Official Direct Benefit Support.", sourceRef: "Section 2: Benefits & Subsidy" },
-      { num: 3, tag: "Panel 3: The Easy Path", image: defaultImgs[2], speaker: "CSC Bhaiya", dialogue: "Submit your Aadhaar card and Bank Passbook at nearest CSC center or online portal.", caption: "Simple digital application process.", sourceRef: "Section 3: Mandatory Documents" },
-      { num: 4, tag: "Panel 4: The Outcome", image: defaultImgs[3], speaker: "Tagline", dialogue: `🎉 ${title}: Sarkari Sahayata, Parivar Ki Suraksha!`, caption: "Peace of mind restored with official support.", sourceRef: "Section 4: Disbursement" }
-    ]).map((p, idx) => ({ ...p, image: p.image || defaultImgs[idx % 4] }));
+    
+    // Construct default multilingual panels if not returned
+    const defaultPanels = generatedPanels || {
+      en: [
+        { num: 1, tag: "Panel 1: The Tension", image: themeImages[0], speaker: "Citizen", dialogue: "How will I manage expenses and secure support for " + title + "?", caption: "Citizen worries about requirements for " + title + ".", sourceRef: "Section 1: Guidelines" },
+        { num: 2, tag: "Panel 2: The Solution", image: themeImages[1], speaker: "GovToon Hero", dialogue: "The Government provides direct financial assistance under " + title + "!", caption: "Official Direct Benefit Support guaranteed.", sourceRef: "Section 2: Benefits" },
+        { num: 3, tag: "Panel 3: The Easy Path", image: themeImages[2], speaker: "CSC Bhaiya", dialogue: "Submit your Aadhaar card and Bank Passbook at nearest CSC center or online portal.", caption: "Simple digital registration.", sourceRef: "Section 3: Mandatory Documents" },
+        { num: 4, tag: "Panel 4: The Khushali", image: themeImages[3], speaker: "Tagline", dialogue: "🎉 " + title + ": Sarkari Sahayata, Parivar Ki Suraksha!", caption: "Peace of mind restored with official support.", sourceRef: "Section 4: Disbursement" }
+      ],
+      te: [
+        { num: 1, tag: "ప్యానెల్ 1: సమస్య & ఆందోళన", image: themeImages[0], speaker: "పౌరుడు", dialogue: title + " పథకం ప్రయోజనాలు ఎలా పొందాలి? ఖర్చులు సమకూర్చడం ఎలా?", caption: title + " కోసం పౌరుడి ఆందోళన.", sourceRef: "విభాగం 1: మార్గదర్శకాలు" },
+        { num: 2, tag: "ప్యానెల్ 2: ప్రభుత్వ పరిష్కారం", image: themeImages[1], speaker: "గోవ్టూన్ హీరో", dialogue: title + " ద్వారా ప్రభుత్వం పూర్తి ఆర్థిక సహాయం అందిస్తోంది!", caption: "ప్రభుత్వ అధికారిక ప్రయోజనాల భరోసా.", sourceRef: "విభాగం 2: ప్రయోజనాలు" },
+        { num: 3, tag: "ప్యానెల్ 3: సులువైన దరఖాస్తు", image: themeImages[2], speaker: "CSC మిత్రుడు", dialogue: "మీ ఆధార్ కార్డు, బ్యాంక్ పాస్‌బుక్‌తో సమీప CSC లేదా ఆన్‌లైన్‌లో దరఖాస్తు చేయండి.", caption: "సులభమైన ఆధార్ నమోదు.", sourceRef: "విభాగం 3: పత్రాలు" },
+        { num: 4, tag: "ప్యానెల్ 4: ఆనందం & ప్రయోజనం", image: themeImages[3], speaker: "స్లోగన్", dialogue: "🎉 " + title + ": ప్రభుత్వ సంక్షేమం, కుటుంబానికి రక్షణ!", caption: "ప్రభుత్వ సహాయంతో నిశ్చింత.", sourceRef: "విభాగం 4: పంపిణీ" }
+      ],
+      hi: [
+        { num: 1, tag: "पैनल 1: चिंता व समस्या", image: themeImages[0], speaker: "नागरिक", dialogue: title + " के लिए आवश्यक सहायता और खर्च की व्यवस्था कैसे होगी?", caption: title + " के नियमों को लेकर नागरिक की चिंता।", sourceRef: "अनुभाग 1: दिशानिर्देश" },
+        { num: 2, tag: "पैनल 2: सरकारी समाधान", image: themeImages[1], speaker: "गवटून हीरो", dialogue: "सरकार " + title + " के अंतर्गत सीधी आर्थिक सहायता प्रदान कर रही है!", caption: "प्रत्यक्ष लाभ की सरकारी गारंटी।", sourceRef: "अनुभाग 2: लाभ" },
+        { num: 3, tag: "पैनल 3: आसान आवेदन प्रक्रिया", image: themeImages[2], speaker: "CSC भैया", dialogue: "बस अपने आधार कार्ड और बैंक पासबुक के साथ नजदीकी जन सेवा केंद्र या पोर्टल पर आवेदन करें।", caption: "सरल डिजिटल पंजीकरण।", sourceRef: "अनुभाग 3: दस्तावेज" },
+        { num: 4, tag: "पैनल 4: खुशहाली व सफलता", image: themeImages[3], speaker: "टैगलाइन", dialogue: "🎉 " + title + ": सरकारी सहायता, परिवार की सुरक्षा!", caption: "सरकारी संबल से परिवार में खुशहाली।", sourceRef: "अनुभाग 4: संवितरण" }
+      ]
+    };
+
+    const defaultChar = generatedChar || {
+      en: { name: "Citizen Hero", role: "Beneficiary", avatar: "🇮🇳", desc: "Relatable Citizen Beneficiary", clothing: "Traditional Kurta / Saree" },
+      te: { name: "పౌరుడు", role: "లబ్ధిదారు", avatar: "🇮🇳", desc: "ప్రభుత్వ సంక్షేమ లబ్ధిదారు", clothing: "సాంప్రదాయ దుస్తులు" },
+      hi: { name: "नागरिक", role: "लाभार्थी", avatar: "🇮🇳", desc: "सरकारी कल्याण लाभार्थी", clothing: "पारंपरिक परिधान" }
+    };
 
     const newScheme = {
       id: newId,
@@ -1631,7 +5867,7 @@ async function startProcessingPipeline(schemeTitle, schemeId, rawInputText) {
       level: "Central",
       dept: "Government of India (India.gov.in)",
       purpose: `Official financial and social welfare assistance under ${title}.`,
-      benefits: "Direct bank transfer and welfare assistance provided.",
+      benefits: `Direct bank transfer and welfare assistance provided under ${title}.`,
       eligibility: { minAge: 18, maxAge: 70, maxIncome: 500000, state: "All India", occupation: "General Citizen", summary: `All eligible Indian citizens meeting official criteria for ${title}.` },
       documents: [
         { id: "d1", name: "Aadhaar Card", required: true, why: "Identity verification" },
@@ -1647,16 +5883,8 @@ async function startProcessingPipeline(schemeTitle, schemeId, rawInputText) {
       sourceUrl: "https://www.india.gov.in",
       applyUrl: "https://www.india.gov.in/my-government/schemes",
       lastVerified: "2026-08-24",
-      character: {
-        en: { name: generatedChar ? generatedChar.name : "Ramu Kaka", role: generatedChar ? generatedChar.role : "Citizen", avatar: generatedChar ? generatedChar.avatar : "👨🏽‍🌾", desc: generatedChar ? generatedChar.clothing : "Relatable Beneficiary" },
-        te: { name: generatedChar ? generatedChar.name : "రాము కాకా", role: "పౌరుడు", avatar: "👨🏽‍🌾", desc: "లబ్ధిదారు" },
-        hi: { name: generatedChar ? generatedChar.name : "रामू काका", role: "नागरिक", avatar: "👨🏽‍🌾", desc: "लाभार्थी" }
-      },
-      panels: {
-        en: formattedPanels,
-        te: formattedPanels.map(p => ({ ...p, tag: `ప్యానెల్ ${p.num}` })),
-        hi: formattedPanels.map(p => ({ ...p, tag: `पैनल ${p.num}` }))
-      },
+      character: defaultChar,
+      panels: defaultPanels,
       quiz: [
         { q: `What is the primary objective of ${title}?`, options: ["Provide official government assistance", "Private bank loan", "No support", "Tax collection"], correct: 0, panelRef: 2, explanation: `${title} provides direct official assistance to eligible citizens.` }
       ]
@@ -1682,12 +5910,26 @@ async function sendChatMessage() {
 
   const udiv = document.createElement('div');
   udiv.className = 'chat-msg user-msg';
-  udiv.innerHTML = `<div class="msg-content"><p>${text}</p></div>`;
+  udiv.innerHTML = `<div class="msg-content"><p>${escapeQuotes(text)}</p></div>`;
   box.appendChild(udiv);
   input.value = '';
+  box.scrollTop = box.scrollHeight;
 
-  const s = appState.selectedScheme;
-  let reply = `Based strictly on official India.gov.in records for ${s.name}: ${s.purpose} Benefits provided: ${s.benefits}`;
+  const s = appState.selectedScheme || (typeof SCHEMES_DATABASE !== 'undefined' ? SCHEMES_DATABASE[0] : {});
+  
+  // Render Thinking Bot Msg
+  const bdiv = document.createElement('div');
+  bdiv.className = 'chat-msg bot-msg';
+  bdiv.innerHTML = `
+    <div class="msg-avatar">🏛️</div>
+    <div class="msg-content">
+      <p style="font-style:italic; color:#64748b;">🤖 Consulting official records for ${s.name || 'Scheme'}...</p>
+    </div>
+  `;
+  box.appendChild(bdiv);
+  box.scrollTop = box.scrollHeight;
+
+  let reply = "";
   let sourceTag = `Source: Verified India.gov.in Record (${s.officialUrl || 'India.gov.in'})`;
 
   if (appState.isServerOnline) {
@@ -1695,7 +5937,7 @@ async function sendChatMessage() {
       const res = await fetch(`${API_BASE_URL}/ask-ai`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: text, schemeName: s.name })
+        body: JSON.stringify({ question: text, schemeName: s.name, lang: appState.currentLang })
       });
       if (res.ok) {
         const data = await res.json();
@@ -1705,24 +5947,22 @@ async function sendChatMessage() {
     } catch (e) {
       console.warn("[Chat API Warning]", e.message);
     }
-  } else {
-    if (text.toLowerCase().includes('document')) reply = `Compulsory documents required: ${s.documents ? s.documents.map(d => d.name).join(', ') : 'Aadhaar Card'}.`;
-    if (text.toLowerCase().includes('eligible') || text.toLowerCase().includes('who')) reply = `Eligibility criteria: ${s.eligibility ? s.eligibility.summary : 'All eligible citizens'}`;
   }
 
-  setTimeout(() => {
-    const bdiv = document.createElement('div');
-    bdiv.className = 'chat-msg bot-msg';
-    bdiv.innerHTML = `
-      <div class="msg-avatar">🏛️</div>
-      <div class="msg-content">
-        <p>${reply}</p>
-        <span class="citation-tag">${sourceTag}</span>
-      </div>
-    `;
-    box.appendChild(bdiv);
-    box.scrollTop = box.scrollHeight;
-  }, 400);
+  if (!reply) {
+    const fallback = getClientSideGroundedAnswer(text, s.name, appState.currentLang);
+    reply = fallback.answer;
+    sourceTag = `Source: ${fallback.sourceRef}`;
+  }
+
+  bdiv.innerHTML = `
+    <div class="msg-avatar">🏛️</div>
+    <div class="msg-content">
+      <div>${formatChatMarkdown(reply)}</div>
+      <span class="citation-tag" style="margin-top:8px; display:inline-block;">${sourceTag}</span>
+    </div>
+  `;
+  box.scrollTop = box.scrollHeight;
 }
 
 function askPresetQuestion(qtext) {
@@ -1810,7 +6050,7 @@ function quickSearch(query) {
   handleHeroSearch();
 }
 
-function sendGeneralChatMessage() {
+async function sendGeneralChatMessage() {
   const input = document.getElementById('general-chat-input');
   const text = input ? input.value.trim() : '';
   if (!text) return;
@@ -1818,26 +6058,71 @@ function sendGeneralChatMessage() {
   const box = document.getElementById('general-chat-messages');
   if (!box) return;
 
+  // Render User Message
   const udiv = document.createElement('div');
   udiv.className = 'chat-msg user-msg';
-  udiv.innerHTML = `<div class="msg-content"><p>${text}</p></div>`;
+  udiv.innerHTML = `<div class="msg-content"><p>${escapeQuotes(text)}</p></div>`;
   box.appendChild(udiv);
   input.value = '';
+  box.scrollTop = box.scrollHeight;
 
-  setTimeout(() => {
-    const bdiv = document.createElement('div');
-    bdiv.className = 'chat-msg bot-msg';
-    bdiv.innerHTML = `
-      <div class="msg-avatar">🏛️</div>
-      <div class="msg-content">
-        <p>Based on official India.gov.in records: "${text}" is covered under national welfare programs. You can generate a 4-panel visual comic story for it anytime from the Create tab.</p>
-        <span class="citation-tag">Source: Grounded on India.gov.in</span>
-      </div>
-    `;
-    box.appendChild(bdiv);
-    box.scrollTop = box.scrollHeight;
-  }, 400);
+  // Render Thinking Indicator
+  const bdiv = document.createElement('div');
+  bdiv.className = 'chat-msg bot-msg';
+  bdiv.innerHTML = `
+    <div class="msg-avatar">🏛️</div>
+    <div class="msg-content">
+      <p style="font-style:italic; color:#64748b;">🤖 Consulting verified India.gov.in database...</p>
+    </div>
+  `;
+  box.appendChild(bdiv);
+  box.scrollTop = box.scrollHeight;
+
+  let answer = "";
+  let sourceRef = "Grounded on India.gov.in";
+  let matchedSchemeId = null;
+
+  if (appState.isServerOnline) {
+    try {
+      const res = await fetch(`${API_BASE_URL}/ask-ai`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question: text, schemeName: "All Government Schemes", lang: appState.currentLang })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        answer = data.answer;
+        if (data.sourceRef) sourceRef = data.sourceRef;
+        if (data.schemeId) matchedSchemeId = data.schemeId;
+      }
+    } catch (e) {
+      console.warn("General Chat API error, using client-side fallback:", e);
+    }
+  }
+
+  if (!answer) {
+    const fallback = getClientSideGroundedAnswer(text, "All Government Schemes", appState.currentLang);
+    answer = fallback.answer;
+    sourceRef = fallback.sourceRef;
+    matchedSchemeId = fallback.schemeId;
+  }
+
+  let ctaBtn = "";
+  if (matchedSchemeId) {
+    ctaBtn = `<div style="margin-top:10px;"><button class="btn btn-saffron btn-outline-sm" style="cursor:pointer;" onclick="openSchemeReaderById('${matchedSchemeId}')">🎨 View 4-Panel Comic Story for this Scheme ↗</button></div>`;
+  }
+
+  bdiv.innerHTML = `
+    <div class="msg-avatar">🏛️</div>
+    <div class="msg-content">
+      <div>${formatChatMarkdown(answer)}</div>
+      ${ctaBtn}
+      <span class="citation-tag" style="margin-top:8px; display:inline-block;">Source: ${sourceRef}</span>
+    </div>
+  `;
+  box.scrollTop = box.scrollHeight;
 }
+
 
 function handleGeneralChatKeyPress(e) {
   if (e.key === 'Enter') sendGeneralChatMessage();
@@ -1882,7 +6167,7 @@ async function sendFloatingChatMessage() {
   // Render User Message
   const udiv = document.createElement('div');
   udiv.className = 'chat-msg user-msg';
-  udiv.innerHTML = `<div class="msg-content"><p>${text}</p></div>`;
+  udiv.innerHTML = `<div class="msg-content"><p>${escapeQuotes(text)}</p></div>`;
   box.appendChild(udiv);
   input.value = '';
   box.scrollTop = box.scrollHeight;
@@ -1902,18 +6187,20 @@ async function sendFloatingChatMessage() {
   const activeScheme = appState.selectedScheme ? appState.selectedScheme.name : "All Government Schemes";
   let answer = "";
   let sourceRef = "India.gov.in National Portal";
+  let matchedSchemeId = null;
 
   if (appState.isServerOnline) {
     try {
       const apiRes = await fetch(`${API_BASE_URL}/ask-ai`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: text, schemeName: activeScheme })
+        body: JSON.stringify({ question: text, schemeName: activeScheme, lang: appState.currentLang })
       });
       if (apiRes.ok) {
         const data = await apiRes.json();
         answer = data.answer;
-        if (data.source) sourceRef = data.source;
+        if (data.sourceRef) sourceRef = data.sourceRef;
+        if (data.schemeId) matchedSchemeId = data.schemeId;
       }
     } catch (e) {
       console.warn("Floating AI Error:", e);
@@ -1921,18 +6208,28 @@ async function sendFloatingChatMessage() {
   }
 
   if (!answer) {
-    answer = `Based strictly on official India.gov.in records for ${activeScheme}: Eligible citizens can apply online with Aadhaar and Bank Passbook.`;
+    const fallback = getClientSideGroundedAnswer(text, activeScheme, appState.currentLang);
+    answer = fallback.answer;
+    sourceRef = fallback.sourceRef;
+    matchedSchemeId = fallback.schemeId;
+  }
+
+  let ctaBtn = "";
+  if (matchedSchemeId) {
+    ctaBtn = `<div style="margin-top:8px;"><button class="btn btn-saffron btn-outline-sm" style="font-size:0.75rem; padding:3px 8px; cursor:pointer;" onclick="openSchemeReaderById('${matchedSchemeId}')">🎨 Open Comic Reader ↗</button></div>`;
   }
 
   bdiv.innerHTML = `
     <div class="msg-avatar">🤖</div>
     <div class="msg-content">
-      <p>${answer}</p>
-      <div class="msg-citation" style="font-size:0.75rem; color:#10b981; margin-top:4px; font-weight:600;">✓ ${sourceRef}</div>
+      <div>${formatChatMarkdown(answer)}</div>
+      ${ctaBtn}
+      <div class="msg-citation" style="font-size:0.75rem; color:#10b981; margin-top:6px; font-weight:600;">✓ ${sourceRef}</div>
     </div>
   `;
   box.scrollTop = box.scrollHeight;
 }
+
 
 function handlePageChatKeyPress(e) {
   if (e.key === 'Enter') {

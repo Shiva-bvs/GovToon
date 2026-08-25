@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fee2e2"/>
+      <stop offset="100%" stop-color="#ffffff"/>
+    </linearGradient>
+    <pattern id="halftone" width="12" height="12" patternUnits="userSpaceOnUse">
+      <circle cx="6" cy="6" r="1.5" fill="#dc2626" opacity="0.12"/>
+    </pattern>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="4" dy="4" stdDeviation="4" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+
+  <!-- Comic Panel Background -->
+  <rect width="800" height="600" fill="url(#bgGrad)"/>
+  <rect width="800" height="600" fill="url(#halftone)"/>
+
+  <!-- Vintage Comic Panel Border -->
+  <rect x="15" y="15" width="770" height="570" fill="none" stroke="#dc2626" stroke-width="8" rx="16"/>
+  <rect x="25" y="25" width="750" height="550" fill="none" stroke="#0f172a" stroke-width="2" rx="10"/>
+
+  <!-- Panel Header Banner -->
+  <rect x="35" y="35" width="730" height="70" fill="#0f172a" rx="8" filter="url(#shadow)"/>
+  <text x="55" y="78" font-family="'Impact', 'Arial Black', sans-serif" font-size="28" fill="#f8fafc" letter-spacing="1">1. HOSPITAL BILL SHOCK</text>
+  
+  <!-- Scheme Badge -->
+  <rect x="560" y="48" width="190" height="42" fill="#dc2626" rx="21"/>
+  <text x="655" y="75" font-family="sans-serif" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">🏥 Medical Crisis</text>
+
+  <!-- Main Illustration Art Card -->
+  <g transform="translate(60, 130)">
+    <rect width="680" height="300" fill="#ffffff" stroke="#cbd5e1" stroke-width="3" rx="16" filter="url(#shadow)"/>
+    
+    <!-- Decorative Theme Graphic Circle -->
+    <circle cx="160" cy="150" r="100" fill="#fee2e2" stroke="#dc2626" stroke-width="4"/>
+    <text x="160" y="175" font-size="76" text-anchor="middle">👩🏽</text>
+    
+    <!-- Story Headline & Subtitle -->
+    <text x="290" y="90" font-family="sans-serif" font-size="26" font-weight="800" fill="#0f172a">Ayushman Bharat PM-JAY</text>
+    <rect x="290" y="110" width="350" height="4" fill="#dc2626" rx="2"/>
+    <text x="290" y="150" font-family="sans-serif" font-size="20" font-weight="700" fill="#dc2626">₹80,000 Surgery Estimate</text>
+    
+    <!-- Character Role Box -->
+    <rect x="290" y="180" width="350" height="85" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5" rx="8"/>
+    <text x="310" y="215" font-family="sans-serif" font-size="16" font-weight="bold" fill="#334155">Character: 👩🏽 Lata Tai</text>
+    <text x="310" y="245" font-family="sans-serif" font-size="14" fill="#64748b">GovToon Grounded Narrative Panel</text>
+  </g>
+
+  <!-- Comic Dialogue Balloon -->
+  <g transform="translate(45, 455)">
+    <rect width="710" height="100" fill="#ffffff" stroke="#0f172a" stroke-width="3" rx="14" filter="url(#shadow)"/>
+    <!-- Speech bubble pointer -->
+    <polygon points="120,0 140,-18 160,0" fill="#ffffff" stroke="#0f172a" stroke-width="3"/>
+    <polygon points="123,0 140,-15 157,0" fill="#ffffff"/>
+    
+    <text x="30" y="42" font-family="'Comic Sans MS', 'Trebuchet MS', sans-serif" font-size="20" font-weight="bold" fill="#0f172a">"1. Hospital Bill Shock: ₹80,000 Surgery Estimate"</text>
+    <text x="30" y="76" font-family="sans-serif" font-size="14" font-weight="600" fill="#059669">✓ Official Data Source Grounding • India.gov.in National Portal</text>
+  </g>
+</svg>
