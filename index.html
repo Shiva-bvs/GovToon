@@ -133,23 +133,23 @@
           <div class="hero-quick-features">
             <div class="qfeat-card" onclick="navigateTo('explore')">
               <div class="qfeat-icon">🔍</div>
-              <h3>Explore All Schemes</h3>
-              <p>Filter Central, State, and Personalized schemes</p>
+              <h3 data-i18n="qf1_h">Explore All Schemes</h3>
+              <p data-i18n="qf1_p">Filter Central, State, and Personalized schemes</p>
             </div>
             <div class="qfeat-card highlighted" onclick="navigateTo('eligibility')">
               <div class="qfeat-icon">🎯</div>
-              <h3>Check My Eligibility</h3>
-              <p>Instant rule match for Age, Income & State</p>
+              <h3 data-i18n="qf2_h">Check My Eligibility</h3>
+              <p data-i18n="qf2_p">Instant rule match for Age, Income & State</p>
             </div>
             <div class="qfeat-card" onclick="navigateTo('compare')">
               <div class="qfeat-icon">⚖️</div>
-              <h3>Compare Schemes</h3>
-              <p>Side-by-side comparison of benefits & docs</p>
+              <h3 data-i18n="qf3_h">Compare Schemes</h3>
+              <p data-i18n="qf3_p">Side-by-side comparison of benefits & docs</p>
             </div>
             <div class="qfeat-card" onclick="toggleFloatingChat()">
               <div class="qfeat-icon">💬</div>
-              <h3>Mitra AI Assistant</h3>
-              <p>Personalized voice assistant in 3 languages</p>
+              <h3 data-i18n="qf4_h">Mitra AI Assistant</h3>
+              <p data-i18n="qf4_p">Personalized voice assistant in 3 languages</p>
             </div>
           </div>
         </div>
@@ -160,8 +160,8 @@
             <div class="impact-number red-text">62%</div>
             <div class="impact-label" data-i18n="impact_orig">Average Citizen Understanding of Official PDF Text</div>
           </div>
-          <div class="impact-divider">VS</div>
-          <div class="impact-card">
+          <div class="impact-arrow">➔</div>
+          <div class="impact-card highlight">
             <div class="impact-number green-text">88%</div>
             <div class="impact-label" data-i18n="impact_govtoon">Understanding Score After Reading GovToon Visual Comics</div>
           </div>
@@ -201,28 +201,28 @@
       <section id="view-explore" class="page-view">
         <div class="explore-header-container">
           <div class="explore-titles">
-            <h1 class="explore-main-title">Explore Schemes</h1>
+            <h1 class="explore-main-title" data-i18n="explore_title">Explore Schemes</h1>
             <p class="explore-sub-title" id="explore-subtitle-count">
-              <span id="explore-scheme-count">14</span> schemes shown · scalable architecture supports thousands more
+              <span id="explore-scheme-count">14</span> <span data-i18n="explore_sub">schemes shown · scalable architecture supports thousands more</span>
             </p>
           </div>
 
           <!-- Active Profile Indicator & Quick Switcher -->
           <div class="active-profile-pill">
             <span class="prof-icon">👤</span>
-            <span class="prof-text">Active Profile: <strong id="active-profile-label">Student (20y) • Telangana • ₹1.5L Income</strong></span>
-            <button class="btn-edit-profile" onclick="openProfileModal()">✏️ Edit Profile</button>
+            <span class="prof-text"><span data-i18n="active_prof_lbl">Active Profile:</span> <strong id="active-profile-label">Student (20y) • Telangana • ₹1.5L Income</strong></span>
+            <button class="btn-edit-profile" onclick="openProfileModal()" data-i18n="btn_edit_prof">✏️ Edit Profile</button>
           </div>
         </div>
 
         <!-- Filter Tabs (Matches Screenshot) -->
         <div class="explore-filter-tabs-bar">
           <div class="filter-tabs-group">
-            <button class="explore-tab-btn" data-tab="all" onclick="setExploreTab('all', this)">All Schemes</button>
-            <button class="explore-tab-btn" data-tab="central" onclick="setExploreTab('central', this)">Central</button>
-            <button class="explore-tab-btn" data-tab="state" onclick="setExploreTab('state', this)">My State</button>
-            <button class="explore-tab-btn active" data-tab="recommended" onclick="setExploreTab('recommended', this)">Recommended For Me</button>
-            <button class="explore-tab-btn" data-tab="saved" onclick="setExploreTab('saved', this)">Saved (<span id="saved-tab-count">0</span>)</button>
+            <button class="explore-tab-btn" data-tab="all" data-i18n="tab_all" onclick="setExploreTab('all', this)">All Schemes</button>
+            <button class="explore-tab-btn" data-tab="central" data-i18n="tab_central" onclick="setExploreTab('central', this)">Central</button>
+            <button class="explore-tab-btn" data-tab="state" data-i18n="tab_state" onclick="setExploreTab('state', this)">My State</button>
+            <button class="explore-tab-btn active" data-tab="recommended" data-i18n="tab_recommended" onclick="setExploreTab('recommended', this)">Recommended For Me</button>
+            <button class="explore-tab-btn" data-tab="saved" onclick="setExploreTab('saved', this)"><span data-i18n="tab_saved">Saved</span> (<span id="saved-tab-count">0</span>)</button>
           </div>
         </div>
 
@@ -230,7 +230,7 @@
         <div class="explore-search-controls-bar">
           <div class="search-input-box">
             <span class="search-ic">🔍</span>
-            <input type="text" id="directory-search" placeholder="Search by name, benefit, category, keyword..." oninput="handleDirectoryFilterChange()" />
+            <input type="text" id="directory-search" placeholder="Search by name, benefit, category, keyword..." data-i18n-ph="search_ph" oninput="handleDirectoryFilterChange()" />
           </div>
 
           <div class="dropdown-filter-box">
@@ -271,9 +271,9 @@
       <section id="view-eligibility" class="page-view">
         <div class="page-header">
           <div class="header-text">
-            <span class="badge green-badge">Instant Rule Engine</span>
-            <h2>🎯 Personalized Scheme Eligibility Assessment</h2>
-            <p>Enter your profile information to calculate exact match percentages across Central & State government schemes.</p>
+            <span class="badge green-badge" data-i18n="elig_badge">Instant Rule Engine</span>
+            <h2 data-i18n="elig_title">🎯 Personalized Scheme Eligibility Assessment</h2>
+            <p data-i18n="elig_desc">Enter your profile information to calculate exact match percentages across Central & State government schemes.</p>
           </div>
         </div>
 
@@ -281,23 +281,23 @@
           <!-- Profile Form Box -->
           <div class="elig-profile-card">
             <div class="elig-card-header">
-              <h3>📝 Your Citizen Profile</h3>
-              <p>Values are stored locally on your device for privacy.</p>
+              <h3 data-i18n="elig_card_h">📝 Your Citizen Profile</h3>
+              <p data-i18n="elig_card_sub">Values are stored locally on your device for privacy.</p>
             </div>
 
             <div class="elig-form-grid">
               <div class="form-group">
-                <label>Your Age (Years)</label>
+                <label data-i18n="lbl_age">Your Age (Years)</label>
                 <input type="number" id="wiz-age" value="20" min="1" max="100" oninput="calculateEligibilityMatches()">
               </div>
 
               <div class="form-group">
-                <label>Annual Family Income (₹)</label>
+                <label data-i18n="lbl_income">Annual Family Income (₹)</label>
                 <input type="number" id="wiz-income" value="150000" step="10000" oninput="calculateEligibilityMatches()">
               </div>
 
               <div class="form-group">
-                <label>State of Residence</label>
+                <label data-i18n="lbl_state">State of Residence</label>
                 <select id="wiz-state" onchange="calculateEligibilityMatches()">
                   <option value="Telangana" selected>Telangana</option>
                   <option value="Bihar">Bihar</option>
@@ -310,7 +310,7 @@
               </div>
 
               <div class="form-group">
-                <label>Primary Occupation / Status</label>
+                <label data-i18n="lbl_occ">Primary Occupation / Status</label>
                 <select id="wiz-occupation" onchange="calculateEligibilityMatches()">
                   <option value="Student" selected>🎓 Student / Youth</option>
                   <option value="Farmer">🌾 Small / Marginal Farmer</option>
@@ -322,7 +322,7 @@
               </div>
 
               <div class="form-group">
-                <label>Gender</label>
+                <label data-i18n="lbl_gender">Gender</label>
                 <select id="wiz-gender" onchange="calculateEligibilityMatches()">
                   <option value="Any">All / Any</option>
                   <option value="Female">Female</option>
@@ -331,7 +331,7 @@
               </div>
 
               <div class="form-group">
-                <label>Social Category / Caste</label>
+                <label data-i18n="lbl_cat">Social Category / Caste</label>
                 <select id="wiz-category" onchange="calculateEligibilityMatches()">
                   <option value="General">General</option>
                   <option value="OBC">OBC (Other Backward Classes)</option>
@@ -343,7 +343,7 @@
             </div>
 
             <div class="elig-actions">
-              <button class="btn btn-primary btn-block" onclick="applyWizardProfileToExplore()">
+              <button class="btn btn-primary btn-block" onclick="applyWizardProfileToExplore()" data-i18n="btn_apply_prof">
                 🌟 Apply Profile & View Recommended Schemes
               </button>
             </div>
@@ -370,27 +370,27 @@
       <section id="view-compare" class="page-view">
         <div class="page-header">
           <div class="header-text">
-            <span class="badge saffron-badge">Side-by-Side Matrix</span>
-            <h2>⚖️ Compare Government Schemes</h2>
-            <p>Compare benefits, eligibility criteria, required documents, and application roadmaps between schemes.</p>
+            <span class="badge saffron-badge" data-i18n="comp_badge">Side-by-Side Matrix</span>
+            <h2 data-i18n="comp_title">⚖️ Compare Government Schemes</h2>
+            <p data-i18n="comp_desc">Compare benefits, eligibility criteria, required documents, and application roadmaps between schemes.</p>
           </div>
         </div>
 
         <div class="compare-selector-bar">
           <div class="compare-select-item">
-            <label>Scheme 1:</label>
+            <label data-i18n="lbl_scheme_1">Scheme 1:</label>
             <select id="compare-scheme-1" onchange="renderCompareTable()">
               <!-- Populated dynamically -->
             </select>
           </div>
           <div class="compare-select-item">
-            <label>Scheme 2:</label>
+            <label data-i18n="lbl_scheme_2">Scheme 2:</label>
             <select id="compare-scheme-2" onchange="renderCompareTable()">
               <!-- Populated dynamically -->
             </select>
           </div>
           <div class="compare-select-item">
-            <label>Scheme 3 (Optional):</label>
+            <label data-i18n="lbl_scheme_3">Scheme 3 (Optional):</label>
             <select id="compare-scheme-3" onchange="renderCompareTable()">
               <option value="">-- None --</option>
               <!-- Populated dynamically -->
@@ -409,9 +409,9 @@
       <section id="view-dashboard" class="page-view">
         <div class="page-header">
           <div class="header-text">
-            <span class="badge blue-badge">Personalized Citizen Hub</span>
-            <h2>📊 Citizen Welfare Dashboard</h2>
-            <p>Track your saved schemes, application readiness, document checklist, and reading history.</p>
+            <span class="badge blue-badge" data-i18n="dash_badge">Personalized Citizen Hub</span>
+            <h2 data-i18n="dash_title">📊 Citizen Welfare Dashboard</h2>
+            <p data-i18n="dash_desc">Track your saved schemes, application readiness, document checklist, and reading history.</p>
           </div>
         </div>
 
@@ -421,7 +421,7 @@
             <div class="dstat-icon">⭐</div>
             <div class="dstat-data">
               <span class="dstat-number" id="dash-saved-count">0</span>
-              <span class="dstat-label">Saved Schemes</span>
+              <span class="dstat-label" data-i18n="dstat_saved">Saved Schemes</span>
             </div>
           </div>
 
@@ -429,7 +429,7 @@
             <div class="dstat-icon">🎯</div>
             <div class="dstat-data">
               <span class="dstat-number" id="dash-match-rate">100%</span>
-              <span class="dstat-label">Top Profile Match</span>
+              <span class="dstat-label" data-i18n="dstat_match">Top Profile Match</span>
             </div>
           </div>
 
@@ -437,7 +437,7 @@
             <div class="dstat-icon">📄</div>
             <div class="dstat-data">
               <span class="dstat-number" id="dash-docs-count">0 / 4</span>
-              <span class="dstat-label">Documents Prepared</span>
+              <span class="dstat-label" data-i18n="dstat_docs">Documents Prepared</span>
             </div>
           </div>
 
@@ -445,7 +445,7 @@
             <div class="dstat-icon">📖</div>
             <div class="dstat-data">
               <span class="dstat-number" id="dash-comics-read">4</span>
-              <span class="dstat-label">Visual Comics Read</span>
+              <span class="dstat-label" data-i18n="dstat_comics">Visual Comics Read</span>
             </div>
           </div>
         </div>
@@ -455,8 +455,8 @@
           <!-- Saved Schemes Box -->
           <div class="dash-card">
             <div class="dash-card-header">
-              <h3>⭐ Your Bookmarked Schemes</h3>
-              <button class="btn-outline-sm" onclick="navigateTo('explore')">+ Browse More</button>
+              <h3 data-i18n="dash_saved_h">⭐ Your Bookmarked Schemes</h3>
+              <button class="btn-outline-sm" onclick="navigateTo('explore')" data-i18n="dash_browse_more">+ Browse More</button>
             </div>
             <div id="dashboard-saved-schemes-list" class="dash-items-list">
               <!-- Rendered dynamically -->
@@ -466,25 +466,25 @@
           <!-- Document Readiness Tracker -->
           <div class="dash-card">
             <div class="dash-card-header">
-              <h3>📄 Common Document Readiness</h3>
-              <span class="badge green-badge">Essential For All Schemes</span>
+              <h3 data-i18n="dash_docs_h">📄 Common Document Readiness</h3>
+              <span class="badge green-badge" data-i18n="dash_essential_badge">Essential For All Schemes</span>
             </div>
             <div class="dash-docs-checklist">
               <label class="doc-check-item">
                 <input type="checkbox" checked onchange="updateDashDocs(this)">
-                <span><strong>Aadhaar Card</strong> (Linked with Mobile Number for e-KYC)</span>
+                <span data-i18n="doc_aadhaar_label"><strong>Aadhaar Card</strong> (Linked with Mobile Number for e-KYC)</span>
               </label>
               <label class="doc-check-item">
                 <input type="checkbox" checked onchange="updateDashDocs(this)">
-                <span><strong>Bank Account Passbook</strong> (Active DBT & NPCI Seeding)</span>
+                <span data-i18n="doc_bank_label"><strong>Bank Account Passbook</strong> (Active DBT & NPCI Seeding)</span>
               </label>
               <label class="doc-check-item">
                 <input type="checkbox" onchange="updateDashDocs(this)">
-                <span><strong>Income Certificate / Ration Card</strong> (Issued by Revenue Dept)</span>
+                <span data-i18n="doc_income_label"><strong>Income Certificate / Ration Card</strong> (Issued by Revenue Dept)</span>
               </label>
               <label class="doc-check-item">
                 <input type="checkbox" onchange="updateDashDocs(this)">
-                <span><strong>Residence / Domicile Certificate</strong> (Proof of State)</span>
+                <span data-i18n="doc_domicile_label"><strong>Residence / Domicile Certificate</strong> (Proof of State)</span>
               </label>
             </div>
           </div>
@@ -801,23 +801,23 @@
     <div id="profile-modal" class="modal-overlay" style="display:none;" onclick="if(event.target.id==='profile-modal') closeProfileModal()">
       <div class="modal-card profile-modal-card">
         <div class="modal-header">
-          <h3>👤 Edit Your Profile for Personalized Recommendations</h3>
+          <h3 data-i18n="prof_modal_h">👤 Edit Your Profile for Personalized Recommendations</h3>
           <button class="modal-close-btn" onclick="closeProfileModal()">✕</button>
         </div>
         <div class="modal-body">
-          <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:16px;">GovToon matches these attributes in real time to calculate match scores and highlight relevant schemes.</p>
+          <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:16px;" data-i18n="prof_modal_sub">GovToon matches these attributes in real time to calculate match scores and highlight relevant schemes.</p>
           
           <div class="elig-form-grid">
             <div class="form-group">
-              <label>Age (Years)</label>
+              <label data-i18n="lbl_age">Age (Years)</label>
               <input type="number" id="modal-user-age" value="20" min="1" max="100">
             </div>
             <div class="form-group">
-              <label>Annual Income (₹)</label>
+              <label data-i18n="lbl_income">Annual Income (₹)</label>
               <input type="number" id="modal-user-income" value="150000" step="10000">
             </div>
             <div class="form-group">
-              <label>State</label>
+              <label data-i18n="lbl_state">State</label>
               <select id="modal-user-state">
                 <option value="Telangana">Telangana</option>
                 <option value="Bihar">Bihar</option>
@@ -829,7 +829,7 @@
               </select>
             </div>
             <div class="form-group">
-              <label>Occupation</label>
+              <label data-i18n="lbl_occ">Occupation</label>
               <select id="modal-user-occupation">
                 <option value="Student">Student / Youth</option>
                 <option value="Farmer">Small / Marginal Farmer</option>
@@ -842,8 +842,8 @@
           </div>
 
           <div style="margin-top:20px; display:flex; justify-content:flex-end; gap:10px;">
-            <button class="btn btn-outline-sm" onclick="closeProfileModal()">Cancel</button>
-            <button class="btn btn-primary" onclick="saveProfileFromModal()">Save & Update Recommendations</button>
+            <button class="btn btn-outline-sm" onclick="closeProfileModal()" data-i18n="btn_cancel">Cancel</button>
+            <button class="btn btn-primary" onclick="saveProfileFromModal()" data-i18n="btn_save_prof">Save & Update Recommendations</button>
           </div>
         </div>
       </div>
@@ -888,8 +888,8 @@
           <div class="fchat-title">
             <div class="mitra-avatar-circle">💬</div>
             <div>
-              <h4>Mitra — Personalized AI Assistant</h4>
-              <span class="fchat-status">🟢 Grounded on India.gov.in</span>
+              <h4 data-i18n="mitra_title">Mitra — Personalized AI Assistant</h4>
+              <span class="fchat-status" data-i18n="mitra_status">🟢 Grounded on India.gov.in</span>
             </div>
           </div>
           <button class="fchat-close-btn" onclick="toggleFloatingChat()">✕</button>
@@ -898,14 +898,14 @@
         <div id="fchat-messages" class="fchat-messages-box">
           <div class="chat-msg bot-msg">
             <div class="msg-avatar">🤖</div>
-            <div class="msg-content">
+            <div class="msg-content" id="mitra-initial-msg">
               <p>Namaste! I am <strong>Mitra</strong>, your personal Government Scheme Assistant.</p>
               <p style="margin-top:6px;">Tell me about yourself (your age, state, or occupation) or ask about any scheme like <strong>PM Merit Scholarship</strong>, <strong>Rythu Bandhu</strong>, <strong>PM-Kisan</strong>, or <strong>Ayushman Bharat</strong>!</p>
             </div>
           </div>
         </div>
 
-        <div class="fchat-suggested-chips">
+        <div class="fchat-suggested-chips" id="mitra-chips-box">
           <button class="fchip" onclick="sendFloatingQuickQuestion('What schemes are recommended for a student in Telangana?')">🎓 Student in Telangana</button>
           <button class="fchip" onclick="sendFloatingQuickQuestion('How to apply for PM Merit Scholarship ₹50,000?')">💰 PM Merit ₹50,000</button>
           <button class="fchip" onclick="sendFloatingQuickQuestion('Tell me about Telangana Rythu Bandhu ₹10,000 support')">🌾 Rythu Bandhu</button>
@@ -915,8 +915,8 @@
 
         <div class="fchat-input-box">
           <input type="text" id="fchat-input" placeholder="Ask Mitra anything (e.g. Find schemes for 20y student)..."
-            onkeypress="handleFloatingChatKeyPress(event)">
-          <button class="btn btn-mitra-send" onclick="sendFloatingChatMessage()">Ask</button>
+            data-i18n-ph="mitra_ph" onkeypress="handleFloatingChatKeyPress(event)">
+          <button class="btn btn-mitra-send" onclick="sendFloatingChatMessage()" data-i18n="btn_ask">Ask</button>
         </div>
       </div>
 

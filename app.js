@@ -5,6 +5,680 @@ let API_BASE_URL = typeof window !== 'undefined' && window.location.origin && !w
   ? `${window.location.origin}/api` 
   : 'http://localhost:5000/api';
 
+// Comprehensive UI Translations Dictionary (EN, TE, HI)
+const TRANSLATIONS = {
+  en: {
+    trust_badge: "🛡️ Official Source Grounding",
+    trust_text: "Data sourced from <strong>India.gov.in National Portal of India</strong> / myScheme Ecosystem. We don't change what the government says — we change how easily citizens understand it.",
+    btn_contrast: "🌓 Contrast",
+    logo_sub: "Government Schemes, Told Simply.",
+    nav_home: "Home",
+    nav_explore: "Explore Schemes",
+    nav_eligibility: "Check Eligibility",
+    nav_compare: "Compare",
+    nav_dashboard: "Dashboard",
+    nav_reader: "📖 Comic Reader",
+    nav_admin: "📊 Admin",
+    btn_create_scheme: "+ Turn Scheme into Comic",
+    hero_badge: "🇮🇳 National Portal of India Integration Ready",
+    hero_title: "Government Schemes,<br><span class=\"hero-highlight\">Told Simply.</span>",
+    hero_sub: "Transform complex official government documents, eligibility rules, and application processes into simple, visual 4-panel stories with voice narration and comprehension testing.",
+    hero_ph: "What government scheme do you want to understand? (e.g. PM Merit Scholarship, Rythu Bandhu, PM-Kisan)...",
+    btn_search_schemes: "Search Schemes",
+    try_asking: "Try asking:",
+    qf1_h: "Explore All Schemes",
+    qf1_p: "Filter Central, State, and Personalized schemes",
+    qf2_h: "Check My Eligibility",
+    qf2_p: "Instant rule match for Age, Income & State",
+    qf3_h: "Compare Schemes",
+    qf3_p: "Side-by-side comparison of benefits & docs",
+    qf4_h: "Mitra AI Assistant",
+    qf4_p: "Personalized voice assistant in 3 languages",
+    impact_orig: "Average Citizen Understanding of Official PDF Text",
+    impact_govtoon: "Understanding Score After Reading GovToon Visual Comics",
+    feat_title: "How GovToon Empowers Citizens",
+    feat_sub: "Bridging the gap between complex administrative legalese and citizen understanding.",
+    f1_h: "1. Grounded in Official Sources",
+    f1_p: "Directly linked to India.gov.in / myScheme. Every fact, date, benefit, and requirement maintains an exact source citation.",
+    f2_h: "2. Relatable Character Stories",
+    f2_p: "Character-bible technology ensures consistent visual storytelling featuring farmers, students, women, and street vendors.",
+    f3_h: "3. Desi Basti-Speak & Voice",
+    f3_p: "Translates 'Babu-speak' into everyday language with instant English, Telugu, and Hindi audio narration.",
+    f4_h: "4. Personalized Recommendations",
+    f4_p: "Personal profile matching automatically identifies schemes tailored to your specific age, income, state, and occupation.",
+    explore_title: "Explore Schemes",
+    explore_sub: "schemes shown · scalable architecture supports thousands more",
+    active_prof_lbl: "Active Profile:",
+    btn_edit_prof: "✏️ Edit Profile",
+    tab_all: "All Schemes",
+    tab_central: "Central",
+    tab_state: "My State",
+    tab_recommended: "Recommended For Me",
+    tab_saved: "Saved",
+    search_ph: "Search by name, benefit, category, keyword...",
+    btn_read_comic: "🎨 4-Panel Comic",
+    btn_eligibility: "🟢 Eligibility",
+    btn_apply: "🚀 Apply Online ↗",
+    elig_badge: "Instant Rule Engine",
+    elig_title: "🎯 Personalized Scheme Eligibility Assessment",
+    elig_desc: "Enter your profile information to calculate exact match percentages across Central & State government schemes.",
+    elig_card_h: "📝 Your Citizen Profile",
+    elig_card_sub: "Values are stored locally on your device for privacy.",
+    lbl_age: "Your Age (Years)",
+    lbl_income: "Annual Family Income (₹)",
+    lbl_state: "State of Residence",
+    lbl_occ: "Primary Occupation / Status",
+    lbl_gender: "Gender",
+    lbl_cat: "Social Category / Caste",
+    btn_apply_prof: "🌟 Apply Profile & View Recommended Schemes",
+    comp_badge: "Side-by-Side Matrix",
+    comp_title: "⚖️ Compare Government Schemes",
+    comp_desc: "Compare benefits, eligibility criteria, required documents, and application roadmaps between schemes.",
+    lbl_scheme_1: "Scheme 1:",
+    lbl_scheme_2: "Scheme 2:",
+    lbl_scheme_3: "Scheme 3 (Optional):",
+    dash_badge: "Personalized Citizen Hub",
+    dash_title: "📊 Citizen Welfare Dashboard",
+    dash_desc: "Track your saved schemes, application readiness, document checklist, and reading history.",
+    dstat_saved: "Saved Schemes",
+    dstat_match: "Top Profile Match",
+    dstat_docs: "Documents Prepared",
+    dstat_comics: "Visual Comics Read",
+    dash_saved_h: "⭐ Your Bookmarked Schemes",
+    dash_browse_more: "+ Browse More",
+    dash_docs_h: "📄 Common Document Readiness",
+    dash_essential_badge: "Essential For All Schemes",
+    doc_aadhaar_label: "<strong>Aadhaar Card</strong> (Linked with Mobile Number for e-KYC)",
+    doc_bank_label: "<strong>Bank Account Passbook</strong> (Active DBT & NPCI Seeding)",
+    doc_income_label: "<strong>Income Certificate / Ration Card</strong> (Issued by Revenue Dept)",
+    doc_domicile_label: "<strong>Residence / Domicile Certificate</strong> (Proof of State)",
+    rtab_comic: "🎨 4-Panel Comic",
+    rtab_eligibility: "🟢 Visual Eligibility",
+    rtab_documents: "📄 Required Documents",
+    rtab_steps: "🗺️ Application Steps",
+    rtab_ask: "💬 Ask AI Assistant",
+    rtab_quiz: "✅ Comprehension Quiz",
+    btn_listen: "▶ Listen to Full Comic",
+    btn_pause: "⏸ Pause",
+    lbl_speed: "Speed:",
+    btn_bookmark: "🔖 Bookmark",
+    btn_print: "🖨️ Print 1-Page Flyer",
+    source_verified: "✓ Official Source Verified",
+    btn_verify_portal: "🔗 Verify Official Portal",
+    elig_h: "🟢 Visual Eligibility Assessment",
+    elig_sub: "Enter your basic details to check preliminary match against official rules.",
+    doc_h: "📄 Required Documents Checklist",
+    doc_sub: "Check off documents as you prepare them before visiting the official portal or Panchayat office.",
+    doc_prep_label: "Preparation Progress:",
+    steps_h: "🗺️ Step-by-Step Application Roadmap",
+    steps_sub: "Follow these official steps to submit your application safely.",
+    cta_ready: "Ready to Apply?",
+    cta_desc: "Submit your application directly on the official government portal.",
+    btn_go_portal: "🚀 Go to Official Government Application Portal",
+    ask_h: "💬 Ask Mitra Grounded AI Assistant",
+    ask_sub: "Answers strictly from official India.gov.in scheme data with page citations.",
+    sug_q: "Suggested Questions:",
+    bot_welcome: "Namaste! I am your GovToon Assistant. I can answer questions about this scheme strictly based on official government records.",
+    cit_verified: "Source: Verified India.gov.in Record",
+    chat_ph: "Ask a question about this scheme...",
+    btn_send_q: "Send Question",
+    quiz_h: "✅ Scheme Comprehension Test",
+    quiz_sub: "Test your understanding of the verified scheme facts.",
+    admin_badge: "Admin Access Only",
+    admin_h: "Administrative & Confusion Analytics Dashboard",
+    admin_sub: "Monitor ingested schemes, version updates, AI extraction logs, and citizen confusion analytics.",
+    astat_1: "Indexed Government Schemes",
+    astat_2: "Visual Comics Generated",
+    astat_3: "Average Citizen Comprehension",
+    astat_4: "Active Languages (EN, TE, HI)",
+    conf_h: "📊 Citizen Confusion Analytics",
+    conf_sub: "Where citizens encounter the most difficulty in understanding government schemes:",
+    conf_1: "Eligibility Criteria & Income Thresholds",
+    conf_2: "Required Documents & Verification",
+    conf_3: "Application Process & Portal Submission",
+    conf_4: "Benefit Calculation & Disbursement",
+    prof_modal_h: "👤 Edit Your Profile for Personalized Recommendations",
+    prof_modal_sub: "GovToon matches these attributes in real time to calculate match scores and highlight relevant schemes.",
+    btn_cancel: "Cancel",
+    btn_save_prof: "Save & Update Recommendations",
+    mitra_title: "Mitra — Personalized AI Assistant",
+    mitra_status: "🟢 Grounded on India.gov.in",
+    mitra_ph: "Ask Mitra anything (e.g. Find schemes for 20y student)...",
+    btn_ask: "Ask",
+    footer_quote: "\"We don't change what the government says. We change how easily citizens understand it.\"",
+    footer_src_label: "Source Data:",
+    footer_disclaimer: "GovToon simplifies publicly available government information for visual comprehension. It does not replace official government websites or application portals."
+  },
+  te: {
+    trust_badge: "🛡️ అధికారిక మూలాల ఆధారం",
+    trust_text: "<strong>India.gov.in జాతీయ పోర్టల్</strong> / myScheme నుండి సేకరించిన సమాచారం. ప్రభుత్వం చెప్పిన దాన్ని మేము మార్చము — పౌరులు అర్థం చేసుకునే విధానాన్ని సులభతరం చేస్తాము.",
+    btn_contrast: "🌓 కాంట్రాస్ట్",
+    logo_sub: "ప్రభుత్వ పథకాలు, సులువైన మాటల్లో.",
+    nav_home: "హోమ్",
+    nav_explore: "పథకాలు వెతకండి",
+    nav_eligibility: "అర్హత తనిఖీ",
+    nav_compare: "పోల్చండి",
+    nav_dashboard: "డాష్‌బోర్డ్",
+    nav_reader: "📖 కామిక్ చదవండి",
+    nav_admin: "📊 అడ్మిన్",
+    btn_create_scheme: "+ పథకాన్ని కామిక్‌గా మార్చండి",
+    hero_badge: "🇮🇳 జాతీయ పోర్టల్ సమన్వయం సిద్ధంగా ఉంది",
+    hero_title: "ప్రభుత్వ పథకాలు,<br><span class=\"hero-highlight\">సులువైన మాటల్లో.</span>",
+    hero_sub: "సంక్లిష్టమైన ప్రభుత్వ పత్రాలు, అర్హత నిబంధనలు మరియు దరఖాస్తు విధానాలను సులువైన 4-ప్యానెల్ కామిక్ కథలుగా, వాయిస్ వివరణలతో పొందండి.",
+    hero_ph: "మీరు ఏ ప్రభుత్వ పథకం గురించి తెలుసుకోవాలనుకుంటున్నారు? (ఉదా: పీఎం మెరిట్ స్కాలర్‌షిప్, రైతు బంధు)...",
+    btn_search_schemes: "పథకాలు వెతకండి",
+    try_asking: "ప్రయత్నించండి:",
+    qf1_h: "అన్ని పథకాలు చూడండి",
+    qf1_p: "కేంద్ర, రాష్ట్ర మరియు వ్యక్తిగత పథకాల వివరాలు",
+    qf2_h: "నా అర్హతను తనిఖీ చేయండి",
+    qf2_p: "వయస్సు, ఆదాయం & రాష్ట్రం ఆధారంగా సరిపోయే పథకాలు",
+    qf3_h: "పథకాలను పోల్చండి",
+    qf3_p: "లబ్ధి మరియు అవసరమైన పత్రాల సమగ్ర పోలిక",
+    qf4_h: "మిత్ర AI సహాయకుడు",
+    qf4_p: "3 భాషల్లో వ్యక్తిగత వాయిస్ సహాయకుడు",
+    impact_orig: "సాధారణ పౌరుల ప్రభుత్వ పత్రాల అవగాహన",
+    impact_govtoon: "గోవ్‌టూన్ కామిక్స్ చదివిన తర్వాత అవగాహన స్కోరు",
+    feat_title: "గోవ్‌టూన్ పౌరులకు ఎలా సహాయపడుతుంది",
+    feat_sub: "కఠినమైన ప్రభుత్వ భాషకు, సాధారణ పౌరుల అవగాహనకు మధ్య వారధి.",
+    f1_h: "1. అధికారిక ఆధారాలు",
+    f1_p: "India.gov.in / myScheme కి నేరుగా అనుసంధానించబడింది. ప్రతి విషయం అధికారిక ఆధారంతో కూడి ఉంటుంది.",
+    f2_h: "2. సుపరిచితమైన పాత్రల కథలు",
+    f2_p: "రైతులు, విద్యార్థులు, మహిళలు మరియు వీధి వ్యాపారుల ప్రతిరూప పాత్రలతో సులువైన కథలు.",
+    f3_h: "3. దేశీ బస్తీ మాటలు & వాయిస్",
+    f3_p: "కఠినమైన అధికారుల భాషను సాధారణ వాడుక భాషలోకి మార్చి ఇంగ్లీష్, తెలుగు, హిందీ వాయిస్ ఇస్తుంది.",
+    f4_h: "4. వ్యక్తిగతీకరించిన సిఫార్సులు",
+    f4_p: "మీ వయస్సు, ఆదాయం, రాష్ట్రం ఆధారంగా మీకు సరిపోయే పథకాలను ఆటోమేటిక్‌గా చూపిస్తుంది.",
+    explore_title: "పథకాలు అన్వేషించండి",
+    explore_sub: "పథకాలు అందుబాటులో ఉన్నాయి · విస్తరించగల వ్యవస్థ",
+    active_prof_lbl: "యాక్టివ్ ప్రొఫైల్:",
+    btn_edit_prof: "✏️ ప్రొఫైల్ మార్చండి",
+    tab_all: "అన్ని పథకాలు",
+    tab_central: "కేంద్ర పథకాలు",
+    tab_state: "నా రాష్ట్రం",
+    tab_recommended: "నాకు సరిపోయేవి",
+    tab_saved: "దాచుకున్నవి",
+    search_ph: "పథకం పేరు, లబ్ధి లేదా కీవర్డ్ ద్వారా వెతకండి...",
+    btn_read_comic: "🎨 4-ప్యానెల్ కామిక్",
+    btn_eligibility: "🟢 అర్హత తనిఖీ",
+    btn_apply: "🚀 ఆన్‌లైన్ దరఖాస్తు ↗",
+    elig_badge: "తక్షణ నిబంధనల ఇంజిన్",
+    elig_title: "🎯 వ్యక్తిగత పథక అర్హత అంచనా",
+    elig_desc: "కేంద్ర & రాష్ట్ర ప్రభుత్వ పథకాలతో మీ వివరాలను సరిపోల్చి అర్హత శాతాన్ని తెలుసుకోండి.",
+    elig_card_h: "📝 మీ పౌర ప్రొఫైల్",
+    elig_card_sub: "మీ వ్యక్తిగత గోప్యత కోసం వివరాలు మీ పరికరంలోనే భద్రపరచబడతాయి.",
+    lbl_age: "మీ వయస్సు (సంవత్సరాలు)",
+    lbl_income: "వార్షిక కుటుంబ ఆదాయం (₹)",
+    lbl_state: "నివాస రాష్ట్రం",
+    lbl_occ: "ప్రధాన వృత్తి / హోదా",
+    lbl_gender: "లింగం",
+    lbl_cat: "సామాజిక వర్గం / కులం",
+    btn_apply_prof: "🌟 ప్రొఫైల్ వర్తింపజేసి సిఫార్సు పథకాలు చూడండి",
+    comp_badge: "సమగ్ర పోలిక పట్టిక",
+    comp_title: "⚖️ ప్రభుత్వ పథకాల పోలిక",
+    comp_desc: "పథకాల మధ్య ప్రయోజనాలు, అర్హత నిబంధనలు, అవసరమైన పత్రాలు మరియు దరఖాస్తు విధానాలను పోల్చండి.",
+    lbl_scheme_1: "పథకం 1:",
+    lbl_scheme_2: "పథకం 2:",
+    lbl_scheme_3: "పథకం 3 (ఐచ్ఛికం):",
+    dash_badge: "వ్యక్తిగతీకరించిన పౌర కేంద్రం",
+    dash_title: "📊 పౌర సంక్షేమ డాష్‌బోర్డ్",
+    dash_desc: "మీరు దాచుకున్న పథకాలు, దరఖాస్తు సన్నద్ధత, పత్రాల చెక్‌లిస్ట్ మరియు చదివిన కథలను ట్రాక్ చేయండి.",
+    dstat_saved: "దాచుకున్న పథకాలు",
+    dstat_match: "టాప్ ప్రొఫైల్ మ్యాచ్",
+    dstat_docs: "సిద్ధమైన పత్రాలు",
+    dstat_comics: "చదివిన కామిక్స్",
+    dash_saved_h: "⭐ మీరు దాచుకున్న పథకాలు",
+    dash_browse_more: "+ మరిన్ని వెతకండి",
+    dash_docs_h: "📄 సాధారణ పత్రాల సన్నద్ధత",
+    dash_essential_badge: "అన్ని పథకాలకు ముఖ్యం",
+    doc_aadhaar_label: "<strong>ఆధార్ కార్డు</strong> (e-KYC కోసం మొబైల్ నంబర్‌తో లింక్ చేయబడింది)",
+    doc_bank_label: "<strong>బ్యాంక్ ఖాతా పాస్‌బుక్</strong> (యాక్టివ్ DBT & NPCI సీడింగ్)",
+    doc_income_label: "<strong>ఆదాయ ధృవీకరణ పత్రం / రేషన్ కార్డు</strong> (రెవెన్యూ విభాగం జారీ చేసినది)",
+    doc_domicile_label: "<strong>నివాస ధృవీకరణ పత్రం</strong> (రాష్ట్ర నివాస రుజువు)",
+    rtab_comic: "🎨 4-ప్యానెల్ కామిక్",
+    rtab_eligibility: "🟢 అర్హత తనిఖీ",
+    rtab_documents: "📄 అవసరమైన పత్రాలు",
+    rtab_steps: "🗺️ దరఖాస్తు విధానం",
+    rtab_ask: "💬 మిత్ర AI అడగండి",
+    rtab_quiz: "✅ అవగాహన క్విజ్",
+    btn_listen: "▶ పూర్తి కామిక్ వినండి",
+    btn_pause: "⏸ ఆపండి",
+    lbl_speed: "వేగం:",
+    btn_bookmark: "🔖 బుక్‌మార్క్",
+    btn_print: "🖨️ 1-పేజీ ఫ్లైయర్ ప్రింట్",
+    source_verified: "✓ అధికారిక ఆధారాలు ధృవీకరించబడ్డాయి",
+    btn_verify_portal: "🔗 పోర్టల్‌ను తనిఖీ చేయండి",
+    elig_h: "🟢 అర్హత అంచనా తనిఖీ",
+    elig_sub: "అధికారిక నిబంధనలతో మీ వివరాలను తనిఖీ చేయడానికి వివరాలు నమోదు చేయండి.",
+    doc_h: "📄 అవసరమైన పత్రాల జాబితా",
+    doc_sub: "మీరు సిద్ధం చేసుకున్న పత్రాలను చెక్‌బాక్స్‌లో గుర్తించండి.",
+    doc_prep_label: "సిద్ధమైన పురోగతి:",
+    steps_h: "🗺️ అంచెలవారీ దరఖాస్తు విధానం",
+    steps_sub: "సురక్షితంగా దరఖాస్తు చేయడానికి ఈ అధికారిక దశలను అనుసరించండి.",
+    cta_ready: "దరఖాస్తు చేయడానికి సిద్ధంగా ఉన్నారా?",
+    cta_desc: "నేరుగా అధికారిక ప్రభుత్వ పోర్టల్‌లో దరఖాస్తు చేసుకోండి.",
+    btn_go_portal: "🚀 అధికారిక ప్రభుత్వ దరఖాస్తు పోర్టల్‌కు వెళ్లండి",
+    ask_h: "💬 మిత్ర AI సహాయకుడు",
+    ask_sub: "కేవలం అధికారిక India.gov.in సమాచారం ఆధారంగానే సమాధానాలు ఇస్తుంది.",
+    sug_q: "సూచించిన ప్రశ్నలు:",
+    bot_welcome: "నమస్తే! నేను మీ గోవ్‌టూన్ సహాయకుడిని. అధికారిక రికార్డుల ఆధారంగా మీ ప్రశ్నలకు సమాధానం ఇస్తాను.",
+    cit_verified: "మూలం: ధృవీకరించబడిన India.gov.in రికార్డు",
+    chat_ph: "ఈ పథకం గురించి ప్రశ్నించండి...",
+    btn_send_q: "ప్రశ్న పంపండి",
+    quiz_h: "✅ పథకం అవగాహన పరీక్ష",
+    quiz_sub: "పథకం విషయాలపై మీ అవగాహనను పరీక్షించుకోండి.",
+    admin_badge: "అడ్మిన్ లాగిన్ మాత్రమే",
+    admin_h: "నిర్వాహక & అవగాహన విశ్లేషణల డాష్‌బోర్డ్",
+    admin_sub: "సేకరించిన పథకాలు, నవీకరణలు మరియు ప్రజల సందేహాలను విశ్లేషించండి.",
+    astat_1: "సేకరించిన ప్రభుత్వ పథకాలు",
+    astat_2: "తయారైన దృశ్య కామిక్స్",
+    astat_3: "సగటు పౌరుల అవగాహన",
+    astat_4: "యాక్టివ్ భాషలు (ఇంగ్లీష్, తెలుగు, హిందీ)",
+    conf_h: "📊 పౌరుల అయోమయ విశ్లేషణలు",
+    conf_sub: "ప్రభుత్వ పథకాలను అర్థం చేసుకోవడంలో ప్రజలు ఎక్కడ ఎక్కువ ఇబ్బంది పడుతున్నారో చూడండి:",
+    conf_1: "అర్హత నిబంధనలు & ఆదాయ పరిమితులు",
+    conf_2: "అవసరమైన పత్రాలు & ధృవీకరణ",
+    conf_3: "దరఖాస్తు విధానం & పోర్టల్ సబ్మిషన్",
+    conf_4: "లబ్ధి లెక్కింపు & జమ ప్రక్రియ",
+    prof_modal_h: "👤 వ్యక్తిగతీకరించిన సిఫార్సుల కోసం మీ ప్రొఫైల్‌ను సవరించండి",
+    prof_modal_sub: "గోవ్‌టూన్ మీకు సరిపోయే పథకాలను సూచించడానికి ఈ వివరాలను సరిపోలుస్తుంది.",
+    btn_cancel: "రద్దు చేయండి",
+    btn_save_prof: "సేవ్ చేసి సిఫార్సులను అప్‌డేట్ చేయండి",
+    mitra_title: "మిత్ర — వ్యక్తిగత AI సహాయకుడు",
+    mitra_status: "🟢 India.gov.in అధికారిక ఆధారం",
+    mitra_ph: "మిత్రను ఏమైనా అడగండి (ఉదా: 20 సం. విద్యార్థి పథకాలు)...",
+    btn_ask: "అడగండి",
+    footer_quote: "\"ప్రభుత్వం చెప్పిన దాన్ని మేము మార్చము. పౌరులు అర్థం చేసుకునే విధానాన్ని సులభతరం చేస్తాము.\"",
+    footer_src_label: "మూల సమాచారం:",
+    footer_disclaimer: "గోవ్‌టూన్ పౌరుల సులువైన అవగాహన కోసం ప్రభుత్వ సమాచారాన్ని సరళీకృతం చేస్తుంది. ఇది అధికారిక ప్రభుత్వ వెబ్‌సైట్‌లకు ప్రత్యామ్నాయం కాదు."
+  },
+  hi: {
+    trust_badge: "🛡️ आधिकारिक स्रोतों पर आधारित",
+    trust_text: "<strong>India.gov.in राष्ट्रीय पोर्टल</strong> / myScheme से प्राप्त जानकारी। हम सरकार की बात नहीं बदलते — हम नागरिकों के समझने का तरीका आसान बनाते हैं।",
+    btn_contrast: "🌓 कंट्रास्ट",
+    logo_sub: "सरकारी योजनाएं, आसान भाषा में।",
+    nav_home: "होम",
+    nav_explore: "योजनाएं खोजें",
+    nav_eligibility: "पात्रता जांच",
+    nav_compare: "तुलना करें",
+    nav_dashboard: "डैशबोर्ड",
+    nav_reader: "📖 कॉमिक पढ़ें",
+    nav_admin: "📊 एडमिन",
+    btn_create_scheme: "+ योजना को कॉमिक में बदलें",
+    hero_badge: "🇮🇳 राष्ट्रीय पोर्टल इंडिया Integration तैयार",
+    hero_title: "सरकारी योजनाएं,<br><span class=\"hero-highlight\">आसान भाषा में।</span>",
+    hero_sub: "जटिल सरकारी दस्तावेजों, पात्रता नियमों और आवेदन प्रक्रियाओं को सरल 4-पैनल दृश्यात्मक कहानियों और ऑडियो में समझें।",
+    hero_ph: "आप कौन सी सरकारी योजना समझना चाहते हैं? (जैसे पीएम मेरिट स्कॉलरशिप, रायथू बंधु, पीएम-किसान)...",
+    btn_search_schemes: "योजनाएं खोजें",
+    try_asking: "खोजकर देखें:",
+    qf1_h: "सभी योजनाएं खोजें",
+    qf1_p: "केंद्रीय, राज्य और व्यक्तिगत योजनाओं की सूची",
+    qf2_h: "मेरी पात्रता जांचें",
+    qf2_p: "उम्र, आय और राज्य अनुसार तुरंत पात्रता मिलान",
+    qf3_h: "योजनाओं की तुलना करें",
+    qf3_p: "लाभ और दस्तावेजों की आमने-सामने तुलना",
+    qf4_h: "मित्र AI सहायक",
+    qf4_p: "3 भाषाओं में व्यक्तिगत वॉयस असिस्टेंट",
+    impact_orig: "सरकारी दस्तावेज पढ़ने पर सामान्य नागरिक की समझ",
+    impact_govtoon: "गवटून कॉमिक्स पढ़ने के बाद समझ का स्कोर",
+    feat_title: "गवटून नागरिकों को कैसे सशक्त बनाता है",
+    feat_sub: "जटिल सरकारी भाषा और आम नागरिक की समझ के बीच का मजबूत पुल।",
+    f1_h: "1. आधिकारिक स्रोतों पर आधारित",
+    f1_p: "India.gov.in / myScheme से सीधा जुड़ाव। हर नियम और लाभ का स्पष्ट संदर्भ।",
+    f2_h: "2. आम आदमी की कहानियां",
+    f2_p: "किसान, छात्र, महिला और छोटे व्यापारियों की दैनिक जिंदगी से जुड़ी कहानियां।",
+    f3_h: "3. देशी बस्ती की भाषा और आवाज",
+    f3_p: "अधिकारियों की कठिन भाषा को आसान बोलचाल में बदलकर अंग्रेजी, तेलुगु, हिंदी में ऑडियो।",
+    f4_h: "4. व्यक्तिगत योजना सुझाव",
+    f4_p: "आपकी उम्र, आय और राज्य के अनुसार सबसे उपयुक्त योजनाओं की तत्काल पहचान।",
+    explore_title: "योजनाएं खोजें",
+    explore_sub: "योजनाएं उपलब्ध हैं · व्यापक डेटाबेस",
+    active_prof_lbl: "सक्रिय प्रोफाइल:",
+    btn_edit_prof: "✏️ प्रोफाइल बदलें",
+    tab_all: "सभी योजनाएं",
+    tab_central: "केंद्रीय योजनाएं",
+    tab_state: "मेरा राज्य",
+    tab_recommended: "मेरे लिए अनुशंसित",
+    tab_saved: "सहेजी गई",
+    search_ph: "योजना का नाम, लाभ या कीवर्ड लिखें...",
+    btn_read_comic: "🎨 4-पैनल कॉमिक",
+    btn_eligibility: "🟢 पात्रता जांच",
+    btn_apply: "🚀 ऑनलाइन आवेदन ↗",
+    elig_badge: "त्वरित नियम इंजन",
+    elig_title: "🎯 व्यक्तिगत योजना पात्रता मूल्यांकन",
+    elig_desc: "केंद्रीय और राज्य सरकारी योजनाओं के साथ अपनी जानकारी मिलाकर पात्रता प्रतिशत जानें।",
+    elig_card_h: "📝 आपकी नागरिक प्रोफाइल",
+    elig_card_sub: "गोपनीयता के लिए विवरण आपके उपकरण में ही सुरक्षित रहता है।",
+    lbl_age: "आपकी उम्र (वर्ष)",
+    lbl_income: "वार्षिक पारिवारिक आय (₹)",
+    lbl_state: "निवास का राज्य",
+    lbl_occ: "मुख्य व्यवसाय / श्रेणी",
+    lbl_gender: "लिंग",
+    lbl_cat: "सामाजिक वर्ग / जाति",
+    btn_apply_prof: "🌟 प्रोफाइल लागू करें और अनुशंसित योजनाएं देखें",
+    comp_badge: "तुलना तालिका",
+    comp_title: "⚖️ सरकारी योजनाओं की तुलना",
+    comp_desc: "योजनाओं के लाभ, पात्रता नियम, आवश्यक दस्तावेज और आवेदन प्रक्रिया की तुलना करें।",
+    lbl_scheme_1: "योजना 1:",
+    lbl_scheme_2: "योजना 2:",
+    lbl_scheme_3: "योजना 3 (वैकल्पिक):",
+    dash_badge: "व्यक्तिगत नागरिक केंद्र",
+    dash_title: "📊 नागरिक कल्याण डैशबोर्ड",
+    dash_desc: "सहेजी गई योजनाएं, आवेदन की तैयारी, दस्तावेजों की चेकलिस्ट और पढ़ने का इतिहास देखें।",
+    dstat_saved: "सहेजी गई योजनाएं",
+    dstat_match: "सर्वोत्तम प्रोफाइल मैच",
+    dstat_docs: "तैयार दस्तावेज",
+    dstat_comics: "पढ़ी गई कॉमिक्स",
+    dash_saved_h: "⭐ आपकी सहेजी गई योजनाएं",
+    dash_browse_more: "+ और योजनाएं देखें",
+    dash_docs_h: "📄 सामान्य दस्तावेज तैयारी",
+    dash_essential_badge: "सभी योजनाओं के लिए आवश्यक",
+    doc_aadhaar_label: "<strong>आधार कार्ड</strong> (ई-केवाईसी के लिए मोबाइल से लिंक)",
+    doc_bank_label: "<strong>बैंक खाता पासबुक</strong> (सक्रिय डीबीटी और एनपीसीआई सीडिंग)",
+    doc_income_label: "<strong>आय प्रमाण पत्र / राशन कार्ड</strong> (राजस्व विभाग द्वारा जारी)",
+    doc_domicile_label: "<strong>निवास प्रमाण पत्र</strong> (राज्य का निवास प्रमाण)",
+    rtab_comic: "🎨 4-पैनल कॉमिक",
+    rtab_eligibility: "🟢 पात्रता जांच",
+    rtab_documents: "📄 जरूरी दस्तावेज",
+    rtab_steps: "🗺️ आवेदन के चरण",
+    rtab_ask: "💬 मित्र AI से पूछें",
+    rtab_quiz: "✅ समझ की परीक्षा",
+    btn_listen: "▶ पूरी कॉमिक सुनें",
+    btn_pause: "⏸ रोकें",
+    lbl_speed: "गति:",
+    btn_bookmark: "🔖 बुकमार्क",
+    btn_print: "🖨️ 1-पेज फ्लायर प्रिंट",
+    source_verified: "✓ आधिकारिक स्रोत प्रमाणित",
+    btn_verify_portal: "🔗 आधिकारिक पोर्टल देखें",
+    elig_h: "🟢 पात्रता मूल्यांकन जांच",
+    elig_sub: "आधिकारिक नियमों से अपनी पात्रता मिलाने के लिए जानकारी दर्ज करें।",
+    doc_h: "📄 आवश्यक दस्तावेजों की सूची",
+    doc_sub: "तैयार दस्तावेजों को चेकबॉक्स में मार्क करें।",
+    doc_prep_label: "तैयारी की प्रगति:",
+    steps_h: "🗺️ चरणबद्ध आवेदन मार्गदर्शिका",
+    steps_sub: "सुरक्षित आवेदन के लिए इन आधिकारिक चरणों का पालन करें।",
+    cta_ready: "आवेदन के लिए तैयार हैं?",
+    cta_desc: "सीधे आधिकारिक सरकारी पोर्टल पर आवेदन जमा करें।",
+    btn_go_portal: "🚀 आधिकारिक सरकारी पोर्टल पर जाएं",
+    ask_h: "💬 मित्र AI सहायक",
+    ask_sub: "केवल आधिकारिक India.gov.in आंकड़ों पर आधारित सटीक जवाब।",
+    sug_q: "सुझाए गए प्रश्न:",
+    bot_welcome: "नमस्ते! मैं आपका गवटून सहायक हूं। सरकारी रिकॉर्ड के आधार पर आपके सवालों के जवाब दूंगा।",
+    cit_verified: "स्रोत: प्रमाणित India.gov.in रिकॉर्ड",
+    chat_ph: "इस योजना के बारे में सवाल पूछें...",
+    btn_send_q: "सवाल भेजें",
+    quiz_h: "✅ योजना समझ की परीक्षा",
+    quiz_sub: "योजना के तथ्यों पर अपनी समझ की जांच करें।",
+    admin_badge: "केवल एडमिन लॉगिन",
+    admin_h: "प्रशासनिक एवं नागरिक समझ विश्लेषण डैशबोर्ड",
+    admin_sub: "योजनाओं, नए अपडेट और नागरिकों के संशय का विश्लेषण करें।",
+    astat_1: "सूचीबद्ध सरकारी योजनाएं",
+    astat_2: "निर्मित दृश्यात्मक कॉमिक्स",
+    astat_3: "औसत नागरिक समझ स्कोर",
+    astat_4: "सक्रिय भाषाएं (अंग्रेजी, तेलुगु, हिंदी)",
+    conf_h: "📊 नागरिक संशय विश्लेषण",
+    conf_sub: "नागरिकों को सरकारी योजनाएं समझने में कहां सबसे ज्यादा कठिनाई होती है:",
+    conf_1: "पात्रता नियम और आय सीमा",
+    conf_2: "आवश्यक दस्तावेज और सत्यापन",
+    conf_3: "आवेदन प्रक्रिया और पोर्टल जमा",
+    conf_4: "लाभ की गणना और राशि जमा",
+    prof_modal_h: "👤 व्यक्तिगत सिफारिशों के लिए अपनी प्रोफाइल बदलें",
+    prof_modal_sub: "गवटून आपकी उपयुक्त योजनाओं को खोजने के लिए इन विवरणों का मिलान करता है।",
+    btn_cancel: "रद्द करें",
+    btn_save_prof: "सुरक्षित करें और सिफारिशें अपडेट करें",
+    mitra_title: "मित्र — व्यक्तिगत AI सहायक",
+    mitra_status: "🟢 India.gov.in आधिकारिक आधार",
+    mitra_ph: "मित्र से कुछ भी पूछें (उदा: 20 वर्ष के छात्र के लिए योजनाएं)...",
+    btn_ask: "पूछें",
+    footer_quote: "\"हम सरकार की बात नहीं बदलते। हम नागरिकों के समझने का तरीका आसान बनाते हैं।\"",
+    footer_src_label: "स्रोत डेटा:",
+    footer_disclaimer: "गवटून आसान समझ के लिए सार्वजनिक सरकारी जानकारी को सरल बनाता है। यह आधिकारिक सरकारी वेबसाइटों का विकल्प नहीं है।"
+  }
+};
+
+// Multilingual Scheme Translations Dataset (Full Telugu & Hindi Panels, Dialogues & Facts)
+const SCHEMES_I18N = {
+  pm_merit_scholarship: {
+    te: {
+      name: "పీఎం మెరిట్ స్కాలర్‌షిప్ పథకం",
+      purpose: "ప్రతిభావంతులైన విద్యార్థులకు కళాశాల ఫీజులు మరియు ఉన్నత విద్యా ఖర్చుల కోసం ప్రభుత్వం అందించే నగదు సహాయం.",
+      benefits: "సంవత్సరానికి ₹50,000 నేరుగా విద్యార్థి బ్యాంక్ ఖాతాలో జమ (DBT).",
+      character: { name: "రాజు (విద్యార్థి)", role: "కళాశాల విద్యార్థి", desc: "కళాశాల ఫీజుల కోసం స్కాలర్‌షిప్ పొందుతున్న ప్రతిభావంతుడు" },
+      panels: [
+        { num: 1, tag: "ప్యానెల్ 1: కళాశాల ఫీజుల ఆందోళన", speaker: "రాజు", dialogue: "నాకు ఇంజనీరింగ్ ప్రవేశ పరీక్షలో మంచి ర్యాంక్ వచ్చింది, కానీ కాలేజీ ఫీజు ₹50,000 ఎలా కట్టాలి?", caption: "కాలేజీ ఫీజుల గురించి విద్యార్థి ఆందోళన." },
+        { num: 2, tag: "ప్యానెల్ 2: పీఎం మెరిట్ స్కాలర్‌షిప్", speaker: "అధ్యాపకుడు", dialogue: "ఆందోళన పడకు రాజు! నేషనల్ స్కాలర్‌షిప్ పోర్టల్‌లో పీఎం మెరిట్ స్కాలర్‌షిప్‌కు దరఖాస్తు చేసుకో. ప్రభుత్వం ఏటా ₹50,000 నేరుగా ఇస్తుంది!", caption: "కేంద్ర ప్రభుత్వం అందించే పూర్తి ఫీజు సాయం." },
+        { num: 3, tag: "ప్యానెల్ 3: సులువైన e-KYC దరఖాస్తు", speaker: "CSC సహాయకుడు", dialogue: "scholarships.gov.in లో నీ మార్కుల పత్రం, ఆదాయ ధృవీకరణ పత్రం, ఆధార్ కార్డు అప్‌లోడ్ చెయ్యి.", caption: "డిజిటల్ పద్ధతిలో సులువైన దరఖాస్తు." },
+        { num: 4, tag: "ప్యానెల్ 4: ఉజ్వల భవిష్యత్తు", speaker: "రాజు & తండ్రి", dialogue: "🎉 నా బ్యాంక్ ఖాతాలో ₹50,000 జమ అయ్యాయి! ఇప్పుడు నేను ప్రశాంతంగా నా చదువును కొనసాగించగలను!", caption: "స్కాలర్‌షిప్‌తో విద్యార్థుల కలల సాకారం." }
+      ]
+    },
+    hi: {
+      name: "पीएम मेरिट छात्रवृत्ति योजना",
+      purpose: "प्रतिभाशाली छात्रों को कॉलेज फीस और उच्च शिक्षा के खर्चों के लिए सरकार द्वारा सीधी आर्थिक मदद।",
+      benefits: "प्रति वर्ष ₹50,000 सीधे छात्र के बैंक खाते में जमा (DBT)।",
+      character: { name: "राजू (छात्र)", role: "कॉलेज छात्र", desc: "कॉलेज फीस के लिए छात्रवृत्ति प्राप्त करता होनहार छात्र" },
+      panels: [
+        { num: 1, tag: "पैनल 1: कॉलेज फीस की चिंता", speaker: "राजू", dialogue: "मैंने अच्छे अंकों से परीक्षा पास की, लेकिन कॉलेज की फीस ₹50,000 है। पिताजी इसका प्रबंध कैसे करेंगे?", caption: "कॉलेज की फीस को लेकर मेधावी छात्र चिंतित।" },
+        { num: 2, tag: "पैनल 2: पीएम मेरिट स्कॉलरशिप", speaker: "शिक्षक", dialogue: "चिंता मत करो राजू! नेशनल स्कॉलरशिप पोर्टल पर पीएम मेरिट स्कॉलरशिप के लिए आवेदन करो। सरकार हर साल ₹50,000 सीधे देती है!", caption: "केंद्र सरकार द्वारा सुनिश्चित शैक्षणिक सहायता।" },
+        { num: 3, tag: "पैनल 3: आसान ऑनलाइन e-KYC", speaker: "सीएससी सहायक", dialogue: "scholarships.gov.in पर अपनी अंकतालिका, आय प्रमाण पत्र और आधार कार्ड अपलोड करें।", caption: "न्यूनतम दस्तावेजों के साथ त्वरित डिजिटल आवेदन।" },
+        { num: 4, tag: "पैनल 4: उज्ज्वल भविष्य", speaker: "राजू और पिता", dialogue: "🎉 बैंक खाते में ₹50,000 जमा हो गए! अब मैं अपनी इंजीनियरिंग की पढ़ाई बिना किसी रुकावट के पूरी कर सकता हूं!", caption: "सीधी छात्रवृत्ति से युवा सपनों को नई उड़ान।" }
+      ]
+    }
+  },
+  rythu_bandhu: {
+    te: {
+      name: "తెలంగాణ రైతు బంధు పథకం",
+      purpose: "తెలంగాణలో వ్యవసాయ భూమి కలిగిన రైతులకు విత్తనాలు, ఎరువులు మరియు పంట పెట్టుబడి కోసం ప్రభుత్వం ఇచ్చే నగదు సాయం.",
+      benefits: "ఎకరానికి ఏడాదికి ₹10,000 (ఖరీఫ్‌కు ₹5,000 + రబీకి ₹5,000) నేరుగా బ్యాంక్ ఖాతాలో జమ.",
+      character: { name: "రాము కాకా", role: "తెలంగాణ రైతు", desc: "వరి మరియు పత్తి పండించే ఆదర్శ రైతు" },
+      panels: [
+        { num: 1, tag: "ప్యానెల్ 1: పెట్టుబడి కష్టాలు", speaker: "రాము కాకా", dialogue: "వానలు మొదలయ్యాయి, కానీ విత్తనాలు, ఎరువులు కొనడానికి పైసలు ఎక్కడి నుండి తేవాలి?", caption: "పంట పెట్టుబడి కోసం రైతు ఆందోళన." },
+        { num: 2, tag: "ప్యానెల్ 2: రైతు బంధు భరోసా", speaker: "వ్యవసాయ అధికారి", dialogue: "రాము కాకా, రైతు బంధు కింద తెలంగాణ ప్రభుత్వం ఎకరానికి ఏటా ₹10,000 నేరుగా మీ ఖాతాలో వేస్తుంది!", caption: "రైతులకు సకాలంలో పంట పెట్టుబడి సాయం." },
+        { num: 3, tag: "ప్యానెల్ 3: ధరణి పాస్‌బుక్ నమోదు", speaker: "రైతు మిత్ర", dialogue: "రైతు వేదిక వద్ద మీ ధరణి పట్టాదారు పాస్‌బుక్‌ను ఆధార్, బ్యాంక్ ఖాతాతో లింక్ చేసుకోండి.", caption: "పారదర్శకమైన డిజిటల్ ప్రక్రియ." },
+        { num: 4, tag: "ప్యానెల్ 4: పచ్చని పంటలు", speaker: "రాము కాకా", dialogue: "🎉 సమయానికి ₹10,000 ఖాతాలో పడ్డాయి! అప్పులు లేకుండా మా చేను పచ్చగా కళకళలాడుతోంది!", caption: "రైతన్నకు ప్రభుత్వ నిండు భరోసా." }
+      ]
+    },
+    hi: {
+      name: "तेलंगाना रायथू बंधु योजना",
+      purpose: "तेलंगाना के किसानों को बीज, खाद और खेती के निवेश के लिए सरकार द्वारा मौसमी आर्थिक मदद।",
+      benefits: "प्रति वर्ष ₹10,000 प्रति एकड़ (खरीफ ₹5,000 + रबी ₹5,000) सीधे बैंक खाते में।",
+      character: { name: "रामू काका", role: "तेलंगाना किसान", desc: "धान और कपास की खेती करने वाले किसान" },
+      panels: [
+        { num: 1, tag: "पैनल 1: खाद-बीज की चिंता", speaker: "रामू काका", dialogue: "मानसून शुरू हो गया है, लेकिन बीज और खाद खरीदने के लिए पैसे कहां से लाऊं?", caption: "मौसमी कृषि खर्चों को लेकर किसान की चिंता।" },
+        { num: 2, tag: "पैनल 2: रायथू बंधु सहायता", speaker: "कृषि अधिकारी", dialogue: "रामू काका, रायथू बंधु के तहत तेलंगाना सरकार हर एकड़ पर ₹10,000 सीधे आपके बैंक खाते में देती है!", caption: "किसानों को समय पर फसल निवेश सहायता।" },
+        { num: 3, tag: "पैनल 3: पासबुक पंजीकरण", speaker: "सीएससी मित्र", dialogue: "रायथू वेदिका में अपनी धरणी पट्टादार पासबुक को आधार और बैंक खाते से लिंक कराएं।", caption: "पारदर्शी डिजिटल प्रक्रिया।" },
+        { num: 4, tag: "पैनल 4: लहलहाते खेत", speaker: "रामू काका", dialogue: "🎉 समय पर ₹10,000 खाते में आ गए! बिना किसी कर्ज के हमारी फसल हरी-भरी हो गई है!", caption: "सरकारी मदद से समृद्ध होती खेती।" }
+      ]
+    }
+  },
+  nps_unorganised: {
+    te: {
+      name: "అసంఘటిత కార్మికుల జాతీయ పెన్షన్ పథకం (PM-SYM)",
+      purpose: "అసంఘటిత రంగ కార్మికులు, వీధి వ్యాపారులు, డ్రైవర్లు ప్రతి నెలా కొద్ది మొత్తం పొదుపు చేసి జీవితాంతం పెన్షన్ పొందే పథకం.",
+      benefits: "60 సంవత్సరాల తర్వాత నెలకు ₹3,000 హామీతో కూడిన జీవితాంత పెన్షన్.",
+      character: { name: "కాలు (వీధి వ్యాపారి)", role: "అసంఘటిత కార్మికుడు", desc: "వృద్ధాప్య భద్రత కోసం పొదుపు చేసుకుంటున్న వీధి వ్యాపారి" },
+      panels: [
+        { num: 1, tag: "ప్యానెల్ 1: వృద్ధాప్య ఆందోళన", speaker: "కాలు", dialogue: "రోజంతా పండ్ల బండి తోస్తేనే సంపాదన. రేపు ముసలితనం వస్తే నా ఖర్చులు ఎవరు చూస్తారు?", caption: "వృద్ధాప్య ఆర్థిక భద్రత కోసం కార్మికుడి ఆందోళన." },
+        { num: 2, tag: "ప్యానెల్ 2: పీఎం-SYM పెన్షన్", speaker: "గోవ్‌టూన్ మిత్ర", dialogue: "PM-SYM లో చేరండి! నెలకు ₹55 నుండి ₹100 కడితే, ప్రభుత్వం కూడా అంతే మొత్తం జమ చేసి ₹3,000 నెలవారీ పెన్షన్ ఇస్తుంది!", caption: "జీవితాంతం నెల నెలా స్థిరమైన పెన్షన్." },
+        { num: 3, tag: "ప్యానెల్ 3: CSC లో నమోదు", speaker: "CSC ఆపరేటర్", dialogue: "మీ ఆధార్, జన్ ధన్ పాస్‌బుక్ ఇస్తే 5 నిమిషాల్లో పెన్షన్ కార్డు వచ్చేస్తుంది.", caption: "సులభమైన బయోమెట్రిక్ నమోదు." },
+        { num: 4, tag: "ప్యానెల్ 4: గౌరవప్రదమైన వృద్ధాప్యం", speaker: "కాలు & భార్య", dialogue: "🎉 60 ఏళ్ల తర్వాత నెలకు ₹3,000 ఖాయమైన పెన్షన్ వస్తుంది! మా వృద్ధాప్యం ధైర్యంగా గడుస్తుంది!", caption: "శ్రామికులకు ఆర్థిక స్వతంత్రం మరియు గౌరవం." }
+      ]
+    },
+    hi: {
+      name: "असंगठित कामगार राष्ट्रीय पेंशन योजना (PM-SYM)",
+      purpose: "दिहाड़ी मजदूरों, रेहड़ी-पटरी वालों और ड्राइवरों को 60 वर्ष के बाद आजीवन सुरक्षित मासिक पेंशन देने की योजना।",
+      benefits: "60 वर्ष की आयु के बाद ₹3,000 प्रति माह गारंटीकृत आजीवन पेंशन।",
+      character: { name: "कालू (स्ट्रीट वेंडर)", role: "असंगठित कामगार", desc: "बुढ़ापे की सुरक्षा की योजना बनाते फल विक्रेता" },
+      panels: [
+        { num: 1, tag: "पैनल 1: बुढ़ापे की चिंता", speaker: "कालू", dialogue: "ठेले से रोज कमाता हूं, लेकिन जब बुढ़ापे में ठेला नहीं खींच पाऊंगा, तब घर का खर्च कैसे चलेगा?", caption: "असंगठित श्रमिक की बुढ़ापे की चिंता।" },
+        { num: 2, tag: "पैनल 2: पीएम-एसवाईएम योजना", speaker: "गवटून मित्र", dialogue: "PM-SYM में शामिल हों! महीने के ₹55 से ₹100 जमा करें, सरकार भी बराबर का अंशदान देकर ₹3,000 मासिक पेंशन देगी!", caption: "आजीवन गारंटीकृत पेंशन सुरक्षा।" },
+        { num: 3, tag: "पैनल 3: सीएससी पर नामांकन", speaker: "सीएससी वीएलई", dialogue: "अपना आधार और जनधन बैंक पासबुक दें, तुरंत पेंशन कार्ड बन जाएगा।", caption: "त्वरित बायोमेट्रिक ऑनबोर्डिंग।" },
+        { num: 4, tag: "पैनल 4: सुरक्षित बुढ़ापा", speaker: "कालू और पत्नी", dialogue: "🎉 अब 60 वर्ष के बाद ₹3,000 की पक्की मासिक पेंशन मिलेगी! हमारा बुढ़ापा पूरी तरह सुरक्षित है!", caption: "श्रमिकों के लिए वित्तीय स्वावलंबन और सम्मान।" }
+      ]
+    }
+  },
+  kalyana_lakshmi: {
+    te: {
+      name: "తెలంగాణ కళ్యాణ లక్ష్మి / షాదీ ముబారక్",
+      purpose: "తెలంగాణలోని పేద కుటుంబాల ఆడపిల్లల వివాహ ఖర్చుల కోసం ప్రభుత్వం అందించే ఒకేసారి ఆర్థిక సాయం.",
+      benefits: "వధువు తల్లి బ్యాంక్ ఖాతాలో నేరుగా ₹1,00,116 ఒకేసారి జమ.",
+      character: { name: "లత తాయి & కూతురు", role: "తెలంగాణ కుటుంబం", desc: "కూతురి పెళ్లిని ప్రభుత్వ సాయంతో ఘనంగా జరుపుకుంటున్న తల్లి" },
+      panels: [
+        { num: 1, tag: "ప్యానెల్ 1: పెళ్లి ఖర్చుల భారం", speaker: "లత తాయి", dialogue: "కూతురికి మంచి సంబంధం కుదిరింది, కానీ పెళ్లి ఖర్చులకు అప్పులు చేయకుండా ఎలా గడవాలి?", caption: "కూతురి వివాహ ఖర్చుల గురించి తల్లి ఆందోళన." },
+        { num: 2, tag: "ప్యానెల్ 2: కళ్యాణ లక్ష్మి పతకం", speaker: "పంచాయతీ కార్యదర్శి", dialogue: "కళ్యాణ లక్ష్మికి దరఖాస్తు చేసుకోండి! ప్రభుత్వం వధువు తల్లి ఖాతాలో నేరుగా ₹1,00,116 ఒకేసారి జమ చేస్తుంది!", caption: "ఆడపిల్లల పెళ్లి కోసం రాష్ట్ర ప్రభుత్వ భారీ సాయం." },
+        { num: 3, tag: "ప్యానెల్ 3: మీసేవలో దరఖాస్తు", speaker: "మీసేవ ఆపరేటర్", dialogue: "వధువు ఆధార్, ఆదాయ ధృవీకరణ పత్రం, లగ్నపత్రిక, తల్లి బ్యాంక్ పాస్‌బుక్ telanganaepass లో సమర్పించండి.", caption: "సులభమైన ఆన్‌లైన్ ధృవీకరణ." },
+        { num: 4, tag: "ప్యానెల్ 4: సంతోషకరమైన వివాహం", speaker: "తల్లి & వధువు", dialogue: "🎉 ₹1,00,116 ఖాతాలో పడ్డాయి! అప్పులు లేకుండా మా అమ్మాయి పెళ్లి ఎంతో ఘనంగా జరిగింది!", caption: "కుటుంబాల్లో వెల్లివిరిసిన సంతోషం." }
+      ]
+    },
+    hi: {
+      name: "तेलंगाना कल्याणा लक्ष्मी योजना",
+      purpose: "तेलंगाना के गरीब परिवारों की बेटियों के विवाह में आर्थिक सहायता प्रदान करने हेतु सरकारी अनुदान।",
+      benefits: "दुल्हन की मां के बैंक खाते में ₹1,00,116 की एकमुश्त सीधी सहायता।",
+      character: { name: "लता ताई और बेटी", role: "तेलंगाना परिवार", desc: "सरकारी सहायता से बेटी का विवाह संपन्न करती मां" },
+      panels: [
+        { num: 1, tag: "पैनल 1: विवाह खर्च की चिंता", speaker: "लता ताई", dialogue: "बेटी का रिश्ता तय हो गया है, लेकिन शादी के भारी खर्चों का प्रबंध बिना कर्ज के कैसे होगा?", caption: "विवाह के खर्चों को लेकर परिवार चिंतित।" },
+        { num: 2, tag: "पैनल 2: कल्याणा लक्ष्मी योजना", speaker: "पंचायत सचिव", dialogue: "कल्याणा लक्ष्मी के लिए आवेदन करें! तेलंगाना सरकार दुल्हन की मां के खाते में ₹1,00,116 की एकमुश्त सहायता देती है!", caption: "बालिकाओं के विवाह हेतु प्रमुख राज्य कल्याण योजना।" },
+        { num: 3, tag: "पैनल 3: मीसेवा पर आवेदन", speaker: "मीसेवा संचालक", dialogue: "दुल्हन का आधार, जन्म प्रमाण पत्र, विवाह पत्रिका और मां की बैंक पासबुक telanganaepass पर जमा करें।", caption: "पारदर्शी ऑनलाइन प्रक्रिया।" },
+        { num: 4, tag: "पैनल 4: धूमधाम से विवाह", speaker: "मां और दुल्हन", dialogue: "🎉 खाते में ₹1,00,116 आ गए! बिना किसी कर्ज के हमारी बेटी का विवाह गरिमापूर्ण ढंग से संपन्न हुआ!", caption: "महिलाओं का सशक्तिकरण और परिवारों में खुशी।" }
+      ]
+    }
+  },
+  pm_awas_urban: {
+    te: {
+      name: "పీఎం ఆవాస్ యోజన (పట్టణ గృహ నిర్మాణం)",
+      purpose: "పట్టణ పేదలు మరియు అద్దె ఇళ్లలో నివసించే వారి కోసం ప్రభుత్వం అందించే పక్కా ఇళ్ల నిర్మాణ సబ్సిడీ.",
+      benefits: "సొంత పక్కా ఇల్లు నిర్మించుకోవడానికి ₹2.5 లక్షల వరకు ప్రత్యక్ష ప్రభుత్వ సబ్సిడీ."
+    },
+    hi: {
+      name: "पीएम आवास योजना (शहरी)",
+      purpose: "शहरी गरीबों और बेघर परिवारों को अपना पक्का मकान बनाने के लिए सरकारी ब्याज और निर्माण सब्सिडी।",
+      benefits: "मकान निर्माण एवं विकास हेतु ₹2.5 लाख तक की सीधी सरकारी सब्सिडी।"
+    }
+  },
+  nmmss_scholarship: {
+    te: {
+      name: "నేషనల్ మీన్స్-కమ్-మెరిట్ స్కాలర్‌షిప్ (NMMSS)",
+      purpose: "8వ తరగతి ఉత్తీర్ణులైన పేద విద్యార్థులు ఉన్నత పాఠశాల చదువును కొనసాగించడానికి ఇచ్చే కేంద్ర స్కాలర్‌షిప్.",
+      benefits: "9వ తరగతి నుండి 12వ తరగతి వరకు సంవత్సరానికి ₹12,000 (నెలకు ₹1,000) నగదు సాయం."
+    },
+    hi: {
+      name: "राष्ट्रीय साधन-सह-योग्यता छात्रवृत्ति (NMMSS)",
+      purpose: "आर्थिक रूप से कमजोर वर्ग के मेधावी छात्रों को माध्यमिक स्तर पर पढ़ाई जारी रखने हेतु छात्रवृत्ति।",
+      benefits: "कक्षा 9 से 12वीं तक ₹12,000 प्रति वर्ष (₹1,000 प्रति माह) की छात्रवृत्ति।"
+    }
+  },
+  pm_kisan: {
+    te: {
+      name: "పీఎం-కిసాన్ సమ్మాన్ నిధి",
+      purpose: "దేశంలోని ప్రతి రైతు కుటుంబానికి పెట్టుబడి మరియు వ్యవసాయ అవసరాల కోసం కేంద్ర ప్రభుత్వం అందించే ఆదాయ భరోసా.",
+      benefits: "సంవత్సరానికి ₹6,000 (3 విడతల్లో ₹2,000 చొప్పున) నేరుగా DBT ద్వారా జమ.",
+      character: { name: "రాము కాకా", role: "రైతు", desc: "ప్రభుత్వ ఆదాయ భరోసాతో పంటలు సాగుచేస్తున్న రైతు" },
+      panels: [
+        { num: 1, tag: "ప్యానెల్ 1: విత్తనాల సీజన్ ఆందోళన", speaker: "రాము కాకా", dialogue: "విత్తనాల సమయం వచ్చేసింది, కానీ డీజిల్ మరియు ఎరువుల కోసం చేతిలో పైసలు లేవు.", caption: "పంట పెట్టుబడి కోసం రైతు ఆలోచన." },
+        { num: 2, tag: "ప్యానెల్ 2: పీఎం-కిసాన్ హామీ", speaker: "కిసాన్ మిత్ర", dialogue: "పీఎం-కిసాన్ పథకం ద్వారా కేంద్ర ప్రభుత్వం ఏడాదికి ₹6,000 నేరుగా మీ బ్యాంక్ ఖాతాలో వేస్తుంది!", caption: "రైతులకు నిరంతర ఆదాయ భరోసా." },
+        { num: 3, tag: "ప్యానెల్ 3: e-KYC పూర్తి చేయండి", speaker: "CSC ఆపరేటర్", dialogue: "pmkisan.gov.in లో లేదా CSC లో ఆధార్ బయోమెట్రిక్ e-KYC పూర్తి చేయండి.", caption: "100% డిజిటల్ మరియు పారదర్శక ప్రక్రియ." },
+        { num: 4, tag: "ప్యానెల్ 4: మంచి దిగుబడి", speaker: "రాము కాకా", dialogue: "🎉 ₹2,000 విడత ఖాతాలో పడింది! సమయానికి మంచి విత్తనాలు కొని పంట వేసాను, మంచి దిగుబడి వచ్చింది!", caption: "రైతులకు ఆర్థిక ధైర్యం." }
+      ]
+    },
+    hi: {
+      name: "पीएम-किसान सम्मान निधि योजना",
+      purpose: "देश के सभी भूमिधारक किसान परिवारों को कृषि आवश्यकताओं हेतु प्रत्यक्ष आर्थिक सहायता।",
+      benefits: "प्रति वर्ष ₹6,000 (3 किस्तों में ₹2,000 प्रत्येक) सीधे बैंक खाते में डीबीटी।",
+      character: { name: "रामू काका", role: "किसान", desc: "सरकारी सहायता से निश्चिंत होकर खेती करते किसान" },
+      panels: [
+        { num: 1, tag: "पैनल 1: बुवाई के समय की चिंता", speaker: "रामू काका", dialogue: "बुवाई का मौसम आ गया है, लेकिन खाद और बीज के लिए नकदी की जरूरत है।", caption: "फसल के शुरुआती खर्चों को लेकर किसान चिंतित।" },
+        { num: 2, tag: "पैनल 2: पीएम-किसान की गारंटी", speaker: "किसान मित्र", dialogue: "पीएम-किसान योजना के तहत सरकार हर साल ₹6,000 सीधे आपके बैंक खाते में देती है!", caption: "किसानों के लिए सुनिश्चित प्रत्यक्ष आय सहायता।" },
+        { num: 3, tag: "पैनल 3: e-KYC पूरा करें", speaker: "सीएससी ऑपरेटर", dialogue: "pmkisan.gov.in या नजदीकी सीएससी पर आधार ई-केवाईसी पूरा कराएं।", caption: "100% पारदर्शी डिजिटल सत्यापन।" },
+        { num: 4, tag: "पैनल 4: बंपर पैदावार", speaker: "रामू काका", dialogue: "🎉 ₹2,000 की किस्त खाते में आ गई! समय पर खाद-बीज मिल गया और फसल लहलहा उठी!", caption: "भारतीय किसानों के लिए आर्थिक संबल।" }
+      ]
+    }
+  },
+  ayushman: {
+    te: {
+      name: "ఆయుష్మాన్ భారత్ (పీఎం-జన్ ఆరోగ్య యోజన)",
+      purpose: "ప్రతి పేద కుటుంబానికి ఆసుపత్రి చికిత్సలు, శస్త్రచికిత్సల కోసం దేశవ్యాప్తంగా ఉచిత నగదు రహిత వైద్య బీమా.",
+      benefits: "ప్రతి కుటుంబానికి సంవత్సరానికి ₹5 లక్షల వరకు ఉచిత నగదు రహిత ఆసుపత్రి చికిత్స.",
+      character: { name: "శర్మ జీ & కుటుంబం", role: "లబ్ధిదారుడు", desc: "ఉచిత వైద్య చికిత్సతో ప్రాణాలు కాపాడుకున్న కుటుంబం" },
+      panels: [
+        { num: 1, tag: "ప్యానెల్ 1: వైద్య అత్యవసరం", speaker: "తండ్రి", dialogue: "ఆసుపత్రిలో గుండె ఆపరేషన్ కు ₹3 లక్షలు ఖర్చు అవుతుందన్నారు. ఇంత పెద్ద మొత్తం ఎక్కడి నుండి తేవాలి?", caption: "ఆసుపత్రి బిల్లుల గురించి కుటుంబ ఆందోళన." },
+        { num: 2, tag: "ప్యానెల్ 2: ఆయుష్మాన్ భారత్ రక్షణ", speaker: "ఆయుష్మాన్ మిత్ర", dialogue: "ఆందోళన పడకండి! ఆయుష్మాన్ భారత్ కార్డు ఉంటే ఏటా ₹5 లక్షల వరకు ఉచిత చికిత్స లభిస్తుంది!", caption: "ప్రభుత్వ ఉచిత నగదు రహిత వైద్య భరోసా." },
+        { num: 3, tag: "ప్యానెల్ 3: ఉచిత ఆసుపత్రి అడ్మిషన్", speaker: "ఆసుపత్రి రిసెప్షన్", dialogue: "మీ ఆయుష్మాన్ కార్డు ఆధార్‌తో ధృవీకరించబడింది. పైసా ఖర్చు లేకుండా మొత్తం శస్త్రచికిత్స ఉచితం.", caption: "పూర్తిగా ఉచిత క్యాష్‌లెస్ చికిత్స." },
+        { num: 4, tag: "ప్యానెల్ 4: ఆరోగ్యంగా ఇంటికి", speaker: "కోలుకున్న రోగి", dialogue: "🎉 ఒక్క రూపాయి కూడా ఖర్చు లేకుండా ఆపరేషన్ విజయవంతమైంది! ఆయుష్మాన్ భారత్ మా ప్రాణాలను కాపాడింది!", caption: "ప్రతి పౌరుడికి ఆరోగ్య భరోసా." }
+      ]
+    },
+    hi: {
+      name: "आयुष्मान भारत (पीएम जन आरोग्य योजना)",
+      purpose: "देश के गरीब परिवारों को सूचीबद्ध अस्पतालों में गंभीर बीमारियों के इलाज हेतु कैशलेस स्वास्थ्य बीमा।",
+      benefits: "प्रति परिवार प्रति वर्ष ₹5 लाख तक का पूर्णतः मुफ्त एवं कैशलेस इलाज।",
+      character: { name: "शर्मा जी और परिवार", role: "लाभार्थी", desc: "मुफ्त इलाज से स्वस्थ होकर घर लौटा परिवार" },
+      panels: [
+        { num: 1, tag: "पैनल 1: बीमारी का संकट", speaker: "पिता", dialogue: "डॉक्टर ने ऑपरेशन के लिए ₹3 लाख का खर्च बताया है। हमारे पास इतने पैसे कहां से आएंगे?", caption: "अस्पताल के भारी बिल को लेकर परिवार चिंतित।" },
+        { num: 2, tag: "पैनल 2: आयुष्मान सुरक्षा कवच", speaker: "आयुष्मान मित्र", dialogue: "घबराइए मत! आयुष्मान भारत के तहत हर साल ₹5 लाख तक का इलाज पूरी तरह मुफ्त होता है!", caption: "मुफ्त एवं कैशलेस स्वास्थ्य सुरक्षा।" },
+        { num: 3, tag: "पैनल 3: शून्य खर्च पर इलाज", speaker: "अस्पताल स्वागत", dialogue: "आपका आयुष्मान कार्ड सत्यापित हो गया है। बिना किसी अग्रिम राशि के पूरा इलाज मुफ्त होगा।", caption: "पूरी तरह कैशलेस अस्पताल सुविधा।" },
+        { num: 4, tag: "पैनल 4: स्वस्थ और खुशहाल", speaker: "स्वस्थ मरीज", dialogue: "🎉 बिना एक रुपया खर्च किए सफल इलाज हो गया! आयुष्मान भारत ने हमारा जीवन बचा लिया!", caption: "हर नागरिक के लिए स्वास्थ्य सुरक्षा।" }
+      ]
+    }
+  },
+  surya_ghar: {
+    te: {
+      name: "పీఎం సూర్య ఘర్: ఉచిత విద్యుత్ యోజన",
+      purpose: "ఇంటి పైకప్పుపై సోలార్ ప్యానెల్స్ ఏర్పాటు చేసుకుని నెలకు 300 యూనిట్ల వరకు ఉచిత కరెంట్ పొందే పథకం.",
+      benefits: "3kW సోలార్ ప్లాంట్ ఏర్పాటుపై ₹78,000 వరకు నేరుగా కేంద్ర ప్రభుత్వ సబ్సిడీ."
+    },
+    hi: {
+      name: "पीएम सूर्य घर: मुफ्त बिजली योजना",
+      purpose: "घरों की छतों पर सोलर पैनल लगाकर हर महीने 300 यूनिट तक मुफ्त बिजली देने की योजना।",
+      benefits: "3kW रूफटॉप सोलर लगाने पर ₹78,000 की सीधी केंद्रीय सब्सिडी।"
+    }
+  },
+  pm_svanidhi: {
+    te: {
+      name: "పీఎం స్వనిధి (వీధి వ్యాపారుల రుణం)",
+      purpose: "రోడ్లపై వ్యాపారం చేసుకునే వీధి వ్యాపారులకు బ్యాంకుల ద్వారా ఎటువంటి పూచీకత్తు లేకుండా లభించే తక్కువ వడ్డీ రుణం.",
+      benefits: "మొదట ₹10,000 పూచీకత్తు లేని రుణం, సకాలంలో చెల్లిస్తే ₹20,000 & ₹50,000 వరకు పెంపు."
+    },
+    hi: {
+      name: "पीएम स्वनिधि (स्ट्रीट वेंडर ऋण योजना)",
+      purpose: "रेहड़ी-पटरी और ठेला लगाने वाले छोटे व्यापारियों को बिना गारंटी के किफायती कार्यशील पूंजी ऋण।",
+      benefits: "₹10,000 का प्रारंभिक गारंटी-मुक्त ऋण, समय पर भुगतान पर ₹20,000 और ₹50,000 का अगला लोन।"
+    }
+  },
+  mudra_loan: {
+    te: {
+      name: "ప్రధాన మంత్రి ముద్ర యోజన (PMMY)",
+      purpose: "చిన్న వ్యాపారాలు, దుకాణాలు, కుట్టు మిషన్ కేంద్రాలు పెట్టుకోవడానికి బ్యాంకుల ద్వారా ఇచ్చే పూచీకత్తు లేని రుణాలు.",
+      benefits: "శిశు లోన్ (₹50,000 వరకు), కిశోర్ (₹5 లక్షల వరకు), తరుణ్ (₹10 లక్షల వరకు) తక్కువ వడ్డీ రుణాలు."
+    },
+    hi: {
+      name: "प्रधानमंत्री मुद्रा योजना (PMMY)",
+      purpose: "छोटे उद्यम, दुकानें, बुटीक और कार्यशाला शुरू करने हेतु बिना किसी संपत्ति बंधक के माइक्रो-लोन।",
+      benefits: "शिशु (₹50,000 तक), किशोर (₹5 लाख तक), तरुण (₹10 लाख तक) का कम ब्याज वाला ऋण।"
+    }
+  },
+  sukanya: {
+    te: {
+      name: "సుకున్య సమృద్ధి యోజన",
+      purpose: "ఆడపిల్లల ఉన్నత చదువు మరియు వివాహ భవిష్యత్తు కోసం ప్రభుత్వం అందించే అత్యధిక వడ్డీ పొదుపు పథకం.",
+      benefits: "8.2% చక్రవడ్డీ ఆదాయం + సెక్షన్ 80C కింద 100% పూర్తి పన్ను మినహాయింపు."
+    },
+    hi: {
+      name: "सुकन्या समृद्धि योजना",
+      purpose: "बालिकाओं की उच्च शिक्षा और उज्ज्वल भविष्य के लिए सरकार द्वारा संचालित सर्वाधिक ब्याज बचत योजना।",
+      benefits: "8.2% की उच्चतम वार्षिक चक्रवृद्धि ब्याज दर + आयकर से पूर्ण छूट।"
+    }
+  },
+  pm_vishwakarma: {
+    te: {
+      name: "పీఎం విశ్వకర్మ పథకం",
+      purpose: "చేతివృత్తుల వారు, వడ్రంగులు, కమ్మరులు, కుమ్మరులు, టైలర్ల ఆధునిక పరికరాలు మరియు శిక్షణ కోసం ఆర్థిక పథకం.",
+      benefits: "₹15,000 ఉచిత టూల్‌కిట్ ఈ-వోచర్ + రోజువారీ స్టైపెండ్‌తో 5 రోజుల శిక్షణ + 5% వడ్డీకే ₹3 లక్షల రుణం."
+    },
+    hi: {
+      name: "पीएम विश्वकर्मा योजना",
+      purpose: "पारंपरिक कारीगरों, बढ़ई, लोहार, दर्जी एवं शिल्पकारों को आधुनिक टूलकिट और रियायती ऋण सहायता।",
+      benefits: "₹15,000 का आधुनिक टूलकिट ई-वाउचर + ₹500/दिन प्रशिक्षण स्टाइपेंड + 5% ब्याज पर ₹3 लाख का लोन।"
+    }
+  }
+};
+
 // Citizen User Profile for Personalized Recommendations
 let userProfile = {
   age: 20,
@@ -38,16 +712,21 @@ let appState = {
   isDarkMode: false
 };
 
-// Load saved bookmarks
+// Load saved bookmarks and language
 try {
   const savedBm = localStorage.getItem('govtoon_saved_schemes');
   if (savedBm) {
     const list = JSON.parse(savedBm);
     if (Array.isArray(list)) appState.bookmarkedIds = new Set(list);
   }
+
+  const savedLang = localStorage.getItem('govtoon_lang');
+  if (savedLang && (savedLang === 'en' || savedLang === 'te' || savedLang === 'hi')) {
+    appState.currentLang = savedLang;
+  }
 } catch (e) {}
 
-// Comprehensive Scheme Database (Including all Schemes from Screenshot & Directory)
+// Comprehensive Scheme Database (Central & State Verified Schemes)
 const SCHEMES_DATABASE = [
   {
     id: "pm_merit_scholarship",
@@ -701,10 +1380,29 @@ const SCHEMES_DATABASE = [
       ]
     },
     quiz: [
-      { q: "What is the toolkit incentive provided under PM Vishwakarma Scheme?", options: ["₹15,000 e-voucher", "₹5,000 cash", "₹1,000 discount", "₹50,000 loan only"], correct: 0, panelRef: 2, explanation: "PM Vishwakarma provides a ₹15,000 e-voucher for modern toolkits along with skill training." }
+      { q: "What is the toolkit incentive provided under PM Vishwakarma Scheme?", options: ["₹15,000 e-voucher", "₹5,000 cash", "₹1,00,000 loan", "₹1,000 discount"], correct: 0, panelRef: 2, explanation: "PM Vishwakarma provides a ₹15,000 e-voucher for modern toolkits along with skill training." }
     ]
   }
 ];
+
+// Localized Scheme Resolver
+function getLocalizedScheme(s, lang) {
+  if (!s) return s;
+  const l = lang || appState.currentLang || 'en';
+  if (l === 'en') return s;
+
+  const overrides = SCHEMES_I18N[s.id] && SCHEMES_I18N[s.id][l];
+  if (!overrides) return s;
+
+  return {
+    ...s,
+    name: overrides.name || s.name,
+    purpose: overrides.purpose || s.purpose,
+    benefits: overrides.benefits || s.benefits,
+    character: overrides.character || s.character,
+    panels: overrides.panels ? { [l]: overrides.panels, en: s.panels.en || s.panels } : s.panels
+  };
+}
 
 // Calculate Personalized Match Score for Scheme against User Profile
 function computeSchemeMatchScore(scheme, profile) {
@@ -743,9 +1441,171 @@ function computeSchemeMatchScore(scheme, profile) {
   return Math.max(10, Math.min(100, score));
 }
 
-// Multilingual Scheme Translations Helper
-function getLocalizedScheme(s, lang) {
-  return s;
+// Update All UI Text Elements to Active Language
+function updateLanguageUI() {
+  const lang = appState.currentLang || 'en';
+  const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (t[key]) {
+      el.innerHTML = t[key];
+    }
+  });
+
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    const key = el.getAttribute('data-i18n-ph');
+    if (t[key]) {
+      el.placeholder = t[key];
+    }
+  });
+
+  const sel = document.getElementById('app-language-select');
+  if (sel && sel.value !== lang) {
+    sel.value = lang;
+  }
+
+  // Update Dropdown Options (Category & Occupation)
+  updateFilterDropdownOptions(lang);
+  updateMitraAssistantInitialMessage(lang);
+}
+
+// Localized Filter Options
+function updateFilterDropdownOptions(lang) {
+  const catSel = document.getElementById('filter-category');
+  if (catSel) {
+    const currentVal = catSel.value;
+    if (lang === 'te') {
+      catSel.innerHTML = `
+        <option value="all">అన్ని వర్గాలు</option>
+        <option value="Education">విద్య & స్కాలర్‌షిప్‌లు</option>
+        <option value="Agriculture">వ్యవసాయం & రైతు సాయం</option>
+        <option value="Pension">పెన్షన్ & సామాజిక భద్రత</option>
+        <option value="Employment">ఉపాధి & చేతివృత్తులు</option>
+        <option value="Women & Child">మహిళలు & పిల్లల సంక్షేమం</option>
+        <option value="Housing">గృహ నిర్మాణం & సోలార్</option>
+        <option value="Health">ఆరోగ్యం & ఉచిత వైద్యం</option>
+        <option value="Banking & Finance">బ్యాంకింగ్ & పొదుపు</option>
+        <option value="Business">వ్యాపారం & చిన్న రుణాలు</option>
+      `;
+    } else if (lang === 'hi') {
+      catSel.innerHTML = `
+        <option value="all">सभी श्रेणियां</option>
+        <option value="Education">शिक्षा एवं छात्रवृत्ति</option>
+        <option value="Agriculture">कृषि एवं किसान सहायता</option>
+        <option value="Pension">पेंशन एवं सामाजिक सुरक्षा</option>
+        <option value="Employment">रोजगार एवं कौशल</option>
+        <option value="Women & Child">महिला एवं बाल विकास</option>
+        <option value="Housing">आवास एवं सोलर ऊर्जा</option>
+        <option value="Health">स्वास्थ्य एवं मुफ्त इलाज</option>
+        <option value="Banking & Finance">बैंकिंग एवं बचत</option>
+        <option value="Business">व्यापार एवं सूक्ष्म ऋण</option>
+      `;
+    } else {
+      catSel.innerHTML = `
+        <option value="all">All categories</option>
+        <option value="Education">Education</option>
+        <option value="Agriculture">Agriculture</option>
+        <option value="Pension">Pension</option>
+        <option value="Employment">Employment</option>
+        <option value="Women & Child">Women & Child</option>
+        <option value="Housing">Housing</option>
+        <option value="Health">Health</option>
+        <option value="Banking & Finance">Banking & Finance</option>
+        <option value="Business">Business</option>
+      `;
+    }
+    catSel.value = currentVal;
+  }
+
+  const occSel = document.getElementById('filter-occupation');
+  if (occSel) {
+    const currentVal = occSel.value;
+    if (lang === 'te') {
+      occSel.innerHTML = `
+        <option value="all">అన్ని వృత్తులు</option>
+        <option value="Student">విద్యార్థి / యువత</option>
+        <option value="Farmer">రైతు / వ్యవసాయదారుడు</option>
+        <option value="Unorganised">అసంఘటిత కార్మికుడు / వీధి వ్యాపారి</option>
+        <option value="Women">మహిళలు / గృహిణి</option>
+        <option value="Senior">వయోవృద్ధులు (60+)</option>
+        <option value="Artisan">చేతివృత్తుల వారు / శిల్పి</option>
+      `;
+    } else if (lang === 'hi') {
+      occSel.innerHTML = `
+        <option value="all">सभी व्यवसाय</option>
+        <option value="Student">छात्र / युवा</option>
+        <option value="Farmer">किसान</option>
+        <option value="Unorganised">असंगठित मजदूर / स्ट्रीट वेंडर</option>
+        <option value="Women">महिला / गृहिणी</option>
+        <option value="Senior">वरिष्ठ नागरिक (60+)</option>
+        <option value="Artisan">कारीगर / शिल्पकार</option>
+      `;
+    } else {
+      occSel.innerHTML = `
+        <option value="all">All occupations</option>
+        <option value="Student">Student</option>
+        <option value="Farmer">Farmer</option>
+        <option value="Unorganised">Unorganised Worker / Street Vendor</option>
+        <option value="Women">Women / Homemaker</option>
+        <option value="Senior">Senior Citizen</option>
+        <option value="Artisan">Artisan / Craftsman</option>
+      `;
+    }
+    occSel.value = currentVal;
+  }
+}
+
+// Localized Initial Mitra AI Message & Suggested Prompts
+function updateMitraAssistantInitialMessage(lang) {
+  const initMsg = document.getElementById('mitra-initial-msg');
+  if (initMsg) {
+    if (lang === 'te') {
+      initMsg.innerHTML = `
+        <p>నమస్కారం! నేను మీ <strong>మిత్ర</strong>, ప్రభుత్వ సంక్షేమ పథకాల వ్యక్తిగత AI సహాయకుడిని.</p>
+        <p style="margin-top:6px;">మీ వయస్సు, రాష్ట్రం లేదా వృత్తి గురించి చెప్పండి లేదా <strong>పీఎం మెరిట్ స్కాలర్‌షిప్</strong>, <strong>రైతు బంధు</strong>, <strong>పీఎం-కిసాన్</strong>, లేదా <strong>ఆయుష్మాన్ భారత్</strong> గురించి అడగండి!</p>
+      `;
+    } else if (lang === 'hi') {
+      initMsg.innerHTML = `
+        <p>नमस्ते! मैं आपका <strong>मित्र</strong>, सरकारी योजनाओं का व्यक्तिगत AI सहायक हूं।</p>
+        <p style="margin-top:6px;">मुझे अपनी उम्र, राज्य या व्यवसाय बताएं या <strong>पीएम मेरिट छात्रवृत्ति</strong>, <strong>रायथू बंधु</strong>, <strong>पीएम-किसान</strong>, या <strong>आयुष्मान भारत</strong> के बारे में पूछें!</p>
+      `;
+    } else {
+      initMsg.innerHTML = `
+        <p>Namaste! I am <strong>Mitra</strong>, your personal Government Scheme Assistant.</p>
+        <p style="margin-top:6px;">Tell me about yourself (your age, state, or occupation) or ask about any scheme like <strong>PM Merit Scholarship</strong>, <strong>Rythu Bandhu</strong>, <strong>PM-Kisan</strong>, or <strong>Ayushman Bharat</strong>!</p>
+      `;
+    }
+  }
+
+  const chipsBox = document.getElementById('mitra-chips-box');
+  if (chipsBox) {
+    if (lang === 'te') {
+      chipsBox.innerHTML = `
+        <button class="fchip" onclick="sendFloatingQuickQuestion('తెలంగాణ విద్యార్థులకు ఏ పథకాలు ఉన్నాయి?')">🎓 తెలంగాణ విద్యార్థుల పథకాలు</button>
+        <button class="fchip" onclick="sendFloatingQuickQuestion('పీఎం మెరిట్ స్కాలర్‌షిప్ ₹50,000 ఎలా పొందాలి?')">💰 పీఎం మెరిట్ ₹50,000</button>
+        <button class="fchip" onclick="sendFloatingQuickQuestion('రైతు బంధు ₹10,000 సాయం వివరాలు చెప్పండి')">🌾 రైతు బంధు ₹10,000</button>
+        <button class="fchip" onclick="sendFloatingQuickQuestion('అసంఘటిత కార్మికుల పెన్షన్ ₹3,000 ఎలా వస్తుంది?')">👵 కార్మిక పెన్షన్ ₹3,000</button>
+        <button class="fchip" onclick="sendFloatingQuickQuestion('ఆయుష్మాన్ భారత్ ₹5 లక్షల ఉచిత వైద్యం కార్డు ఎలా పొందాలి?')">🏥 ఆయుష్మాన్ కార్డ్</button>
+      `;
+    } else if (lang === 'hi') {
+      chipsBox.innerHTML = `
+        <button class="fchip" onclick="sendFloatingQuickQuestion('छात्रों के लिए कौन सी योजनाएं अनुशंसित हैं?')">🎓 छात्रों के लिए योजनाएं</button>
+        <button class="fchip" onclick="sendFloatingQuickQuestion('पीएम मेरिट छात्रवृत्ति ₹50,000 कैसे प्राप्त करें?')">💰 पीएम मेरिट ₹50,000</button>
+        <button class="fchip" onclick="sendFloatingQuickQuestion('रायथू बंधु ₹10,000 सहायता के बारे में बताएं')">🌾 रायथू बंधु ₹10,000</button>
+        <button class="fchip" onclick="sendFloatingQuickQuestion('असंगठित कामगार पेंशन ₹3,000 योजना क्या है?')">👵 कामगार पेंशन ₹3,000</button>
+        <button class="fchip" onclick="sendFloatingQuickQuestion('आयुष्मान भारत ₹5 लाख का मुफ्त कार्ड कैसे बनाएं?')">🏥 आयुष्मान कार्ड</button>
+      `;
+    } else {
+      chipsBox.innerHTML = `
+        <button class="fchip" onclick="sendFloatingQuickQuestion('What schemes are recommended for a student in Telangana?')">🎓 Student in Telangana</button>
+        <button class="fchip" onclick="sendFloatingQuickQuestion('How to apply for PM Merit Scholarship ₹50,000?')">💰 PM Merit ₹50,000</button>
+        <button class="fchip" onclick="sendFloatingQuickQuestion('Tell me about Telangana Rythu Bandhu ₹10,000 support')">🌾 Rythu Bandhu</button>
+        <button class="fchip" onclick="sendFloatingQuickQuestion('What is National Pension Scheme for Unorganised Workers?')">👵 Worker Pension ₹3,000</button>
+        <button class="fchip" onclick="sendFloatingQuickQuestion('How to get ₹5 Lakh Ayushman Bharat health card?')">🏥 Ayushman Card</button>
+      `;
+    }
+  }
 }
 
 // Initialize Application
@@ -758,6 +1618,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setupNavigation();
   setupLanguageSelector();
   setupThemeToggles();
+  updateLanguageUI();
   updateProfileUI();
   populateCompareDropdowns();
   renderDirectory();
@@ -815,10 +1676,13 @@ function handleDirectoryFilterChange() {
   renderDirectory();
 }
 
-// RENDER SCHEMES DIRECTORY (MATCHES SCREENSHOT EXACTLY)
+// RENDER SCHEMES DIRECTORY (MATCHES SCREENSHOT & ACTIVE LANGUAGE)
 function renderDirectory() {
   const grid = document.getElementById('schemes-directory-grid');
   if (!grid) return;
+
+  const lang = appState.currentLang || 'en';
+  const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
 
   const searchInput = document.getElementById('directory-search');
   const query = (searchInput ? searchInput.value : '').toLowerCase().trim();
@@ -849,13 +1713,14 @@ function renderDirectory() {
 
   // 2. Search Query Filter
   if (query) {
-    list = list.filter(s => 
-      s.name.toLowerCase().includes(query) ||
-      s.purpose.toLowerCase().includes(query) ||
-      s.benefits.toLowerCase().includes(query) ||
-      s.category.toLowerCase().includes(query) ||
-      s.dept.toLowerCase().includes(query)
-    );
+    list = list.filter(s => {
+      const ls = getLocalizedScheme(s, lang);
+      return ls.name.toLowerCase().includes(query) ||
+             ls.purpose.toLowerCase().includes(query) ||
+             ls.benefits.toLowerCase().includes(query) ||
+             s.category.toLowerCase().includes(query) ||
+             s.dept.toLowerCase().includes(query);
+    });
   }
 
   // 3. Category Filter
@@ -882,9 +1747,9 @@ function renderDirectory() {
     grid.innerHTML = `
       <div style="grid-column: 1/-1; text-align:center; padding:50px 20px; background:#fff; border-radius:16px; border:1px solid #e2e8f0;">
         <span style="font-size:3rem;">🔍</span>
-        <h3 style="font-family:var(--font-heading); color:var(--primary-navy); margin-top:12px;">No schemes match your filter</h3>
-        <p style="color:var(--text-muted); margin-bottom:16px;">Try adjusting your search terms or clearing category filters.</p>
-        <button class="btn btn-primary" onclick="resetExploreFilters()">Reset Filters</button>
+        <h3 style="font-family:var(--font-heading); color:var(--primary-navy); margin-top:12px;">${lang === 'te' ? 'ఎటువంటి పథకాలు సరిపోలలేదు' : lang === 'hi' ? 'कोई योजना नहीं मिली' : 'No schemes match your filter'}</h3>
+        <p style="color:var(--text-muted); margin-bottom:16px;">${lang === 'te' ? 'దయచేసి మీ ఫిల్టర్‌లను మార్చండి.' : lang === 'hi' ? 'कृपया अपने फिल्टर बदलें।' : 'Try adjusting your search terms or clearing category filters.'}</p>
+        <button class="btn btn-primary" onclick="resetExploreFilters()">${lang === 'te' ? 'ఫిల్టర్‌లను రీసెట్ చేయండి' : lang === 'hi' ? 'फिल्टर रीसेट करें' : 'Reset Filters'}</button>
       </div>
     `;
     return;
@@ -892,6 +1757,7 @@ function renderDirectory() {
 
   grid.innerHTML = '';
   list.forEach(s => {
+    const ls = getLocalizedScheme(s, lang);
     const isBookmarked = appState.bookmarkedIds.has(s.id);
     const matchScore = s.calculatedMatch !== undefined ? s.calculatedMatch : computeSchemeMatchScore(s, userProfile);
     const timingLabel = s.timing || 'Open year-round';
@@ -904,7 +1770,7 @@ function renderDirectory() {
       <div>
         <div class="scard-top-row">
           <div class="scard-badges-group">
-            <span class="badge-pill ${s.level === 'Central' ? 'level-central' : 'level-state'}">${s.level || 'Central'}</span>
+            <span class="badge-pill ${s.level === 'Central' ? 'level-central' : 'level-state'}">${s.level === 'Central' ? (lang === 'te' ? 'కేంద్ర పథకం' : lang === 'hi' ? 'केंद्रीय योजना' : 'CENTRAL') : (lang === 'te' ? 'రాష్ట్ర పథకం' : lang === 'hi' ? 'राज्य योजना' : 'STATE')}</span>
             <span class="badge-pill cat-tag">${s.category || 'Welfare'}</span>
           </div>
           <button class="star-bookmark-btn ${isBookmarked ? 'bookmarked' : ''}" 
@@ -914,23 +1780,23 @@ function renderDirectory() {
           </button>
         </div>
 
-        <h3 class="scard-title">${s.name}</h3>
-        <div class="scard-amount">${s.amount || s.benefits.split(' ')[0]}</div>
-        <p class="scard-desc">${s.purpose}</p>
+        <h3 class="scard-title">${ls.name}</h3>
+        <div class="scard-amount">${s.amount || ls.benefits.split(' ')[0]}</div>
+        <p class="scard-desc">${ls.purpose}</p>
       </div>
 
       <div>
         <div class="scard-bottom-meta">
           <div class="meta-status-tags">
-            <span class="match-score-badge">${matchScore}% MATCH</span>
+            <span class="match-score-badge">${matchScore}% ${lang === 'te' ? 'సరిపోలింది' : lang === 'hi' ? 'मैच' : 'MATCH'}</span>
             <span class="timing-badge ${timingClass}">${timingIcon} ${timingLabel}</span>
           </div>
         </div>
 
         <div class="scard-actions-bar">
-          <button class="btn-card-comic" onclick="openSchemeReaderById('${s.id}')">🎨 4-Panel Comic</button>
-          <button class="btn-card-elig" onclick="openSchemeEligibilityTab('${s.id}')">🟢 Eligibility</button>
-          <a href="${s.applyUrl || s.officialUrl}" target="_blank" rel="noopener noreferrer" class="btn-card-apply">🚀 Apply ↗</a>
+          <button class="btn-card-comic" onclick="openSchemeReaderById('${s.id}')">${t.btn_read_comic || '🎨 4-Panel Comic'}</button>
+          <button class="btn-card-elig" onclick="openSchemeEligibilityTab('${s.id}')">${t.btn_eligibility || '🟢 Eligibility'}</button>
+          <a href="${s.applyUrl || s.officialUrl}" target="_blank" rel="noopener noreferrer" class="btn-card-apply">${t.btn_apply || '🚀 Apply ↗'}</a>
         </div>
       </div>
     `;
@@ -1011,6 +1877,9 @@ function calculateEligibilityMatches() {
   const state = document.getElementById('wiz-state')?.value || userProfile.state;
   const occ = document.getElementById('wiz-occupation')?.value || userProfile.occupation;
 
+  const lang = appState.currentLang || 'en';
+  const t = TRANSLATIONS[lang] || TRANSLATIONS.en;
+
   const currentProf = { age, income, state, occupation: occ };
 
   const matches = SCHEMES_DATABASE.map(s => ({
@@ -1023,17 +1892,18 @@ function calculateEligibilityMatches() {
 
   const topMatchCount = matches.filter(m => m.score >= 80).length;
   const countTxt = document.getElementById('elig-match-count');
-  if (countTxt) countTxt.innerText = `${topMatchCount} Highly Recommended Schemes`;
+  if (countTxt) countTxt.innerText = `${topMatchCount} ${lang === 'te' ? 'అత్యంత సిఫార్సు చేయబడిన పథకాలు' : lang === 'hi' ? 'अत्यधिक अनुशंसित योजनाएं' : 'Highly Recommended Schemes'}`;
 
   const subTxt = document.getElementById('elig-match-sub');
-  if (subTxt) subTxt.innerText = `Based on Age: ${age}, ${occ}, ${state}, Income: ₹${income.toLocaleString()}`;
+  if (subTxt) subTxt.innerText = `Age: ${age}, ${occ}, ${state}, ₹${income.toLocaleString()}`;
 
   const topRate = document.getElementById('elig-match-top-rate');
-  if (topRate && matches.length > 0) topRate.innerText = `${matches[0].score}% Top Match`;
+  if (topRate && matches.length > 0) topRate.innerText = `${matches[0].score}% ${lang === 'te' ? 'టాప్ మ్యాచ్' : lang === 'hi' ? 'शीर्ष मैच' : 'Top Match'}`;
 
   container.innerHTML = '';
   matches.forEach(m => {
     const s = m.scheme;
+    const ls = getLocalizedScheme(s, lang);
     const isHigh = m.score >= 80;
     const isModerate = m.score >= 60 && m.score < 80;
     const scoreBadgeClass = isHigh ? 'green-badge' : isModerate ? 'saffron-badge' : 'red-badge';
@@ -1044,15 +1914,15 @@ function calculateEligibilityMatches() {
       <div class="matched-top-bar">
         <div>
           <span class="badge ${scoreBadgeClass}">${m.score}% MATCH</span>
-          <strong style="font-family:var(--font-heading); margin-left:8px; font-size:1.1rem;">${s.name}</strong>
+          <strong style="font-family:var(--font-heading); margin-left:8px; font-size:1.1rem;">${ls.name}</strong>
         </div>
-        <span style="font-weight:800; color:var(--primary-green); font-size:1.1rem;">${s.amount || s.benefits.split(' ')[0]}</span>
+        <span style="font-weight:800; color:var(--primary-green); font-size:1.1rem;">${s.amount || ls.benefits.split(' ')[0]}</span>
       </div>
-      <p style="font-size:0.86rem; color:var(--text-muted); margin:6px 0 10px 0;"><strong>Official Rule:</strong> ${s.eligibility ? s.eligibility.summary : s.purpose}</p>
+      <p style="font-size:0.86rem; color:var(--text-muted); margin:6px 0 10px 0;"><strong>${lang === 'te' ? 'అధికారిక నిబంధన' : lang === 'hi' ? 'आधिकारिक नियम' : 'Official Rule'}:</strong> ${s.eligibility ? s.eligibility.summary : ls.purpose}</p>
       <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-        <span style="font-size:0.8rem; color:var(--text-muted);">Dept: ${s.dept}</span>
+        <span style="font-size:0.8rem; color:var(--text-muted);">${s.dept}</span>
         <div style="display:flex; gap:8px;">
-          <button class="btn btn-outline-sm" onclick="openSchemeReaderById('${s.id}')">🎨 Read Comic</button>
+          <button class="btn btn-outline-sm" onclick="openSchemeReaderById('${s.id}')">${t.btn_read_comic || '🎨 Read Comic'}</button>
           <a href="${s.applyUrl || s.officialUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-saffron btn-sm" style="font-size:0.8rem; padding:4px 10px;">Apply ↗</a>
         </div>
       </div>
@@ -1083,11 +1953,15 @@ function populateCompareDropdowns() {
   const s3 = document.getElementById('compare-scheme-3');
   if (!s1 || !s2 || !s3) return;
 
-  const optionsHtml = SCHEMES_DATABASE.map(s => `<option value="${s.id}">${s.name} (${s.level})</option>`).join('');
+  const lang = appState.currentLang || 'en';
+  const optionsHtml = SCHEMES_DATABASE.map(s => {
+    const ls = getLocalizedScheme(s, lang);
+    return `<option value="${s.id}">${ls.name} (${s.level})</option>`;
+  }).join('');
 
   s1.innerHTML = optionsHtml;
   s2.innerHTML = optionsHtml;
-  s3.innerHTML = '<option value="">-- None --</option>' + optionsHtml;
+  s3.innerHTML = `<option value="">-- ${lang === 'te' ? 'ఏదీ లేదు' : lang === 'hi' ? 'कोई नहीं' : 'None'} --</option>` + optionsHtml;
 
   if (SCHEMES_DATABASE.length > 1) {
     s1.selectedIndex = 0;
@@ -1107,6 +1981,7 @@ function renderCompareTable() {
   const s2 = SCHEMES_DATABASE.find(s => s.id === s2Id) || SCHEMES_DATABASE[1];
   const s3 = s3Id ? SCHEMES_DATABASE.find(s => s.id === s3Id) : null;
 
+  const lang = appState.currentLang || 'en';
   const schemes = [s1, s2, s3].filter(Boolean);
   const container = document.getElementById('compare-matrix-table');
   if (!container) return;
@@ -1115,34 +1990,40 @@ function renderCompareTable() {
     <table class="compare-table">
       <thead>
         <tr>
-          <th style="width:20%;">Comparison Attribute</th>
-          ${schemes.map(s => `<th style="width:${80/schemes.length}%; color:var(--primary-green); font-size:1.05rem;">${s.name}</th>`).join('')}
+          <th style="width:20%;">${lang === 'te' ? 'పోలిక అంశం' : lang === 'hi' ? 'तुलना बिंदु' : 'Comparison Attribute'}</th>
+          ${schemes.map(s => {
+            const ls = getLocalizedScheme(s, lang);
+            return `<th style="width:${80/schemes.length}%; color:var(--primary-green); font-size:1.05rem;">${ls.name}</th>`;
+          }).join('')}
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td><strong>Financial Benefit / Amount</strong></td>
-          ${schemes.map(s => `<td style="font-size:1.1rem; font-weight:800; color:var(--primary-navy);">${s.amount || s.benefits}</td>`).join('')}
+          <td><strong>${lang === 'te' ? 'ఆర్థిక ప్రయోజనం / మొత్తం' : lang === 'hi' ? 'वित्तीय लाभ / राशि' : 'Financial Benefit / Amount'}</strong></td>
+          ${schemes.map(s => {
+            const ls = getLocalizedScheme(s, lang);
+            return `<td style="font-size:1.1rem; font-weight:800; color:var(--primary-navy);">${s.amount || ls.benefits}</td>`;
+          }).join('')}
         </tr>
         <tr>
-          <td><strong>Category & Level</strong></td>
+          <td><strong>${lang === 'te' ? 'వర్గం & స్థాయి' : lang === 'hi' ? 'श्रेणी एवं स्तर' : 'Category & Level'}</strong></td>
           ${schemes.map(s => `<td><span class="badge blue-badge">${s.category} • ${s.level}</span></td>`).join('')}
         </tr>
         <tr>
-          <td><strong>Ministry / Department</strong></td>
+          <td><strong>${lang === 'te' ? 'మంత్రిత్వ శాఖ / విభాగం' : lang === 'hi' ? 'मंत्रालय / विभाग' : 'Ministry / Department'}</strong></td>
           ${schemes.map(s => `<td>${s.dept}</td>`).join('')}
         </tr>
         <tr>
-          <td><strong>Target Eligibility</strong></td>
+          <td><strong>${lang === 'te' ? 'లక్ష్యిత అర్హత' : lang === 'hi' ? 'लक्षित पात्रता' : 'Target Eligibility'}</strong></td>
           ${schemes.map(s => `<td>${s.eligibility ? s.eligibility.summary : 'See portal'}</td>`).join('')}
         </tr>
         <tr>
-          <td><strong>Compulsory Documents</strong></td>
+          <td><strong>${lang === 'te' ? 'తప్పనిసరి పత్రాలు' : lang === 'hi' ? 'अनिवार्य दस्तावेज' : 'Compulsory Documents'}</strong></td>
           ${schemes.map(s => `<td>${s.documents ? s.documents.map(d => d.name).join(', ') : 'Aadhaar, Passbook'}</td>`).join('')}
         </tr>
         <tr>
-          <td><strong>Application Mode</strong></td>
-          ${schemes.map(s => `<td><a href="${s.applyUrl || s.officialUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-saffron btn-sm">Apply on Official Portal ↗</a></td>`).join('')}
+          <td><strong>${lang === 'te' ? 'దరఖాస్తు పోర్టల్' : lang === 'hi' ? 'आवेदन पोर्टल' : 'Application Mode'}</strong></td>
+          ${schemes.map(s => `<td><a href="${s.applyUrl || s.officialUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-saffron btn-sm">${lang === 'te' ? 'అధికారిక పోర్టల్ ↗' : lang === 'hi' ? 'आधिकारिक पोर्टल ↗' : 'Apply on Official Portal ↗'}</a></td>`).join('')}
         </tr>
       </tbody>
     </table>
@@ -1154,20 +2035,22 @@ function renderDashboard() {
   const savedCount = document.getElementById('dash-saved-count');
   if (savedCount) savedCount.innerText = appState.bookmarkedIds.size;
 
+  const lang = appState.currentLang || 'en';
   const savedList = document.getElementById('dashboard-saved-schemes-list');
   if (savedList) {
     savedList.innerHTML = '';
     const bookmarked = SCHEMES_DATABASE.filter(s => appState.bookmarkedIds.has(s.id));
 
     if (bookmarked.length === 0) {
-      savedList.innerHTML = `<p style="color:var(--text-muted); font-size:0.9rem; padding:12px 0;">No schemes bookmarked yet. Click the star icon ⭐ on any scheme card to save it here.</p>`;
+      savedList.innerHTML = `<p style="color:var(--text-muted); font-size:0.9rem; padding:12px 0;">${lang === 'te' ? 'ఇంకా ఎటువంటి పథకాలు దాచబడలేదు. పథకం కార్డుపై ఉన్న స్టార్ ఐకాన్ ⭐ క్లిక్ చేయండి.' : lang === 'hi' ? 'कोई योजना सहेजी नहीं गई है। योजना कार्ड पर स्टार ⭐ आइकन दबाएं।' : 'No schemes bookmarked yet. Click the star icon ⭐ on any scheme card to save it here.'}</p>`;
     } else {
       bookmarked.forEach(s => {
+        const ls = getLocalizedScheme(s, lang);
         const item = document.createElement('div');
         item.style.cssText = "display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid var(--border-light);";
         item.innerHTML = `
           <div>
-            <strong>${s.name}</strong> <span style="font-size:0.8rem; color:var(--text-muted);">(${s.amount || s.category})</span>
+            <strong>${ls.name}</strong> <span style="font-size:0.8rem; color:var(--text-muted);">(${s.amount || s.category})</span>
           </div>
           <div style="display:flex; gap:8px;">
             <button class="btn btn-outline-sm" onclick="openSchemeReaderById('${s.id}')">🎨 Comic</button>
@@ -1204,8 +2087,11 @@ function renderReaderView() {
   const s = appState.selectedScheme || SCHEMES_DATABASE[0];
   if (!s) return;
 
+  const lang = appState.currentLang || 'en';
+  const ls = getLocalizedScheme(s, lang);
+
   const nameElem = document.getElementById('reader-scheme-name');
-  if (nameElem) nameElem.innerText = s.name;
+  if (nameElem) nameElem.innerText = ls.name;
 
   const badgeElem = document.getElementById('reader-category-badge');
   if (badgeElem) badgeElem.innerText = `${s.category} • ${s.level}`;
@@ -1223,18 +2109,18 @@ function renderReaderView() {
       <div style="background:#fff; border:1px solid var(--border-light); border-left:5px solid var(--primary-green); border-radius:14px; padding:20px; box-shadow:var(--shadow-sm); margin-bottom:20px;">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
           <div>
-            <h3 style="font-family:var(--font-heading); color:var(--primary-navy); margin:0;">📌 Key Details Overview: ${s.name}</h3>
+            <h3 style="font-family:var(--font-heading); color:var(--primary-navy); margin:0;">📌 ${lang === 'te' ? 'పథకం ముఖ్య సారాంశం' : lang === 'hi' ? 'योजना का मुख्य सारांश' : 'Key Details Overview'}: ${ls.name}</h3>
             <p style="font-size:0.85rem; color:var(--text-muted); margin:4px 0 0 0;">Official Government Fact Sheet Grounded on India.gov.in</p>
           </div>
-          <span style="font-size:1.3rem; font-weight:800; color:var(--primary-green);">${s.amount || s.benefits}</span>
+          <span style="font-size:1.3rem; font-weight:800; color:var(--primary-green);">${s.amount || ls.benefits}</span>
         </div>
         <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px; margin-top:14px;">
           <div style="background:var(--bg-light); padding:10px 12px; border-radius:8px;">
-            <strong style="font-size:0.8rem; color:var(--primary-green); display:block;">🎯 Purpose</strong>
-            <span style="font-size:0.88rem;">${s.purpose}</span>
+            <strong style="font-size:0.8rem; color:var(--primary-green); display:block;">🎯 ${lang === 'te' ? 'లక్ష్యం' : lang === 'hi' ? 'उद्देश्य' : 'Purpose'}</strong>
+            <span style="font-size:0.88rem;">${ls.purpose}</span>
           </div>
           <div style="background:var(--bg-light); padding:10px 12px; border-radius:8px;">
-            <strong style="font-size:0.8rem; color:var(--trust-blue); display:block;">👤 Eligibility</strong>
+            <strong style="font-size:0.8rem; color:var(--trust-blue); display:block;">👤 ${lang === 'te' ? 'అర్హత' : lang === 'hi' ? 'पात्रता' : 'Eligibility'}</strong>
             <span style="font-size:0.88rem;">${s.eligibility ? s.eligibility.summary : 'All eligible citizens'}</span>
           </div>
         </div>
@@ -1244,12 +2130,12 @@ function renderReaderView() {
 
   // Character Card
   const charBox = document.getElementById('reader-character-card');
-  if (charBox && s.character) {
+  if (charBox && ls.character) {
     charBox.innerHTML = `
-      <div style="font-size:2rem; background:var(--primary-green-subtle); padding:8px 12px; border-radius:50%;">${s.character.avatar || '🇮🇳'}</div>
+      <div style="font-size:2rem; background:var(--primary-green-subtle); padding:8px 12px; border-radius:50%;">${ls.character.avatar || s.character.avatar || '🇮🇳'}</div>
       <div>
-        <h4 style="font-family:var(--font-heading); font-size:1.1rem; margin:0; color:var(--primary-navy);">${s.character.name} <span style="font-size:0.8rem; color:var(--primary-green);">(${s.character.role})</span></h4>
-        <p style="font-size:0.85rem; color:var(--text-muted); margin:2px 0 0 0;">${s.character.desc}</p>
+        <h4 style="font-family:var(--font-heading); font-size:1.1rem; margin:0; color:var(--primary-navy);">${ls.character.name} <span style="font-size:0.8rem; color:var(--primary-green);">(${ls.character.role})</span></h4>
+        <p style="font-size:0.85rem; color:var(--text-muted); margin:2px 0 0 0;">${ls.character.desc}</p>
       </div>
     `;
   }
@@ -1258,14 +2144,14 @@ function renderReaderView() {
   const panelsContainer = document.getElementById('reader-panels-container');
   if (panelsContainer) {
     panelsContainer.innerHTML = '';
-    const panelsList = (s.panels && s.panels.en) || s.panels || [];
+    const panelsList = (ls.panels && ls.panels[lang]) || (s.panels && s.panels[lang]) || (s.panels && s.panels.en) || s.panels || [];
     panelsList.forEach((p, idx) => {
       const pcard = document.createElement('div');
       pcard.className = 'panel-card';
       pcard.innerHTML = `
         <div class="panel-tag-header">
           <span>${p.tag || `Panel ${idx+1}`}</span>
-          <button class="btn-outline-sm" onclick="showCitationModal('${escapeQuotes(p.dialogue)}', '${escapeQuotes(p.sourceRef || s.name)}', '${s.officialUrl}')">🔍 Citation</button>
+          <button class="btn-outline-sm" onclick="showCitationModal('${escapeQuotes(p.dialogue)}', '${escapeQuotes(p.sourceRef || ls.name)}', '${s.officialUrl}')">🔍 ${lang === 'te' ? 'ఆధారం' : lang === 'hi' ? 'संदर्भ' : 'Citation'}</button>
         </div>
         <div class="panel-img-box">
           <img src="${p.image || `assets/pm_kisan_${(idx%4)+1}.jpg`}" alt="${p.tag}" onerror="this.onerror=null; this.src='assets/pm_kisan_1.jpg';">
@@ -1276,7 +2162,7 @@ function renderReaderView() {
         </div>
         <div class="panel-footer-bar">
           <span>📌 ${p.caption || ''}</span>
-          <button class="btn-outline-sm" onclick="speakText('${escapeQuotes(p.dialogue)}')">🔊 Play</button>
+          <button class="btn-outline-sm" onclick="speakText('${escapeQuotes(p.dialogue)}', '${lang}')">🔊 ${lang === 'te' ? 'వినండి' : lang === 'hi' ? 'सुनें' : 'Play'}</button>
         </div>
       `;
       panelsContainer.appendChild(pcard);
@@ -1415,25 +2301,65 @@ function runEligibilityCheck() {
   `;
 }
 
-// Audio Speech Synthesis
-function speakText(text) {
+// Multilingual Speech Voice Synthesis Engine
+function getNaturalVoice(langCode) {
+  if (!('speechSynthesis' in window)) return null;
+  const voices = window.speechSynthesis.getVoices() || [];
+  if (voices.length === 0) return null;
+
+  const targetLang = (langCode || appState.currentLang || 'en').toLowerCase();
+  let matched = [];
+
+  if (targetLang === 'te') {
+    matched = voices.filter(v => v.lang.toLowerCase().includes('te') || v.name.toLowerCase().includes('telugu') || v.name.toLowerCase().includes('mohan') || v.name.toLowerCase().includes('shruthi'));
+  } else if (targetLang === 'hi') {
+    matched = voices.filter(v => v.lang.toLowerCase().includes('hi') || v.name.toLowerCase().includes('hindi') || v.name.toLowerCase().includes('swara') || v.name.toLowerCase().includes('madhur') || v.name.toLowerCase().includes('kalpana'));
+  } else {
+    matched = voices.filter(v => v.lang.toLowerCase().includes('en-in') || v.name.toLowerCase().includes('india') || v.name.toLowerCase().includes('neerja') || v.name.toLowerCase().includes('natural'));
+  }
+
+  if (matched.length > 0) return matched[0];
+  return voices.find(v => v.lang.toLowerCase().startsWith(targetLang)) || voices[0];
+}
+
+function speakText(text, langCode) {
   if (!('speechSynthesis' in window)) return;
   window.speechSynthesis.cancel();
-  const utt = new SpeechSynthesisUtterance(text);
-  utt.rate = 1.0;
-  utt.pitch = 1.02;
+
+  // Clean markdown and symbols before speech
+  const cleanSpeechText = (text || '')
+    .replace(/[*#_~`]/g, '')
+    .replace(/•/g, ', ')
+    .replace(/\[(.*?)\]\((.*?)\)/g, '$1')
+    .replace(/₹/g, 'Rupees ');
+
+  const utt = new SpeechSynthesisUtterance(cleanSpeechText);
+  const targetLang = langCode || appState.currentLang || 'en';
+
+  if (targetLang === 'te') utt.lang = 'te-IN';
+  else if (targetLang === 'hi') utt.lang = 'hi-IN';
+  else utt.lang = 'en-IN';
+
+  const v = getNaturalVoice(targetLang);
+  if (v) utt.voice = v;
+
+  utt.rate = 0.95;
+  utt.pitch = 1.0;
   window.speechSynthesis.speak(utt);
 }
 
 function togglePlayFullComic() {
   const s = appState.selectedScheme;
   if (!s) return;
-  const panels = (s.panels && s.panels.en) || s.panels || [];
-  let script = `Visual comic narration for ${s.name}. `;
+  const lang = appState.currentLang || 'en';
+  const ls = getLocalizedScheme(s, lang);
+  const panels = (ls.panels && ls.panels[lang]) || (s.panels && s.panels[lang]) || (s.panels && s.panels.en) || s.panels || [];
+
+  let script = `${ls.name}. `;
   panels.forEach(p => {
-    script += `${p.speaker} says: ${p.dialogue}. `;
+    script += `${p.speaker}: ${p.dialogue}. `;
   });
-  speakText(script);
+  speakText(script, lang);
   document.getElementById('btn-play-comic').style.display = 'none';
   document.getElementById('btn-pause-comic').style.display = 'inline-flex';
 }
@@ -1525,8 +2451,31 @@ function handleFloatingChatKeyPress(e) {
 function generateMitraPersonalizedAnswer(query) {
   const q = query.toLowerCase().trim();
   const p = userProfile;
+  const lang = appState.currentLang || 'en';
 
-  // 1. Personalized Recommendation Request
+  // Telugu Responses
+  if (lang === 'te') {
+    if (q.includes('recommend') || q.includes('student') || q.includes('telangana') || q.includes('పథకాలు') || q.includes('సరిపోయే') || q.includes('విద్యార్థులకు')) {
+      return {
+        answer: `🌟 **నమస్కారం! మీ ప్రొఫైల్ (${p.occupation}, ${p.age} సం., ${p.state}, ఆదాయం ₹${p.income.toLocaleString()}) కి సరిపోయే ఉత్తమ పథకాలు ఇక్కడ ఉన్నాయి:**\n\n1. **పీఎం మెరిట్ స్కాలర్‌షిప్** (100% Match)\n• **ప్రయోజనం**: సంవత్సరానికి ₹50,000 నేరుగా బ్యాంక్ ఖాతాలో జమ.\n\n2. **తెలంగాణ రైతు బంధు** (100% Match)\n• **ప్రయోజనం**: ఎకరానికి ఏడాదికి ₹10,000 పంట పెట్టుబడి సాయం.\n\n3. **కళ్యాణ లక్ష్మి / షాదీ ముబారక్**\n• **ప్రయోజనం**: ₹1,00,116 ఒకేసారి ఆర్థిక సాయం.\n\n💬 *కింద ఉన్న బటన్ క్లిక్ చేసి పూర్తి కామిక్ కథను చదవండి!*`,
+        sourceRef: "India.gov.in & తెలంగాణ అధికారిక పోర్టల్",
+        schemeId: "pm_merit_scholarship"
+      };
+    }
+  }
+
+  // Hindi Responses
+  if (lang === 'hi') {
+    if (q.includes('recommend') || q.includes('student') || q.includes('योजना') || q.includes('पात्रता') || q.includes('छात्रों')) {
+      return {
+        answer: `🌟 **नमस्ते! आपकी प्रोफाइल (${p.occupation}, ${p.age} वर्ष, ${p.state}, आय ₹${p.income.toLocaleString()}) के अनुसार शीर्ष योजनाएं:**\n\n1. **पीएम मेरिट छात्रवृत्ति** (100% Match)\n• **लाभ**: ₹50,000 प्रति वर्ष सीधी कॉलेज फीस सहायता।\n\n2. **पीएम-किसान सम्मान निधि** (100% Match)\n• **लाभ**: किसानों को सालाना ₹6,000 डीबीटी सहायता।\n\n3. **आयुष्मान भारत (PM-JAY)**\n• **लाभ**: ₹5 लाख तक का मुफ्त कैशलेस इलाज।\n\n💬 *नीचे दिए गए बटन पर क्लिक करके कॉमिक कहानी देखें!*`,
+        sourceRef: "India.gov.in राष्ट्रीय पोर्टल रिकॉर्ड",
+        schemeId: "pm_merit_scholarship"
+      };
+    }
+  }
+
+  // English Personalized Recommendation Request
   if (q.includes('recommend') || q.includes('for me') || q.includes('suit') || q.includes('profile') || q.includes('student in telangana') || q.includes('what can i get')) {
     const topMatches = SCHEMES_DATABASE.map(s => ({
       scheme: s,
@@ -1546,45 +2495,50 @@ function generateMitraPersonalizedAnswer(query) {
     };
   }
 
-  // 2. Specific Scheme Matching
+  // Specific Scheme Matching
   let matchedScheme = SCHEMES_DATABASE.find(s => 
     q.includes(s.name.toLowerCase()) || 
     (s.id && q.includes(s.id.toLowerCase()))
   );
 
   if (!matchedScheme) {
-    if (q.includes('scholarship') || q.includes('merit') || q.includes('college') || q.includes('student') || q.includes('50000')) {
+    if (q.includes('scholarship') || q.includes('merit') || q.includes('college') || q.includes('student') || q.includes('50000') || q.includes('స్కాలర్‌షిప్') || q.includes('छात्रवृत्ति')) {
       matchedScheme = SCHEMES_DATABASE.find(s => s.id === 'pm_merit_scholarship');
-    } else if (q.includes('rythu') || q.includes('bandhu') || q.includes('telangana farm') || q.includes('10000')) {
+    } else if (q.includes('rythu') || q.includes('bandhu') || q.includes('telangana farm') || q.includes('10000') || q.includes('రైతు బంధు') || q.includes('रायथू')) {
       matchedScheme = SCHEMES_DATABASE.find(s => s.id === 'rythu_bandhu');
-    } else if (q.includes('unorganised') || q.includes('worker') || q.includes('shram') || q.includes('pension') || q.includes('3000')) {
+    } else if (q.includes('unorganised') || q.includes('worker') || q.includes('shram') || q.includes('pension') || q.includes('3000') || q.includes('పెన్షన్') || q.includes('पेंशन')) {
       matchedScheme = SCHEMES_DATABASE.find(s => s.id === 'nps_unorganised');
-    } else if (q.includes('kalyana') || q.includes('lakshmi') || q.includes('marriage') || q.includes('bride') || q.includes('100116')) {
+    } else if (q.includes('kalyana') || q.includes('lakshmi') || q.includes('marriage') || q.includes('bride') || q.includes('100116') || q.includes('కళ్యాణ లక్ష్మి') || q.includes('कल्याणा')) {
       matchedScheme = SCHEMES_DATABASE.find(s => s.id === 'kalyana_lakshmi');
-    } else if (q.includes('awas') || q.includes('house') || q.includes('housing') || q.includes('urban') || q.includes('pucca')) {
+    } else if (q.includes('awas') || q.includes('house') || q.includes('housing') || q.includes('urban') || q.includes('pucca') || q.includes('ఆవాస్') || q.includes('आवास')) {
       matchedScheme = SCHEMES_DATABASE.find(s => s.id === 'pm_awas_urban');
-    } else if (q.includes('solar') || q.includes('surya') || q.includes('bijli') || q.includes('electricity') || q.includes('78000')) {
+    } else if (q.includes('solar') || q.includes('surya') || q.includes('bijli') || q.includes('electricity') || q.includes('78000') || q.includes('సూర్య ఘర్') || q.includes('सूर्य घर')) {
       matchedScheme = SCHEMES_DATABASE.find(s => s.id === 'surya_ghar');
-    } else if (q.includes('health') || q.includes('hospital') || q.includes('ayushman') || q.includes('5 lakh')) {
+    } else if (q.includes('health') || q.includes('hospital') || q.includes('ayushman') || q.includes('5 lakh') || q.includes('ఆయుష్మాన్') || q.includes('आयुष्मान')) {
       matchedScheme = SCHEMES_DATABASE.find(s => s.id === 'ayushman');
-    } else if (q.includes('kisan') || q.includes('farmer') || q.includes('6000')) {
+    } else if (q.includes('kisan') || q.includes('farmer') || q.includes('6000') || q.includes('కిసాన్') || q.includes('किसान')) {
       matchedScheme = SCHEMES_DATABASE.find(s => s.id === 'pm_kisan');
     }
   }
 
   if (matchedScheme) {
     const s = matchedScheme;
+    const ls = getLocalizedScheme(s, lang);
     const docs = s.documents ? s.documents.map(d => d.name).join(', ') : 'Aadhaar Card, Bank Passbook';
     return {
-      answer: `🏛️ **${s.name}** (${s.level} • ${s.category})\n\n🎁 **Key Benefit**: ${s.amount || s.benefits}\n\n🎯 **Objective**: ${s.purpose}\n\n👤 **Who is Eligible**: ${s.eligibility ? s.eligibility.summary : 'All eligible citizens'}\n\n📄 **Required Documents**: ${docs}\n\n🚀 [Click here to Apply Online](${s.applyUrl || s.officialUrl})`,
+      answer: `🏛️ **${ls.name}** (${s.level} • ${s.category})\n\n🎁 **${lang === 'te' ? 'ముఖ్య ప్రయోజనం' : lang === 'hi' ? 'मुख्य लाभ' : 'Key Benefit'}**: ${s.amount || ls.benefits}\n\n🎯 **${lang === 'te' ? 'లక్ష్యం' : lang === 'hi' ? 'उद्देश्य' : 'Objective'}**: ${ls.purpose}\n\n👤 **${lang === 'te' ? 'ఎవరికి అర్హత' : lang === 'hi' ? 'किसे पात्रता है' : 'Who is Eligible'}**: ${s.eligibility ? s.eligibility.summary : 'All eligible citizens'}\n\n📄 **${lang === 'te' ? 'అవసరమైన పత్రాలు' : lang === 'hi' ? 'आवश्यक दस्तावेज' : 'Required Documents'}**: ${docs}\n\n🚀 [${lang === 'te' ? 'ఆన్‌లైన్‌లో దరఖాస్తు చేసుకోండి' : lang === 'hi' ? 'ऑनलाइन आवेदन करने के लिए यहां क्लिक करें' : 'Click here to Apply Online'}](${s.applyUrl || s.officialUrl})`,
       sourceRef: `Official India.gov.in Record (${s.dept})`,
       schemeId: s.id
     };
   }
 
-  // 3. General Fallback
+  // General Fallback
   return {
-    answer: `👋 **Namaste! I am Mitra, your personalized AI Scheme Guide.**\n\nI can help you discover and apply for central and state welfare benefits:\n\n• 🎓 **PM Merit Scholarship**: ₹50,000/yr for meritorious students\n• 🌾 **Telangana Rythu Bandhu**: ₹10,000/acre farm support\n• 👵 **NPS for Unorganised Workers**: ₹3,000/mo lifelong pension\n• 🏠 **PM Awas Yojana**: Up to ₹2.5 Lakh housing subsidy\n• 🏥 **Ayushman Bharat**: ₹5 Lakh cashless healthcare\n\n💬 *Tell me your age, state, or occupation for instant personalized matching!*`,
+    answer: lang === 'te' 
+      ? `👋 **నమస్కారం! నేను మీ మిత్ర AI సహాయకుడిని.**\n\nకేంద్ర మరియు రాష్ట్ర ప్రభుత్వ సంక్షేమ పథకాలను కనుగొనడానికి నేను మీకు సహాయం చేస్తాను:\n\n• 🎓 **పీఎం మెరిట్ స్కాలర్‌షిప్**: విద్యార్థులకు ఏటా ₹50,000\n• 🌾 **రైతు బంధు**: ఎకరానికి ఏటా ₹10,000 పెట్టుబడి సాయం\n• 👵 **కార్మికుల పెన్షన్**: నెలకు ₹3,000 జీవితాంత పెన్షన్\n• 🏠 **పీఎం ఆవాస్**: ₹2.5 లక్షల వరకు గృహ సబ్సిడీ\n• 🏥 **ఆయుష్మాన్ భారత్**: ₹5 లక్షల ఉచిత వైద్య చికిత్స\n\n💬 *మీ వయస్సు, రాష్ట్రం లేదా వృత్తిని తెలియజేయండి!*`
+      : lang === 'hi'
+      ? `👋 **नमस्ते! मैं मित्र AI योजना सहायक हूं।**\n\nमैं आपको केंद्र एवं राज्य सरकार की प्रमुख योजनाओं की जानकारी प्रदान करता हूं:\n\n• 🎓 **पीएम मेरिट छात्रवृत्ति**: छात्रों को ₹50,000/वर्ष\n• 🌾 **रायथू बंधु**: ₹10,000/एकड़ कृषि सहायता\n• 👵 **असंगठित कामगार पेंशन**: ₹3,000/माह आजीवन पेंशन\n• 🏠 **पीएम आवास योजना**: ₹2.5 लाख तक की आवास सब्सिडी\n• 🏥 **आयुष्मान भारत**: ₹5 लाख तक का मुफ्त इलाज\n\n💬 *अपनी उम्र, राज्य या व्यवसाय बताएं!*`
+      : `👋 **Namaste! I am Mitra, your personalized AI Scheme Guide.**\n\nI can help you discover and apply for central and state welfare benefits:\n\n• 🎓 **PM Merit Scholarship**: ₹50,000/yr for meritorious students\n• 🌾 **Telangana Rythu Bandhu**: ₹10,000/acre farm support\n• 👵 **NPS for Unorganised Workers**: ₹3,000/mo lifelong pension\n• 🏠 **PM Awas Yojana**: Up to ₹2.5 Lakh housing subsidy\n• 🏥 **Ayushman Bharat**: ₹5 Lakh cashless healthcare\n\n💬 *Tell me your age, state, or occupation for instant personalized matching!*`,
     sourceRef: "National Portal of India (India.gov.in)",
     schemeId: "pm_merit_scholarship"
   };
@@ -1597,6 +2551,8 @@ async function sendFloatingChatMessage() {
 
   const box = document.getElementById('fchat-messages');
   if (!box) return;
+
+  const lang = appState.currentLang || 'en';
 
   // Render User Message
   const udiv = document.createElement('div');
@@ -1612,7 +2568,7 @@ async function sendFloatingChatMessage() {
   bdiv.innerHTML = `
     <div class="msg-avatar">🤖</div>
     <div class="msg-content">
-      <p style="font-style:italic; color:#64748b;">Mitra is consulting official India.gov.in records...</p>
+      <p style="font-style:italic; color:#64748b;">${lang === 'te' ? 'మిత్ర అధికారిక రికార్డులను పరిశీలిస్తోంది...' : lang === 'hi' ? 'मित्र आधिकारिक रिकॉर्ड की जांच कर रहा है...' : 'Mitra is consulting official India.gov.in records...'}</p>
     </div>
   `;
   box.appendChild(bdiv);
@@ -1627,7 +2583,7 @@ async function sendFloatingChatMessage() {
     const res = await fetch(`${API_BASE_URL}/ask-ai`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ question: text, schemeName: "All Government Schemes", userProfile: userProfile })
+      body: JSON.stringify({ question: text, schemeName: "All Government Schemes", userProfile: userProfile, lang: appState.currentLang })
     });
     if (res.ok) {
       const data = await res.json();
@@ -1648,8 +2604,8 @@ async function sendFloatingChatMessage() {
   if (matchedSchemeId) {
     ctaBtn = `
       <div style="margin-top:10px; display:flex; gap:8px;">
-        <button class="btn btn-primary btn-sm" style="font-size:0.75rem; padding:4px 10px;" onclick="openSchemeReaderById('${matchedSchemeId}')">🎨 View Comic Story ↗</button>
-        <button class="btn btn-outline-sm" style="font-size:0.75rem;" onclick="speakText('${escapeQuotes(answer.replace(/[*#]/g, ''))}')">🔊 Listen</button>
+        <button class="btn btn-primary btn-sm" style="font-size:0.75rem; padding:4px 10px;" onclick="openSchemeReaderById('${matchedSchemeId}')">${lang === 'te' ? '🎨 కామిక్ కథ చూడండి ↗' : lang === 'hi' ? '🎨 कॉमिक कहानी देखें ↗' : '🎨 View Comic Story ↗'}</button>
+        <button class="btn btn-outline-sm" style="font-size:0.75rem;" onclick="speakText('${escapeQuotes(answer.replace(/[*#]/g, ''))}', '${appState.currentLang}')">🔊 ${lang === 'te' ? 'వినండి' : lang === 'hi' ? 'सुनें' : 'Listen'}</button>
       </div>
     `;
   }
@@ -1692,13 +2648,14 @@ async function sendChatMessage() {
   box.scrollTop = box.scrollHeight;
 
   const s = appState.selectedScheme || SCHEMES_DATABASE[0];
+  const ls = getLocalizedScheme(s, appState.currentLang);
 
   const bdiv = document.createElement('div');
   bdiv.className = 'chat-msg bot-msg';
   bdiv.innerHTML = `
     <div class="msg-avatar">🏛️</div>
     <div class="msg-content">
-      <p style="font-style:italic; color:#64748b;">Consulting official records for ${s.name}...</p>
+      <p style="font-style:italic; color:#64748b;">Consulting official records for ${ls.name}...</p>
     </div>
   `;
   box.appendChild(bdiv);
@@ -1831,12 +2788,29 @@ function setupThemeToggles() {
   }
 }
 
-// Language Selector
+// Multilingual Setup & Site-Wide Language Engine
 function setupLanguageSelector() {
   const sel = document.getElementById('app-language-select');
   if (!sel) return;
+
+  // Restore saved language
+  if (appState.currentLang) {
+    sel.value = appState.currentLang;
+  }
+
   sel.addEventListener('change', (e) => {
     appState.currentLang = e.target.value;
+    try {
+      localStorage.setItem('govtoon_lang', appState.currentLang);
+    } catch (err) {}
+
+    updateLanguageUI();
+    populateCompareDropdowns();
+    renderDirectory();
+    calculateEligibilityMatches();
+    renderDashboard();
+    if (appState.currentView === 'reader') {
+      renderReaderView();
+    }
   });
 }
-
